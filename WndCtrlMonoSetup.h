@@ -6,12 +6,19 @@
 
 namespace Win{
 
-	class MonoWndController : ChildController
+	class MonoWndCtrl : public ChildController
 	{
 	public:
-		MonoWndController();
+		MonoWndCtrl();
 		bool OnCreate(CreateData const *);
 		bool OnCommand(WPARAM, LPARAM);
+		bool OnSize(int, int, int);
+		bool OnNotify(HWND, LPARAM);
+
+	private:
+		unsigned int itemIndex;
+		ComboControl *_comboOpts;
+		ButtonControl *_btnSelect;
 	};
 }
 

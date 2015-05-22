@@ -2,7 +2,7 @@
 #define CLASSCONTROLLERMAIN_H_
 
 #include <Windows.h>
-//#include "../ClassSynchro.h"
+#include "../WndCtrlMonoSetup.h"
 
 //#include "../WndCtrlSelect.h"
 //#include "../WndCtrlLine.h"
@@ -22,14 +22,14 @@ namespace Win
 		bool OnNotify(WPARAM, LPARAM);
 	private:
 		//controllers:
-//		SelectWndController selCtrl;
+		MonoWndCtrl monoCtrl;
 //		LineWndController lineCtrl;
 //		ExpWndController expCtrl;
 //		ImgWndController *_outCtrl;
 
 		//windows:
 		Dow _main;
-//		Dow _selDev;
+		Dow _monoDow;
 
 //		Synchronizer _synch;
 	};

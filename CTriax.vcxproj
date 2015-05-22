@@ -81,6 +81,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="libWin\ActiveObject.h" />
+    <ClInclude Include="libWin\ChildProcedure.h" />
     <ClInclude Include="libWin\ClassChildController.h" />
     <ClInclude Include="libWin\ClassController.h" />
     <ClInclude Include="libWin\ClassControllerMain.h" />
@@ -113,6 +114,7 @@
     <ClCompile Include="libWin\WindowControls.cpp" />
     <ClCompile Include="libWin\WinMaker.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="WndCtrlMonoSetup.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -6,25 +6,25 @@
 namespace Win
 {
 	MainController::MainController(HWND hwnd, CreateData *create)
-		: _main(hwnd)
+		: _main(hwnd), _monoDow(0)
 	{
 		//window class names:
-//		char classSelectName[] = "Select";
+		char classMonoName[] = "Monochromator";
 	
 		//window class maker:
-//		Win::ChildClassMaker selClass(childProc, classSelectName, _main.GetInstance());
+		Win::ChildClassMaker monoClass(childProc, classMonoName, _main.GetInstance());
 	
 		//registering classes:
-//		selClass.Register();
+		monoClass.Register();
 	
 		//window makers:
-//		ChildMaker selWinMaker(classSelectName, _main, 1, selCtrl);
+		ChildMaker monoWinMaker(classMonoName, _main, 1, monoCtrl);
 	
 		//creating the windows:
-//		selWinMaker.Create("Select device");
+		monoWinMaker.Create("Select device");
 	
 		//initiating windows:
-//		_selDev.Init(selWinMaker);
+		_monoDow.Init(monoWinMaker);
 
 		//show created windows:
 //		selWinMaker.Show();

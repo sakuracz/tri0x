@@ -1,7 +1,7 @@
 #ifndef CHILDCONTROLLER_H_
 #define CHILDCONTROLLER_H_
 
-#include "libWin\ClassController.h"
+#include "ClassController.h"
 
 namespace Win
 {
