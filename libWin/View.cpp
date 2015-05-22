@@ -5,13 +5,13 @@
 View::View(HINSTANCE hInst, int cmdShow)
 	: _main(0)
 {
-	char classMainName[] = "THz Exp";
+	char classMainName[] = "Photoreflection";
 
 	Win::ClassMaker mainClass(Win::Procedure, classMainName, hInst);
 	mainClass.Register();
 
 	Win::Maker mainWndMaker(classMainName, hInst);
-	mainWndMaker.Create("THz Reflection Geometry Setup");
+	mainWndMaker.Create("Photoreflection measurement setup");
 	_main.Init(mainWndMaker);
 	mainWndMaker.Show(cmdShow);
 };

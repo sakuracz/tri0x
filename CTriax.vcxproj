@@ -81,6 +81,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="libWin\ActiveObject.h" />
+    <ClInclude Include="libWin\ClassChildController.h" />
     <ClInclude Include="libWin\ClassController.h" />
     <ClInclude Include="libWin\ClassControllerMain.h" />
     <ClInclude Include="libWin\ClassControllerSub.h" />
@@ -96,9 +97,11 @@
     <ClInclude Include="libWin\WindowControls.h" />
     <ClInclude Include="libWin\WindowEx.h" />
     <ClInclude Include="libWin\WinMaker.h" />
+    <ClInclude Include="WndCtrlMonoSetup.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libWin\ActiveObject.cpp" />
+    <ClCompile Include="libWin\ClassChildController.cpp" />
     <ClCompile Include="libWin\ClassController.cpp" />
     <ClCompile Include="libWin\ClassControllerMain.cpp" />
     <ClCompile Include="libWin\ClassControllerSub.cpp" />

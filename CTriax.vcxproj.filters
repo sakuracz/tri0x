@@ -69,6 +69,12 @@
     <ClInclude Include="libWin\WinMaker.h">
       <Filter>Header Files\libWin</Filter>
     </ClInclude>
+    <ClInclude Include="WndCtrlMonoSetup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="libWin\ClassChildController.h">
+      <Filter>Header Files\libWin</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libWin\WinMaker.cpp">
@@ -106,6 +112,9 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="libWin\ClassChildController.cpp">
+      <Filter>Source Files\libWin</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
