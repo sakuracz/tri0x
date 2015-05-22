@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\libWin">
+      <UniqueIdentifier>{9ecd72bd-4f2e-4691-b89b-83adc262aa1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\libWin">
+      <UniqueIdentifier>{98fa95fc-f187-404a-bc8a-219d5d66bcca}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="libWin\ActiveObject.h">
+      <Filter>Header Files\libWin</Filter>
+    </ClInclude>
+    <ClInclude Include="libWin\ClassController.h">
+      <Filter>Header Files\libWin</Filter>
+    </ClInclude>
+    <ClInclude Include="libWin\ClassControllerMain.h">
+      <Filter>Header Files\libWin</Filter>
+    </ClInclude>
+    <ClInclude Include="libWin\ClassControllerSub.h">
+      <Filter>Header Files\libWin</Filter>
+    </ClInclude>
+    <ClInclude Include="libWin\ClassIcon.h">
+      <Filter>Header Files\libWin</Filter>
+    </ClInclude>
+    <ClInclude Include="libWin\ClassSerializable.h">
+      <Filter>Header Files\libWin</Filter>
+    </ClInclude>
+    <ClInclude Include="libWin\ClassSerializer.h">
+      <Filter>Header Files\libWin</Filter>
+    </ClInclude>
+    <ClInclude Include="libWin\Procedure.h">
+      <Filter>Header Files\libWin</Filter>
+    </ClInclude>
+    <ClInclude Include="libWin\Thread.h">
+      <Filter>Header Files\libWin</Filter>
+    </ClInclude>
+    <ClInclude Include="libWin\Utils.h">
+      <Filter>Header Files\libWin</Filter>
+    </ClInclude>
+    <ClInclude Include="libWin\View.h">
+      <Filter>Header Files\libWin</Filter>
+    </ClInclude>
+    <ClInclude Include="libWin\WinClassMaker.h">
+      <Filter>Header Files\libWin</Filter>
+    </ClInclude>
+    <ClInclude Include="libWin\Window.h">
+      <Filter>Header Files\libWin</Filter>
+    </ClInclude>
+    <ClInclude Include="libWin\WindowControls.h">
+      <Filter>Header Files\libWin</Filter>
+    </ClInclude>
+    <ClInclude Include="libWin\WindowEx.h">
+      <Filter>Header Files\libWin</Filter>
+    </ClInclude>
+    <ClInclude Include="libWin\WinMaker.h">
+      <Filter>Header Files\libWin</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="libWin\WinMaker.cpp">
+      <Filter>Source Files\libWin</Filter>
+    </ClCompile>
+    <ClCompile Include="libWin\WindowControls.cpp">
+      <Filter>Source Files\libWin</Filter>
+    </ClCompile>
+    <ClCompile Include="libWin\Window.cpp">
+      <Filter>Source Files\libWin</Filter>
+    </ClCompile>
+    <ClCompile Include="libWin\WinClassMaker.cpp">
+      <Filter>Source Files\libWin</Filter>
+    </ClCompile>
+    <ClCompile Include="libWin\View.cpp">
+      <Filter>Source Files\libWin</Filter>
+    </ClCompile>
+    <ClCompile Include="libWin\Procedure.cpp">
+      <Filter>Source Files\libWin</Filter>
+    </ClCompile>
+    <ClCompile Include="libWin\ClassIcon.cpp">
+      <Filter>Source Files\libWin</Filter>
+    </ClCompile>
+    <ClCompile Include="libWin\ClassControllerSub.cpp">
+      <Filter>Source Files\libWin</Filter>
+    </ClCompile>
+    <ClCompile Include="libWin\ClassControllerMain.cpp">
+      <Filter>Source Files\libWin</Filter>
+    </ClCompile>
+    <ClCompile Include="libWin\ClassController.cpp">
+      <Filter>Source Files\libWin</Filter>
+    </ClCompile>
+    <ClCompile Include="libWin\ActiveObject.cpp">
+      <Filter>Source Files\libWin</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
