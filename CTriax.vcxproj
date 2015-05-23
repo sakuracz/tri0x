@@ -80,9 +80,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ChildProcedure.h" />
     <ClInclude Include="libWin\ActiveObject.h" />
-    <ClInclude Include="libWin\ChildProcedure.cpp" />
     <ClInclude Include="libWin\ClassChildController.h" />
     <ClInclude Include="libWin\ClassController.h" />
     <ClInclude Include="libWin\ClassControllerMain.h" />

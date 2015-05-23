@@ -2,8 +2,6 @@
 #define CLASSCONTROLLERMAIN_H_
 
 #include <Windows.h>
-#include "Procedure.h"
-#include "ChildProcedure.h"
 #include "../WndCtrlMonoSetup.h"
 #include "ClassController.h"
 #include "Window.h"

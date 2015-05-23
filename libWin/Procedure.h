@@ -12,8 +12,8 @@ namespace Win
 	LRESULT CALLBACK Proc
 		(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-//	LRESULT CALLBACK childProc
-//		(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
+	LRESULT CALLBACK childProc
+		(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 	LRESULT CALLBACK SubProc
 		(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
