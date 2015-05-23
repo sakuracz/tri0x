@@ -75,7 +75,10 @@
     <ClInclude Include="libWin\ClassChildController.h">
       <Filter>Header Files\libWin</Filter>
     </ClInclude>
-    <ClInclude Include="libWin\ChildProcedure.h">
+    <ClInclude Include="libWin\ChildProcedure.cpp">
+      <Filter>Source Files\libWin</Filter>
+    </ClInclude>
+    <ClInclude Include="ChildProcedure.h">
       <Filter>Header Files\libWin</Filter>
     </ClInclude>
   </ItemGroup>
