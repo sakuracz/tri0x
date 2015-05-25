@@ -27,6 +27,7 @@ namespace Win
 		//windows:
 		Dow _main;
 		Dow _monoDow;
+		Dow _expDow;
 
 		Synchronizer _synch;
 	};

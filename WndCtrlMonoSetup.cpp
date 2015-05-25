@@ -61,6 +61,7 @@ namespace Win{
 		for (int i = 0; i < 3; i++){
 			j += i;						// static control ids:[1000,1002]
 			StaticMaker stat(_hwnd, j);		
+			stat.NoBG();
 			stat.AddExStyle(WS_EX_TRANSPARENT);
 			stat.AddStyle(WS_CLIPSIBLINGS);
 			stat.Create("");

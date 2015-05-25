@@ -25,7 +25,7 @@ namespace Win
 		void visibleRun();
 		void visibleStop();
 	protected:
-//		EditController	_edtCtrl[4];
+		EditController	_edtCtrl[20];
 		EditControl		*_edtArray[20];		
 		ButtonControl	*_btnArray[16];
 		StaticControl	*_stcArray[10];		
