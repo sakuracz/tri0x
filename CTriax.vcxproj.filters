@@ -117,7 +117,7 @@
       <Filter>Source Files\libWin</Filter>
     </ClCompile>
     <ClCompile Include="WndCtrlMonoSetup.cpp">
-      <Filter>Source Files\libWin</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

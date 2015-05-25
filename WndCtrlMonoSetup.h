@@ -14,10 +14,12 @@ namespace Win{
 		bool OnCommand(WPARAM, LPARAM);
 		bool OnSize(int, int, int);
 		bool OnNotify(HWND, LPARAM);
+		bool GetInitParams(int*);
 
 	private:
 		unsigned int itemIndex;
-		ComboControl *_comboOpts;
+		StaticControl *_staticArr[3];
+		ComboControl *_comboOpts[2];
 		ButtonControl *_btnSelect;
 	};
 }

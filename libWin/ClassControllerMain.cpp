@@ -47,7 +47,7 @@ namespace Win
 		int maxX = rect.right;
 		int maxY = rect.bottom;
 		
-		::SetWindowPos(_main, HWND_TOP, 0, 0, maxX/2, maxY/2, SWP_SHOWWINDOW); 
+		::SetWindowPos(_main, HWND_TOP, 0, 0, maxX, maxY, SWP_SHOWWINDOW); 
 		 
 		return true;
 	};
@@ -56,6 +56,10 @@ namespace Win
 	{
 		switch(wParam)
 		{
+		case 1200:
+			int params[3];
+			monoCtrl.GetInitParams(params);
+			::SetWindowPos(_monoDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_HIDEWINDOW);
 			break;
 		}
 
