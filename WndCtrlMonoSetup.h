@@ -20,7 +20,8 @@ namespace Win{
 		unsigned int itemIndex;
 		StaticControl *_staticArr[3];
 		ComboControl *_comboOpts[2];
-		ButtonControl *_btnSelect;
+		ButtonControl *_btnSelect, *_btnForce;
+		
 	};
 }
 
