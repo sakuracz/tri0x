@@ -7,7 +7,7 @@
 namespace Win
 {
 	MainController::MainController(HWND hwnd, CreateData *create)
-		: _main(hwnd), _monoDow(0)
+		: _main(hwnd), _monoDow(0), _synch(expCtrl)
 	{
 		//window class names:
 		char classMonoName[] = "Monochromator";

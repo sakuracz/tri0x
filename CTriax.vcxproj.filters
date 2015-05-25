@@ -75,6 +75,24 @@
     <ClInclude Include="libWin\ClassChildController.h">
       <Filter>Header Files\libWin</Filter>
     </ClInclude>
+    <ClInclude Include="ClassSynchro.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WndCtrlExp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ClassDispatcher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WndCtrlImg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SubCtrlEdit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="struct.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libWin\WinMaker.cpp">
@@ -117,6 +135,21 @@
       <Filter>Source Files\libWin</Filter>
     </ClCompile>
     <ClCompile Include="WndCtrlMonoSetup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ClassSynchro.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WndCtrlExp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ClassDispatcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WndCtrlImg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SubCtrlEdit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
