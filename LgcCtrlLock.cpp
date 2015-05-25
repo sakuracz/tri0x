@@ -17,7 +17,7 @@ namespace Logic
 		_comm.WriteTotalTimeoutConstant = 10;
 
 		_dcb.DCBlength = sizeof(_dcb);
-		_dcb.BaudRate = CBR_19200;
+		_dcb.BaudRate = CBR_115200;
 		_dcb.ByteSize = 8;
 		_dcb.StopBits = ONESTOPBIT;
 		_dcb.Parity = NOPARITY;
