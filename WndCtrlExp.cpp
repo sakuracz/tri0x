@@ -1,7 +1,7 @@
 #include "WndCtrlExp.h"
 #include "libWin\WinMaker.h"
-#include <sstream>
-#include <iomanip>
+//#include <sstream>
+//#include <iomanip>
 
 namespace Win
 {
@@ -44,7 +44,6 @@ namespace Win
 		switch(LOWORD(wParam))
 		{
 		case 3300:		//first tab's 'Set' button			
-			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 3300, NULL);
 			break;
 		case 3301:		//second tab's 'Generic 1' button
 			break;
@@ -52,7 +51,7 @@ namespace Win
 			break;
 		case 3303:		//second tab's 'Run' button
 //			::MessageBox(NULL, "Starting", "Step1", MB_OK);			
-			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 3303, NULL);
+
 			break;
 		}		
 		return true;
@@ -68,58 +67,58 @@ namespace Win
 		::SetWindowPos(_hwnd, NULL, 330, 50, _minX, _minY, SWP_SHOWWINDOW);
 
 		//static controls:
-		int j = 2000;
+
 		for(int i = 0; i < 13; i++){
-			j = 2000 + i;
+			int j = 2000 + i;
 			StaticMaker stat(_hwnd, j);
 			stat.NoBG();
-			stat.AddExStyle(WS_EX_TRANSPARENT);			
+			stat.AddExStyle(WS_EX_TRANSPARENT);		
+			stat.AddStyle(WS_CLIPSIBLINGS);
 			stat.Create("");
 			stat.Show();
 			_stcArray[i]->Init(stat, j);
 		};
 
-		::SendMessage(_stcArray[0]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Front slit [um]:");		
-		::SendMessage(_stcArray[1]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Exit slit [um]:");		
-		::SendMessage(_stcArray[2]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Start Point [eV]");		
-		::SendMessage(_stcArray[3]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"End Point [eV]");			
-		::SendMessage(_stcArray[4]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Increment [eV]");	
-		::SendMessage(_stcArray[5]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Set point [nm]");
-		::SendMessage(_stcArray[6]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Y1");
-		::SendMessage(_stcArray[7]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Y2");
-		::SendMessage(_stcArray[8]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Y3");
-		::SendMessage(_stcArray[9]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Time Const");			
-		::SendMessage(_stcArray[10]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Point Count");		
-		::SendMessage(_stcArray[11]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Interval");				
-		::SendMessage(_stcArray[12]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Output File:");
-		::SendMessage(_stcArray[13]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Output");
 
 		//edit controls:		
 		for(int i = 0; i < 20; i++){
-			j = 2100 + i;
+			int j = 2100 + i;
 			EditMaker edit(_hwnd, j);
-//			if (i % 2)
-//				edit.AddStyle(ES_READONLY | ES_AUTOVSCROLL);
 			edit.Create("");
 			edit.Show();
 			_edtArray[i]->Init(edit, j);
-//			_edtArray[i]->SubClass(&_edtCtrl[i]);
-			::SendMessageA(_edtArray[i]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"ksjdtbwk");		
+			_edtArray[i]->SubClass(&_edtCtrl[i]);
 		};
 
 		//button controls:		
 		for(int i = 0; i < 16; i++){
-			j = 2200 + i;
+			int j = 2200 + i;
 			ButtonMaker butt(_hwnd, j);			
 			butt.Create("");
 			butt.Show();
 			_btnArray[i]->Init(butt, j);
 		};
 
-		::SendMessage(_btnArray[0]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Ch1");		
-		::SendMessage(_btnArray[1]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Ch2");		
-		::SendMessage(_btnArray[2]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Inp1");		
-		::SendMessage(_btnArray[3]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Ch1");			
+
+		::SendMessage(_stcArray[0]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Front slit [um]:");
+		::SendMessage(_stcArray[1]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Exit slit [um]:");
+		::SendMessage(_stcArray[2]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Start Point [eV]");
+		::SendMessage(_stcArray[3]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"End Point [eV]");
+		::SendMessage(_stcArray[4]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Increment [eV]");
+		::SendMessage(_stcArray[5]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Set point [nm]");
+		::SendMessage(_stcArray[6]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Y1");
+		::SendMessage(_stcArray[7]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Y2");
+		::SendMessage(_stcArray[8]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Y3");
+		::SendMessage(_stcArray[9]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Time Const");
+		::SendMessage(_stcArray[10]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Point Count");
+		::SendMessage(_stcArray[11]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Interval");
+		::SendMessage(_stcArray[12]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Output File:");
+		//		::SendMessage(_stcArray[13]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Output");
+
+		::SendMessage(_btnArray[0]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Ch1");
+		::SendMessage(_btnArray[1]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Ch2");
+		::SendMessage(_btnArray[2]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Inp1");
+		::SendMessage(_btnArray[3]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Ch1");
 		::SendMessage(_btnArray[4]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Ch2");
 		::SendMessage(_btnArray[5]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Inp1");
 		::SendMessage(_btnArray[6]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"none");
@@ -133,13 +132,17 @@ namespace Win
 		::SendMessage(_btnArray[14]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Mono settings");
 		::SendMessage(_btnArray[15]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Homo settings");
 
+
+
+
+
 		return true;
 	};
 
 	bool ExpWndController::OnSize(int width, int height, int flags)
 	{
 		int xOff = 30, yOff = 30, xSpace = 10, ySpace = 10;	//offset
-		int dxStatic = 90, dxEdit = 65, dyStatic = 20, dyEdit = 20;
+		int dxStatic = 90, dxEdit = 65, dyStatic = 20, dyEdit = 30;
 		int xCol1 = xOff;
 		int xCol2 = xCol1 + dxStatic + xSpace;
 		int xCol3 = xCol2 + dxEdit + xSpace;
@@ -150,7 +153,7 @@ namespace Win
 		int yRow[13];
 		yRow[0] = 0;
 		yRow[1] = yOff;
-		for (int i = 0; i < 13; i++)
+		for (int i = 2; i < 13; i++)
 			yRow[i] = yOff + i*dyEdit + i*ySpace;
 
 		::SetWindowPos(_stcArray[0]->GetHandle(), HWND_TOP, xCol1, yRow[1], dxStatic, dyStatic, SWP_SHOWWINDOW);	//"Front slit"
@@ -208,6 +211,8 @@ namespace Win
 		::SetWindowPos(_btnArray[11]->GetHandle(), HWND_TOP, xCol4, yRow[9], dxEdit, dyEdit, SWP_SHOWWINDOW);
 		::SetWindowPos(_btnArray[12]->GetHandle(), HWND_TOP, xCol5, yRow[9], dxEdit, dyEdit, SWP_SHOWWINDOW);
 		::SetWindowPos(_btnArray[13]->GetHandle(), HWND_TOP, xCol6, yRow[9], dxEdit, dyEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_btnArray[14]->GetHandle(), HWND_TOP, xCol1, yRow[0], dxEdit, dyEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_btnArray[15]->GetHandle(), HWND_TOP, xCol1, yRow[0], dxEdit, dyEdit, SWP_SHOWWINDOW);
 
 		return true;
 	};

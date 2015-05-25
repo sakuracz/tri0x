@@ -25,6 +25,9 @@ namespace Win
 		ChildMaker monoWinMaker(classMonoName, _main, 1, monoCtrl);
 		ChildMaker expWinMaker(classExpName, _main, 2, expCtrl);
 
+		monoWinMaker.AddExStyle(WS_EX_COMPOSITED);
+		expWinMaker.AddExStyle(WS_EX_COMPOSITED);
+
 		//creating the windows:
 		monoWinMaker.Create("Select device");
 		expWinMaker.Create("Set up experiment");
@@ -34,8 +37,8 @@ namespace Win
 		_expDow.Init(expWinMaker);
 
 		//show created windows:
-//		selWinMaker.Show();
-
+		expWinMaker.Show();
+		monoWinMaker.Show();
 //		::SetFocus(_expWnd);
 
 		::SetWindowPos(_expDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_HIDEWINDOW);

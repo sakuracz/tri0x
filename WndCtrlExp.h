@@ -4,7 +4,7 @@
 #include "libWin\ClassChildController.h"
 #include "SubCtrlEdit.h"
 #include "libWin\WindowControls.h"
-#include "struct.h"
+//#include "struct.h"
 
 namespace Win
 {
@@ -28,7 +28,7 @@ namespace Win
 		EditController	_edtCtrl[20];
 		EditControl		*_edtArray[20];		
 		ButtonControl	*_btnArray[16];
-		StaticControl	*_stcArray[10];		
+		StaticControl	*_stcArray[13];		
 	private:				
 		double _interval;
 		double _timeConst;
