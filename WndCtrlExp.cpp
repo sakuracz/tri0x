@@ -11,7 +11,7 @@ namespace Win
 
 //		_prog = 0;
 		
-		for(int i = 0; i < 15; i++){
+		for(int i = 0; i < 10; i++){
 			_stcArray[i] = new StaticControl(0);
 		};
 		
@@ -30,11 +30,11 @@ namespace Win
 			if(_stcArray[i] != NULL) delete _stcArray[i];
 		};
 		
-		for(int i = 0; i < 4; i++){
+		for(int i = 0; i < 20; i++){
 			if(_edtArray[i] != NULL) delete _edtArray[i];
 		};
 		
-		for(int i = 0; i < 4; i++){
+		for(int i = 0; i < 16; i++){
 			if(_btnArray[i] != NULL) delete _btnArray[i];
 		};
 	};
@@ -68,8 +68,9 @@ namespace Win
 		::SetWindowPos(_hwnd, NULL, 330, 50, _minX, _minY, SWP_SHOWWINDOW);
 
 		//static controls:
+		int j = 2000;
 		for(int i = 0; i < 10; i++){
-			int j = 3100 + i;
+			j += i;
 			StaticMaker stat(_hwnd, j);
 			stat.NoBG();
 			stat.AddExStyle(WS_EX_TRANSPARENT);
@@ -79,46 +80,58 @@ namespace Win
 			_stcArray[i]->Init(stat, j);
 		};
 
-		::SendMessage(_stcArray[0]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Selection:");		//Tab1 
-		::SendMessage(_stcArray[1]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Time const");		//Tab1
-		::SendMessage(_stcArray[2]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Sensitivity");		//Tab1
-		::SendMessage(_stcArray[3]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Slope");			//Tab1
-		::SendMessage(_stcArray[4]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Channel");			//Tab1
-		::SendMessage(_stcArray[5]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Set to:");			//Tab2
-		::SendMessage(_stcArray[6]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Start pos");		//Tab2
-		::SendMessage(_stcArray[7]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"End pos");			//Tab2
-		::SendMessage(_stcArray[8]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Increment");		//Tab2
-		::SendMessage(_stcArray[9]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Interval");		//Tab2
+		::SendMessage(_stcArray[0]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Front slit:");		
+		::SendMessage(_stcArray[1]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Exit slit:");		
+		::SendMessage(_stcArray[2]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Start Point");		
+		::SendMessage(_stcArray[3]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"End Point");			
+		::SendMessage(_stcArray[4]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Increment");			
+		::SendMessage(_stcArray[5]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Time Const");			
+		::SendMessage(_stcArray[6]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Point Count");		
+		::SendMessage(_stcArray[7]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Interval");			
+		::SendMessage(_stcArray[8]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"OutputFile");		
+		::SendMessage(_stcArray[9]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Interval");		
 
 		//edit controls:
+		j = 2100;
 		for(int i = 0; i < 20; i++){
-			int j = 3200 + i;
+			j += i;
 			EditMaker edit(_hwnd, j);
+			if (i % 2)
+				edit.AddStyle(WS_DISABLED);
 			edit.Create("");
 			edit.Show();
 			_edtArray[i]->Init(edit, j);
 //			_edtArray[i]->SubClass(&_edtCtrl[i]);
+			::SendMessageA(_edtArray[i]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"0");		
 		};
 
-		::SendMessageA(_edtArray[0]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"100000");
-		::SendMessageA(_edtArray[1]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"600000");
-		::SendMessageA(_edtArray[2]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"1000");
-		::SendMessageA(_edtArray[3]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"200");
-
 		//button controls:
-		for(int i = 0; i < 4; i++){
-			int j = 3300 + i;
+		j = 2200;
+		for(int i = 0; i < 16; i++){
+			j += i;
 			ButtonMaker butt(_hwnd, j);
 			butt.Create("");
 			butt.Show();
 			_btnArray[i]->Init(butt, j);
 		};
 
-		::SendMessage(_btnArray[0]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Set");			//tab1
-		::SendMessage(_btnArray[1]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Gen1");		//tab2
-		::SendMessage(_btnArray[2]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Gen2");		//tab2
-		::SendMessage(_btnArray[3]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Run");			//tab2
-		
+		::SendMessage(_btnArray[0]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Ch1");		
+		::SendMessage(_btnArray[1]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Ch2");		
+		::SendMessage(_btnArray[2]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Inp1");		
+		::SendMessage(_btnArray[3]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Ch1");			
+		::SendMessage(_btnArray[4]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Ch2");
+		::SendMessage(_btnArray[5]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Inp1");
+		::SendMessage(_btnArray[6]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"none");
+		::SendMessage(_btnArray[7]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Ch1");
+		::SendMessage(_btnArray[8]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Ch2");
+		::SendMessage(_btnArray[9]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Inp1");
+		::SendMessage(_btnArray[10]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"none");
+		::SendMessage(_btnArray[11]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Back");
+		::SendMessage(_btnArray[12]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Stop");
+		::SendMessage(_btnArray[13]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Run");
+		::SendMessage(_btnArray[14]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Mono settings");
+		::SendMessage(_btnArray[15]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Homo settings");
+
 
 
 		return true;

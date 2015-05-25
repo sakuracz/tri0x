@@ -28,7 +28,7 @@ namespace Win
 //		EditController	_edtCtrl[4];
 		EditControl		*_edtArray[20];		
 		ButtonControl	*_btnArray[16];
-		StaticControl	*_stcArray[15];		
+		StaticControl	*_stcArray[10];		
 	private:				
 		double _interval;
 		double _timeConst;
