@@ -3,7 +3,7 @@
 
 #include "libWin\ActiveObject.h"
 #include "libWin\Window.h"
-
+#include "LgcIface.h"
 #include "ClassDispatcher.h"
 #include "WndCtrlExp.h"
 #include "WndCtrlImg.h"
@@ -15,7 +15,7 @@ public:
 	~Synchronizer();
 	void Update(void){;}
 	typedef void (Synchronizer::*funcPtr)();
-	bool InitDevLine(unsigned int);
+	bool InitDev(int* params);
 	void StopLineMovement();
 	void updateSettings();
 	bool isRunning(){return running;}
@@ -34,8 +34,7 @@ private:
 	Dispatcher *_Disp;
 	unsigned int _selectedDevice;	
 	Win::ExpWndController& _exp;
-//	Logic::LineInterface _lineIface;
-//	Logic::LockInterface _lockIface;
+	Logic::LogicIface *_iface;
 	void Loop(void);
 	void InitThread(){};
 	void FlushThread(){};
@@ -47,7 +46,7 @@ private:
 	void Idle();			//function to probe for changes made by the user in the interface
 	void SetLineParams();	//two functions to set parameters of both devices:
 	void SetLockParams();
-	void MoveLine();
+	void MoveMono();
 	void Measure();
 	void StartExp();
 	void StopExp();	
@@ -62,17 +61,19 @@ private:					// experiment control variables:
 	bool running;
 	DWORD time;				// timestamp
 	int point;				// point counter
-	int start;				// starting position
-	int stop;				// end position
-	int inc;				// increment position
+	double start;				// starting position
+	double stop;				// end position
+	double inc;				// increment position
 	unsigned int interval;	// time interval between measurements in [ms]
+	unsigned int waitTime;
 //	std::unique_ptr<std::vector<std::complex<double> > > vData;
 
 private:					// output windows and helper functions
 	Win::ImgWndController	*_outCtrl;
 public:
-	double *_dataX;
-	double *_dataY;
+	double *_dataCh1;
+	double *_dataCh2;
+	double *_dataX1;
 };
 
 #endif

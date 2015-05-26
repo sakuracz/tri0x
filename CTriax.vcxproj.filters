@@ -93,7 +93,7 @@
     <ClInclude Include="struct.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LgcCtrlLock.h">
+    <ClInclude Include="LgcIface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -155,7 +155,7 @@
     <ClCompile Include="SubCtrlEdit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LgcCtrlLock.cpp">
+    <ClCompile Include="LgcIface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

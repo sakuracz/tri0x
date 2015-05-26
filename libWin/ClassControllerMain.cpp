@@ -69,6 +69,7 @@ namespace Win
 		case 1200:
 			int params[3];
 			monoCtrl.GetInitParams(params);
+			_synch.InitDev(params);
 			::SetWindowPos(_monoDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_HIDEWINDOW);
 			::SetWindowPos(_expDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 			break;
