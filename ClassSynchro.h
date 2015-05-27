@@ -46,7 +46,6 @@ private:
 	unsigned int _program;
 	void Idle();			//function to probe for changes made by the user in the interface
 	void SetLineParams();	//two functions to set parameters of both devices:
-	void SetLockParams();
 	void MoveMono();
 	void Measure();
 	void StartExp();

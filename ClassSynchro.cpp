@@ -22,7 +22,6 @@ Synchronizer::Synchronizer( Win::ExpWndController& exp)
 	funcTab[4] = &Synchronizer::StopExp;
 	funcTab[5] = &Synchronizer::CheckMovement;
 	funcTab[6] = &Synchronizer::GoHome;
-	funcTab[7] = &Synchronizer::SetLockParams;
 	funcTab[8] = &Synchronizer::StartExp;
 
 	if(!CreateOpenKey())
@@ -234,17 +233,6 @@ void Synchronizer::GoHome()				// func tab[6]
 
 	//	_Disp = new Dispatcher(0, this, &Synchronizer::CheckMovement);
 	_program = 0;
-};
-
-void Synchronizer::SetLockParams()		// func tab[7]
-{
-//	int params[4];
-//	_exp.ReturnSet(params);
-
-	//	_lockIface.SetLockInterfaceParams(params[0], params[1], params[2], params[3]);
-//	::GetTickCount();
-	//	_exp.ResetProg();
-//	_program = 0;	
 };
 
 void Synchronizer::SetOutputWindow(Win::ImgWndController* ctrl)
