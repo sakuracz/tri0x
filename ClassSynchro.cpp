@@ -118,16 +118,14 @@ void Synchronizer::Loop(void)
 {
 	while(1){
 		(this->*funcTab[_program])();
-	};
-	return;
+	};	
 };
 
 void Synchronizer::Idle()		//funct tab[0]
 {
 //	_program = _line.GetProg();
 //	if(_program == 0)
-//		_program = _exp.GetProg();
-	return;
+//		_program = _exp.GetProg();	
 };
 
 void Synchronizer::SetLineParams()		// func tab[1]
@@ -142,8 +140,7 @@ void Synchronizer::SetLineParams()		// func tab[1]
 //	_line.UpdateSet(params[0], params[1], params[2]);
 
 //	_line.ResetProg();
-	_program = 0;
-	return;
+	_program = 0;	
 };
 
 void Synchronizer::MoveMono()	//func tab[2]
@@ -160,8 +157,6 @@ void Synchronizer::MoveMono()	//func tab[2]
 //	_lineIface.GoTo(param);
 //	_Disp = new Dispatcher(0, this, &Synchronizer::CheckMovement);
 	_program = 0;
-
-	return;
 };
 
 void Synchronizer::Measure()	//func tab[3]
@@ -198,8 +193,7 @@ void Synchronizer::Measure()	//func tab[3]
 		point++;
 //		_lockIface.StartAcquisition();
 		time = ::GetTickCount();
-//		::MessageBox(NULL, "Working", "Step3", MB_OK);
-		return;
+//		::MessageBox(NULL, "Working", "Step3", MB_OK);		
 	}
 };
 
@@ -216,8 +210,7 @@ void Synchronizer::StopExp()	//func tab[4]
 	_dataCh2 = NULL;
 	_dataX1 = NULL;
 
-	_program = 0;
-	return;
+	_program = 0;	
 };
 
 void Synchronizer::CheckMovement()			// func tab[5]
@@ -226,9 +219,7 @@ void Synchronizer::CheckMovement()			// func tab[5]
 
 	//	while(_lineIface.isMoving()){Sleep(500);_line.UpdatePos(_lineIface.GetPos());}
 	//	_line.UpdatePos(_lineIface.GetPos());
-	//	_lineIface.Stop();
-
-	return;
+	//	_lineIface.Stop();	
 };
 
 void Synchronizer::GoHome()				// func tab[6]
@@ -243,19 +234,17 @@ void Synchronizer::GoHome()				// func tab[6]
 
 	//	_Disp = new Dispatcher(0, this, &Synchronizer::CheckMovement);
 	_program = 0;
-	return;
 };
 
 void Synchronizer::SetLockParams()		// func tab[7]
 {
-	int params[4];
-	_exp.ReturnSet(params);
+//	int params[4];
+//	_exp.ReturnSet(params);
 
 	//	_lockIface.SetLockInterfaceParams(params[0], params[1], params[2], params[3]);
-	::GetTickCount();
+//	::GetTickCount();
 	//	_exp.ResetProg();
-	_program = 0;
-	return;
+//	_program = 0;	
 };
 
 void Synchronizer::SetOutputWindow(Win::ImgWndController* ctrl)
@@ -271,34 +260,34 @@ void Synchronizer::StartExp()			// func tab[8]
 	_exp.visibleStop();
 	updateSettings();	
 
-	_program = 3;
-	return;
+	_program = 3;	
 };
 
 void Synchronizer::updateSettings()
 {
-	double params[6];
+	double params[4];
 	_exp.ReturnExpParams(params);
 
-
+//	start = params[0];
+//	stop = params[1];
+//	inc = params[2];
+//	interval = params[3];
 };
 
 void Synchronizer::progLineHome()
 {
 	_program = 6;
-	return;
 };
 
 void Synchronizer::progLineParams()
 {
 	_program = 1;
-	return;
+	
 };
 
 void Synchronizer::progLockParams()
 {
 	_program = 7;
-	return;
 };
 
 void Synchronizer::progGoTo()
@@ -308,26 +297,22 @@ void Synchronizer::progGoTo()
 
 void Synchronizer::progStopExp()
 {	
-	_program = 4;
-	return;
+	_program = 4;	
 };
 
 void Synchronizer::progMeasure()
 {
-	_program = 3;
-	return;
+	_program = 3;	
 };
 
 void Synchronizer::progStartExp()
 {
-	_program = 8;
-	return;
+	_program = 8;	
 };
 
 void Synchronizer::StopLineMovement()
 {
-	_program = 4;
-	return;
+	_program = 4;	
 };
 
 void Synchronizer::toggleRunning()
@@ -337,7 +322,5 @@ void Synchronizer::toggleRunning()
 
 void Synchronizer::ShutdownDev()
 {
-	_iface->Close();
-
-	return;
+	_iface->Close();	
 }

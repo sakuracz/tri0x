@@ -21,7 +21,7 @@ namespace Win
 		virtual bool OnCommand(WPARAM, LPARAM){return false;}
 		virtual bool OnChar(){return false;}
 		virtual bool OnCreate(CreateData const *);	
-		virtual bool OnKeyDown(){return false;}
+		virtual bool OnKeyDown(WPARAM, LPARAM){return false;}
 		virtual bool OnLMouseButtonUp(){return false;}
 		virtual bool OnPaint(){return false;}
 		virtual bool OnSize(int width, int height, int flag){return false;}

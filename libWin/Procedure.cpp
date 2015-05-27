@@ -46,6 +46,10 @@ namespace Win
 			if(pCtrl->OnLMouseDblClick())
 				return 0;
 			break;
+		case WM_KEYDOWN:
+			if (pCtrl->OnKeyDown(wParam, lParam))
+				return 0;
+			break;
 		};
 		return pCtrl->CallPrevProc(message, wParam, lParam);
 	};

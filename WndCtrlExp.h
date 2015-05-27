@@ -16,11 +16,8 @@ namespace Win
 	public:
 		ExpWndController();
 		~ExpWndController();
-//		int GetProg(){return _prog;}
-//		void ResetProg();
-//		void startExp();
 		void ReturnExpParams(double*);
-		void ReturnSet(int*);
+		void ReadExpParams();
 		bool OnCommand(WPARAM, LPARAM);
 		bool OnCreate(CreateData const*);
 		bool OnSize(int,int,int);
