@@ -379,6 +379,10 @@ namespace Win
 	{
 		Button_Enable(_btnArray[12]->GetHandle(), false);
 		Button_Enable(_btnArray[11]->GetHandle(), true);
+
+		for (int i = 0; i < 19; i++)
+			Edit_Enable(_edtArray[i]->GetHandle(), true);
+
 		return;
 	};
 
@@ -386,6 +390,10 @@ namespace Win
 	{
 		Button_Enable(_btnArray[12]->GetHandle(), true);
 		Button_Enable(_btnArray[11]->GetHandle(), false);
+
+		for (int i = 0; i < 20; i++)
+			Edit_Enable(_edtArray[i]->GetHandle(), false);
+
 		return;
 	};
 }
