@@ -67,6 +67,7 @@ bool Synchronizer::CreateOpenKey()
 bool Synchronizer::InitDev(int* params)
 {
 	_iface = new Logic::LogicIface(params);
+	_iface->InitMono();
 
 	return true;
 };

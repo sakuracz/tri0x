@@ -26,9 +26,9 @@ namespace Win
 		void visibleStop();
 	protected:
 		EditController	_edtCtrl[20];
+		StaticControl	*_stcArray[13];
 		EditControl		*_edtArray[20];		
 		ButtonControl	*_btnArray[16];
-		StaticControl	*_stcArray[13];		
 	private:				
 		double _interval;
 		double _timeConst;
