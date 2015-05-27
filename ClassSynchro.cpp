@@ -175,8 +175,7 @@ void Synchronizer::Measure()	//func tab[3]
 	};
 
 	if((start + inc*point >= stop)){					
-		_program = 4;			//wersja napierdalacza
-//		point = 0;
+		_program = 4;			
 		return;
 	};
 
@@ -231,24 +230,10 @@ void Synchronizer::StopExp()	//func tab[4]
 
 void Synchronizer::CheckMovement()			// func tab[5]
 {
-	//	::MessageBoxA(NULL, "Mov", "Check", MB_OK);
-
-	//	while(_lineIface.isMoving()){Sleep(500);_line.UpdatePos(_lineIface.GetPos());}
-	//	_line.UpdatePos(_lineIface.GetPos());
-	//	_lineIface.Stop();	
 };
 
 void Synchronizer::GoHome()				// func tab[6]
 {
-	//	_line.ResetProg();
-
-	//	_lineIface.InitHome();
-	//	_line.UpdatePos(_lineIface.GetPos());
-
-	//	if(_Disp)
-	//		delete _Disp;
-
-	//	_Disp = new Dispatcher(0, this, &Synchronizer::CheckMovement);
 	_program = 0;
 };
 
@@ -259,8 +244,6 @@ void Synchronizer::SetOutputWindow(Win::ImgWndController* ctrl)
 
 void Synchronizer::StartExp()			// func tab[8]
 {
-//	_exp.startExp();
-
 	toggleRunning();
 	_exp.visibleStop();
 	updateSettings();	
