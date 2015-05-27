@@ -155,6 +155,10 @@ namespace Win
 		::SendMessage(_btnArray[14]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Mono settings");
 		::SendMessage(_btnArray[15]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Homo settings");
 
+		::SendMessage(_btnArray[0]->GetHandle(), BM_SETCHECK, BST_CHECKED, NULL);
+		::SendMessage(_btnArray[4]->GetHandle(), BM_SETCHECK, BST_CHECKED, NULL);
+		::SendMessage(_btnArray[9]->GetHandle(), BM_SETCHECK, BST_CHECKED, NULL);
+
 		Button_Enable(_btnArray[12]->GetHandle(), false);
 
 		return true;
