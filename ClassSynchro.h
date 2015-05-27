@@ -16,6 +16,7 @@ public:
 	void Update(void){;}
 	typedef void (Synchronizer::*funcPtr)();
 	bool InitDev(int* params);
+	void ShutdownDev();
 	void StopLineMovement();
 	void updateSettings();
 	bool isRunning(){return running;}

@@ -295,3 +295,10 @@ void Synchronizer::toggleRunning()
 {
 	running = !running;
 };
+
+void Synchronizer::ShutdownDev()
+{
+	_iface->Close();
+
+	return;
+}

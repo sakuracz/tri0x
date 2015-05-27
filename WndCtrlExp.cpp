@@ -1,8 +1,6 @@
 #include "WndCtrlExp.h"
 #include "libWin\WinMaker.h"
 #include <windowsx.h>
-//#include <sstream>
-//#include <iomanip>
 
 namespace Win
 {
@@ -44,16 +42,19 @@ namespace Win
 	{
 		switch(LOWORD(wParam))
 		{
-		case 3300:		//first tab's 'Set' button			
+		case 2211:		//Back button				
+			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 2211, NULL);
 			break;
-		case 3301:		//second tab's 'Generic 1' button
+		case 2212:		//Stop button
+			Button_Enable(_btnArray[12]->GetHandle(), false);
+			Button_Enable(_btnArray[11]->GetHandle(), true);
+			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 2212, NULL);
 			break;
-		case 3302:		//second tab's 'Generic 2' button
-			break;
-		case 3303:		//second tab's 'Run' button
-//			::MessageBox(NULL, "Starting", "Step1", MB_OK);			
-
-			break;
+		case 2213:		//Run button
+			Button_Enable(_btnArray[12]->GetHandle(), true);
+			Button_Enable(_btnArray[11]->GetHandle(), false);
+			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 2213, NULL);
+			break;	
 		}		
 		return true;
 	};
@@ -153,6 +154,8 @@ namespace Win
 		::SendMessage(_btnArray[13]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Run");
 		::SendMessage(_btnArray[14]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Mono settings");
 		::SendMessage(_btnArray[15]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Homo settings");
+
+		Button_Enable(_btnArray[12]->GetHandle(), false);
 
 		return true;
 	};

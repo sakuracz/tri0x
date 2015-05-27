@@ -1,14 +1,19 @@
 #include "LgcIface.h"
 #include <sstream>
+#include <iomanip>
 
 using namespace std;
 
-#define NOHOMO_			//NOHOMO - no lock-in nor triax; NOHOMO_ - use devs
+#define NOHOMO			//NOHOMO - no lock-in nor triax; NOHOMO_ - use devs
 
 namespace Logic
 {
 	LogicIface::LogicIface(int* params)		
 	{
+		_gratingFactors[0] = 4.0;
+		_gratingFactors[1] = 16.0;
+		_gratingFactors[2] = 2.0;
+
 		if (params[2])
 			_force = true;
 		else
@@ -56,7 +61,38 @@ namespace Logic
 		stream = stringstream();
 		stream << "/2q1" << 0x0d << "q2" << 0x0d << "x1" << 0x0d;
 		_dataQuery = stream.str();
-
+		stream = stringstream();
+		stream << "f0" << (char)0x0D; 
+		_mirRearStr = stream.str();
+		stream = stringstream();
+		stream << "e0" << (char)0x0D;
+		_mirSideStr = stream.str();
+		stream = stringstream();
+		stream << "l";
+		_mirCheckStr = stream.str();
+		stream = stringstream();
+		stream << "H0" << (char)0x0D;
+		_motorReadStr = stream.str();
+		stream = stringstream();
+		stream << "E";
+		_motorBusyStr = stream.str();
+		stream = stringstream();
+		stream << "C0" << (char)0x0D;
+		_motorSpeedStr = stream.str();
+		stream = stringstream();
+		stream << "L";
+		_motorStopStr = stream.str();
+		stream = stringstream();
+		stream << "Z452,0,0,0" << (char)0x0D;
+		_turPosStr = stream.str();
+		stream = stringstream();
+		stream << "Z453,0,0,0" << (char)0x0D;
+		_turStatusStr = stream.str();
+		stream = stringstream();
+		stream << "Z62,0" << (char)0x0D;
+		_absPosStr = stream.str();
+		// end of common string
+		
 #ifndef NOHOMO
 		Init();
 #endif
@@ -104,9 +140,15 @@ namespace Logic
 
 	void LogicIface::InitMono()
 	{
+#ifdef NOHOMO
+		return;
+#endif
+
 		std::stringstream sstream;
 		DWORD dwBytesWritten, dwBytesRead;
 		char readBuffer[255];
+		//reset string send
+
 		WriteFile(_dev, _resetStr.c_str(), _resetStr.length(), &dwBytesWritten, NULL);
 		ReadFile(_dev, readBuffer, 1, &dwBytesRead, NULL);
 
@@ -170,20 +212,99 @@ namespace Logic
 
 	void LogicIface::Goto(double target)
 	{
+		DWORD dwBytesWritten, dwBytesRead;
+		char readBuffer[255];
+		ZeroMemory(readBuffer, 255);
+		stringstream msgStream;		
+		double val = target / _gratingFactors[_turret];
+
+		msgStream.precision(2);
+		
+		//TODO: checking movement direction
+		msgStream << "/1Z61,0," << val << (char)0x0D;
+		int watchdog = 0;
+		while (readBuffer[0] != 'o'){
+			WriteFile(_dev, msgStream.str().c_str(), msgStream.str().length(), &dwBytesWritten, NULL);
+			ReadFile(_dev, readBuffer, 1, &dwBytesRead, NULL);
+			watchdog++;
+			if (watchdog > 100){
+				::MessageBox(NULL, "We may be stuck in an infinite loop", "Set wavelength failed", MB_OK | MB_ICONERROR);
+				break;
+			}
+		}
 
 		return;
 	};
 
 	void LogicIface::SetTurret(int turret)
 	{
+		DWORD dwBytesWritten, dwBytesRead;
+		char readBuffer[255];
+		ZeroMemory(readBuffer, 255);
+		stringstream msgStream;
+
+		msgStream << "/1Z451,0,0,0," << turret << (char)0x0D;
+		int watchdog = 0;
+		while (readBuffer[0] != 'o'){
+			WriteFile(_dev, msgStream.str().c_str(), msgStream.str().length(), &dwBytesWritten, NULL);
+			ReadFile(_dev, readBuffer, 1, &dwBytesRead, NULL);
+			if (watchdog > 100){
+				::MessageBox(NULL, "We may be stuck in an infinite loop", "Set turret failed", MB_OK | MB_ICONERROR);
+				break;
+			}
+		}
 
 		return;
 	};
 
 	void LogicIface::SetSlit(int slit, int size)
 	{
+		DWORD dwBytesWritten, dwBytesRead;
+		char readBuffer[255];
+		ZeroMemory(readBuffer, 255);
+		stringstream msgStream;
+
+		msgStream << "/1i0," << slit << "," << size << (char)0x0D;
+		int watchdog = 0;
+		while (readBuffer[0] != 'o'){
+			WriteFile(_dev, msgStream.str().c_str(), msgStream.str().length(), &dwBytesWritten, NULL);
+			ReadFile(_dev, readBuffer, 1, &dwBytesRead, NULL);
+			if (watchdog > 100){
+				::MessageBox(NULL, "We may be stuck in an infinite loop", "Set slit failed", MB_OK | MB_ICONERROR);
+				break;
+			}
+		}
 
 		return;
 	};
 
+	void LogicIface::Close()
+	{
+		if(_dev)
+			CloseHandle(_dev);
+		_dev = nullptr;
+
+		return;
+	};
+
+	bool LogicIface::checkBusy(char inp)
+	{
+		if (inp == 'q')
+			return true;
+		if (inp == 'z')
+			return false;
+	};
+
+	bool LogicIface::checkStatus(char inp)
+	{
+		if (inp == 'o')
+			return true;
+		else if (inp == 'z')
+			return false;
+//		else {
+//			::MessageBox(NULL, "Bad status byte received", "Communication error", MB_OK);
+//			return false;
+//		}
+
+	};
 };
