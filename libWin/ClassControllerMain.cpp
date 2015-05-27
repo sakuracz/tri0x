@@ -73,17 +73,17 @@ namespace Win
 			::SetWindowPos(_monoDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_HIDEWINDOW);
 			::SetWindowPos(_expDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 			break;
-		case 2211:	// back to mono setup window (from exp setup)
+		case 2211:	// "Back" to mono setup window (from exp setup)
 			::SetWindowPos(_expDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_HIDEWINDOW);
 			::SetWindowPos(_monoDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 			break;
-		case 2212:	// stop experiment:
-
+		case 2212:	// "Stop" experiment:
+			_synch.progStopExp();
 			break;
-		}		
-			
-
-
+		case 2213:	// "Run" experiment:
+			_synch.progStartExp();
+			break;
+		}	
 		return true;
 	};
 };

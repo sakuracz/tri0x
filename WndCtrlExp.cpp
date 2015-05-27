@@ -344,9 +344,9 @@ namespace Win
 		params[0] = _startPos;
 		params[1] = _stopPos;
 		params[2] = _incPos;
-		params[3] = _timeConst;
+		params[3] = 1000*_timeConst;
 		params[4] = _pointCount;
-		params[5] = _interval;
+		params[5] = 1000*_interval;
 		return;
 	};
 
@@ -396,4 +396,16 @@ namespace Win
 
 		return;
 	};
+
+	void ExpWndController::UpdatePos(double energy)
+	{
+		stringstream textEV, textNM;
+		double wavelength = energy / 1238.9;
+
+		textEV << energy;
+		textNM << wavelength;
+
+		::SendMessage(_edtArray[4]->GetHandle(), WM_SETTEXT, 0, (LPARAM)textEV.str().c_str());		
+		::SendMessage(_edtArray[10]->GetHandle(), WM_SETTEXT, 0, (LPARAM)textNM.str().c_str());
+	}
 }

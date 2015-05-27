@@ -60,17 +60,20 @@ private:					// experiment control variables:
 	void toggleRunning();
 	bool running;
 	DWORD time;				// timestamp
+
 	int point;				// point counter
-	double start;				// starting position
-	double stop;				// end position
+	unsigned int numPoints;			// points per average
+	double start;			// starting position
+	double stop;			// end position
 	double inc;				// increment position
 	unsigned int interval;	// time interval between measurements in [ms]
-	unsigned int waitTime;
+	unsigned int waitTime;	// lock-in time constant
 //	std::unique_ptr<std::vector<std::complex<double> > > vData;
 
 private:					// output windows and helper functions
 	Win::ImgWndController	*_outCtrl;
 public:
+	double *_dataX;
 	double *_dataCh1;
 	double *_dataCh2;
 	double *_dataX1;

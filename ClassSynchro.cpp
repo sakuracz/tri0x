@@ -7,6 +7,7 @@ Synchronizer::Synchronizer( Win::ExpWndController& exp)
 	: _exp(exp)
 {
 	_Disp = NULL;
+	_dataX = NULL;
 	_dataCh1 = NULL;
 	_dataCh2 = NULL;
 	_dataX1 = NULL;
@@ -160,33 +161,49 @@ void Synchronizer::MoveMono()	//func tab[2]
 
 void Synchronizer::Measure()	//func tab[3]
 {
-	if(point == 0){
-//		_lineIface.GoTo(start);
-		int pCount = (stop - start)/inc+1;
-		if(_dataCh1 == NULL) {
-			_dataCh1 = new double[pCount];
-			_dataCh2 = new double[pCount];
-			_dataX1 = new double[pCount];
+	if(point == 0){		
+		_iface->Goto(start);
+		if (inc != 0){
+			int pCount = (stop - start) / inc + 1;
+			if ((_dataCh1 == NULL) && (pCount != 0)) {	
+				_dataX = new double[pCount];
+				_dataCh1 = new double[pCount];
+				_dataCh2 = new double[pCount];
+				_dataX1 = new double[pCount];
+			}
 		}
 	};
 
-	if((start + inc*point > stop)){		
+	if((start + inc*point >= stop)){					
 		_program = 4;			//wersja napierdalacza
 //		point = 0;
 		return;
 	};
 
-	if( ::GetTickCount() - time < interval){
+	if( ::GetTickCount() - time < waitTime){
 		return;
 	} else {
 		if(point != 0){
-//			_lockIface.StopAcquisition();
-//			_lineIface.GoTo(_lineIface.GetPos() + inc);
-//			_line.UpdatePos(_lineIface.GetPos());
-			_dataCh1[point-1] = (start + inc*point)*1.0;
+			double data[3];
+			double average[3] = { 0.0, 0.0, 0.0 };
+			for (unsigned int i = 0; i < numPoints; i++){
+				_iface->queryData(data);
+				::Sleep(interval);
+				average[0] += data[0] / i;
+				average[1] += data[1] / i;
+				average[2] += data[2] / i;
+			}
+
+			_dataX[point-1] = start + inc*point;
+			_dataCh1[point - 1] = average[0];
+			_dataCh2[point - 1] = average[1];
+			_dataX1[point - 1] = average[2];
+
+			_iface->Goto(_iface->GetPos() + inc);
+			_exp.UpdatePos(_iface->GetPos());			
 //			_dataY[point-1] = _lockIface.GetMeasuredValues();
 //			::MessageBox(NULL, "Przed", "MB", MB_OK);
-			_outCtrl->UpdateData(_dataCh1, _dataCh2, point);
+			_outCtrl->UpdateData(_dataX, _dataCh1, point);
 //			::MessageBox(NULL, "Po", "MB", MB_OK);
 		}
 		point++;
@@ -253,13 +270,15 @@ void Synchronizer::StartExp()			// func tab[8]
 
 void Synchronizer::updateSettings()
 {
-	double params[4];
+	double params[6];
 	_exp.ReturnExpParams(params);
 
-//	start = params[0];
-//	stop = params[1];
-//	inc = params[2];
-//	interval = params[3];
+	start = params[0];
+	stop = params[1];
+	inc = params[2];
+	waitTime = (unsigned int)params[3];			// wait time in [ms]
+	numPoints = (unsigned int)params[4];
+	interval = (unsigned int)params[5];			// interval in [ms]
 };
 
 void Synchronizer::progLineHome()
