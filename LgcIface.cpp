@@ -1,6 +1,7 @@
 #include "LgcIface.h"
 #include <sstream>
 #include <iomanip>
+#include <cstdlib>
 
 using namespace std;
 
@@ -211,6 +212,9 @@ namespace Logic
 
 	void LogicIface::Goto(double target)
 	{
+#ifdef NOHOMO
+		return;
+#endif
 		DWORD dwBytesWritten, dwBytesRead;
 		char readBuffer[255];
 		ZeroMemory(readBuffer, 255);
@@ -237,6 +241,9 @@ namespace Logic
 
 	int LogicIface::GetSlitPos(int slit)
 	{
+#ifdef NOHOMO
+		return rand();
+#endif
 		char readBuff = 0;
 		char readBuffer[255];
 		DWORD dwBytesRead, dwBytesWritten;
@@ -267,6 +274,9 @@ namespace Logic
 
 	double LogicIface::GetPos()
 	{
+#ifdef NOHOMO
+		return rand();
+#endif
 		char readBuff = 0;
 		char readBuffer[255];
 		DWORD dwBytesRead, dwBytesWritten;
@@ -296,6 +306,9 @@ namespace Logic
 
 	int LogicIface::GetTurret()
 	{
+#ifdef NOHOMO
+		return 1;
+#endif
 		char readBuff = 0;
 		char readBuffer[255];
 		DWORD dwBytesRead, dwBytesWritten;
@@ -324,6 +337,9 @@ namespace Logic
 
 	void LogicIface::SetTurret(int turret)
 	{
+#ifdef NOHOMO
+		return;
+#endif
 		DWORD dwBytesWritten, dwBytesRead;
 		char readBuffer[255];
 		ZeroMemory(readBuffer, 255);
@@ -345,6 +361,9 @@ namespace Logic
 
 	void LogicIface::SetSlit(int slit, int size)
 	{
+#ifdef NOHOMO
+		return;
+#endif
 		DWORD dwBytesWritten, dwBytesRead;
 		char readBuffer[255];
 		ZeroMemory(readBuffer, 255);

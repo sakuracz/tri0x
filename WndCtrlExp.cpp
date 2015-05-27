@@ -1,6 +1,7 @@
 #include "WndCtrlExp.h"
 #include "libWin\WinMaker.h"
 #include <windowsx.h>
+#include <sstream>
 
 namespace Win
 {
@@ -46,13 +47,11 @@ namespace Win
 			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 2211, NULL);
 			break;
 		case 2212:		//Stop button
-			Button_Enable(_btnArray[12]->GetHandle(), false);
-			Button_Enable(_btnArray[11]->GetHandle(), true);
+			visibleRun();
 			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 2212, NULL);
 			break;
 		case 2213:		//Run button
-			Button_Enable(_btnArray[12]->GetHandle(), true);
-			Button_Enable(_btnArray[11]->GetHandle(), false);
+			visibleStop();
 			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 2213, NULL);
 			break;	
 		}		
@@ -82,7 +81,7 @@ namespace Win
 		};
 
 		//edit controls:		
-		for(int i = 0; i < 20; i++){
+		for(int i = 0; i < 19; i++){
 			int j = 2100 + i;
 			EditMaker edit(_hwnd, j);							
 			edit.Create("");
@@ -90,6 +89,13 @@ namespace Win
 			_edtArray[i]->Init(edit, j);
 			_edtArray[i]->SubClass(&_edtCtrl[i]);
 		};
+
+		EditMaker edit(_hwnd, 2119);
+		edit.AddStyle(ES_MULTILINE | ES_AUTOVSCROLL);
+		edit.Create("");
+		edit.Show();
+		_edtArray[19]->Init(edit, 2119);
+		_edtArray[19]->SubClass(&_edtCtrl[19]);
 
 		for (int i = 0; i < 18; i+=2)
 			Edit_Enable(_edtArray[i]->GetHandle(), false);
@@ -247,12 +253,14 @@ namespace Win
 		return false;
 	}
 
-	void ExpWndController::ReturnExpParams(int* params)
+	void ExpWndController::ReturnExpParams(double* params)
 	{
-//		params[0] = _startPos;
-//		params[1] = _stopPos;
-//		params[2] = _incPos;
-//		params[3] = _interval;
+		params[0] = _startPos;
+		params[1] = _stopPos;
+		params[2] = _incPos;
+		params[3] = _timeConst;
+		params[4] = _pointCount;
+		params[5] = _interval;
 		return;
 	};
 
@@ -264,19 +272,37 @@ namespace Win
 //		params[3] = _chann;
 	};
 
+	void ExpWndController::setEditVal(int editNum, string text)
+	{
+		::SendMessage(_edtArray[editNum]->GetHandle(), WM_SETTEXT, 0, (LPARAM)text.c_str());
+		return;
+	};
+
+	void ExpWndController::UpdateEditBox(double* valArr, int num)
+	{
+		stringstream valStream;
+		for (int i = 0; i < num; i++)
+		{
+			valStream << valArr[i] << "\t";
+		}
+		valStream << endl;
+
+		::SendMessage(NULL, WM_SETTEXT, 0, (LPARAM)valStream.str().c_str());
+
+		return;
+	};
+
 	void ExpWndController::visibleRun()
 	{
-//		::SendMessage(_btnArray[3]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Run");
+		Button_Enable(_btnArray[12]->GetHandle(), false);
+		Button_Enable(_btnArray[11]->GetHandle(), true);
+		return;
 	};
 
 	void ExpWndController::visibleStop()
 	{
-//		::SendMessage(_btnArray[3]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Stop");
-	};
-
-	void ExpWndController::setEditVal(int editNum, string text)
-	{
-		::SendMessage(_edtArray[editNum]->GetHandle(), WM_SETTEXT, 0, (LPARAM)text.c_str());
+		Button_Enable(_btnArray[12]->GetHandle(), true);
+		Button_Enable(_btnArray[11]->GetHandle(), false);
 		return;
 	};
 //	void ExpWndController::startExp()

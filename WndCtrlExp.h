@@ -19,15 +19,16 @@ namespace Win
 //		int GetProg(){return _prog;}
 //		void ResetProg();
 //		void startExp();
-		void ReturnExpParams(int*);
+		void ReturnExpParams(double*);
 		void ReturnSet(int*);
 		bool OnCommand(WPARAM, LPARAM);
 		bool OnCreate(CreateData const*);
 		bool OnSize(int,int,int);
 		bool OnNotify(HWND, LPARAM);
+		void setEditVal(int, string);
 		void visibleRun();
 		void visibleStop();
-		void setEditVal(int, string);
+		void UpdateEditBox(double*, int);
 	protected:
 		EditController	_edtCtrl[20];
 		StaticControl	*_stcArray[13];

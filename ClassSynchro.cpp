@@ -277,13 +277,10 @@ void Synchronizer::StartExp()			// func tab[8]
 
 void Synchronizer::updateSettings()
 {
-	int params[4];
+	double params[6];
 	_exp.ReturnExpParams(params);
 
-	start = params[0];
-	stop = params[1];
-	inc = params[2];
-	interval = params[3];
+
 };
 
 void Synchronizer::progLineHome()
