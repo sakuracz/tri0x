@@ -69,6 +69,48 @@ bool Synchronizer::InitDev(int* params)
 	_iface = new Logic::LogicIface(params);
 	_iface->InitMono();
 
+	double posEV = _iface->GetPos();
+	double posNM = 1238.0 / posEV;
+	int frontSlit = _iface->GetSlitPos(0);
+	int exitSlit = _iface->GetSlitPos(2);
+
+	stringstream text;
+	text << frontSlit;
+	_exp.setEditVal(0, text.str());
+	_exp.setEditVal(1, "0");
+
+	text = stringstream();
+	text << exitSlit;
+	_exp.setEditVal(2, text.str());
+	_exp.setEditVal(3, "0");
+
+	text = stringstream();
+	text << posEV;
+	_exp.setEditVal(4, text.str());
+	_exp.setEditVal(5, "0.000");
+
+	_exp.setEditVal(6, "0");
+	_exp.setEditVal(7, "0.000");
+
+	_exp.setEditVal(8, "0");
+	_exp.setEditVal(9, "0.000");
+
+	text = stringstream();
+	text << posNM;
+	_exp.setEditVal(10, text.str());
+	_exp.setEditVal(11, "0.00");
+
+	_exp.setEditVal(12, "not used");
+	_exp.setEditVal(13, "0.3");
+
+	_exp.setEditVal(14, "not used");
+	_exp.setEditVal(15, "1");
+
+	_exp.setEditVal(16, "not used");
+	_exp.setEditVal(17, "0.1");
+
+
+
 	return true;
 };
 

@@ -13,15 +13,15 @@ namespace Logic
 		~LogicIface();
 		void InitMono();
 		void Close();
-	private:			
-		void Goto(double);
-		void SetTurret(int);
-		void SetSlit(int, int);
-		void SetHandle(HANDLE dev){ _dev = dev; }
 		int GetSlitPos(int);
 		double GetPos();
 		int GetTurret();
 		void queryData(double*);
+		void Goto(double);
+		void SetTurret(int);
+		void SetSlit(int, int);
+	private:			
+		void SetHandle(HANDLE dev){ _dev = dev; }
 
 		HANDLE		_dev;
 		DCB			_dcb;

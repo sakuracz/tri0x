@@ -270,6 +270,11 @@ namespace Win
 //		::SendMessage(_btnArray[3]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Stop");
 	};
 
+	void ExpWndController::setEditVal(int editNum, string text)
+	{
+		::SendMessage(_edtArray[editNum]->GetHandle(), WM_SETTEXT, 0, (LPARAM)text.c_str());
+		return;
+	};
 //	void ExpWndController::startExp()
 //	{
 //		_prog = 3;

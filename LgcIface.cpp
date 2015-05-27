@@ -286,9 +286,10 @@ namespace Logic
 		}
 
 		msgStream << readBuffer;
-		double output;
+		double output;		
 
 		msgStream >> output;
+		output = output*_gratingFactors[_turret];
 
 		return output;		
 	};

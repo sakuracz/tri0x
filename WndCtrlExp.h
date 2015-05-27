@@ -4,7 +4,10 @@
 #include "libWin\ClassChildController.h"
 #include "SubCtrlEdit.h"
 #include "libWin\WindowControls.h"
+#include <string>
 //#include "struct.h"
+
+using namespace std;
 
 namespace Win
 {
@@ -24,6 +27,7 @@ namespace Win
 		bool OnNotify(HWND, LPARAM);
 		void visibleRun();
 		void visibleStop();
+		void setEditVal(int, string);
 	protected:
 		EditController	_edtCtrl[20];
 		StaticControl	*_stcArray[13];
