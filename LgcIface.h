@@ -18,10 +18,10 @@ namespace Logic
 		void SetTurret(int);
 		void SetSlit(int, int);
 		void SetHandle(HANDLE dev){ _dev = dev; }
-		double GetSlit();
+		int GetSlitPos(int);
 		double GetPos();
-		double GetTurret();
-		void queryData(void);
+		int GetTurret();
+		void queryData(double*);
 
 		HANDLE		_dev;
 		DCB			_dcb;

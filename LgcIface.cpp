@@ -189,22 +189,21 @@ namespace Logic
 		return;
 	};
 
-	void LogicIface::queryData()
+	void LogicIface::queryData(double* outArr)
 	{
 		DWORD dwBytesWritten, dwBytesRead;
 		char readBuff[255];
-		double q1, q2, x1;
 		std::stringstream inpStream;
 
 #ifndef NOHOMO
 		WriteFile(_dev, _dataQuery.c_str(), _dataQuery.length(), &dwBytesWritten, NULL);
 		ReadFile(_dev, readBuff, 255, &dwBytesRead, NULL);
 		inpStream << readBuff;
-		inpStream >> q1 >> q2 >> x1;
+		inpStream >> outArr[0] >> outArr[1] >> outArr[2];
 #else
-		q1 = 123.1;
-		q2 = 321.2;
-		x1 = 231.3;
+		outArr[0] = 123.1;
+		outArr[1] = 321.2;
+		outArr[2] = 231.3;
 #endif
 
 		return;
@@ -234,6 +233,92 @@ namespace Logic
 		}
 
 		return;
+	};
+
+	int LogicIface::GetSlitPos(int slit)
+	{
+		char readBuff = 0;
+		char readBuffer[255];
+		DWORD dwBytesRead, dwBytesWritten;
+		ZeroMemory(readBuffer, 255);
+		stringstream msgStream;
+
+		msgStream << "/1j0," << slit << (char)0x0D;
+
+		int watchdog = 0;
+		while (readBuff != 'o'){
+			WriteFile(_dev, msgStream.str().c_str(), msgStream.str().length(), &dwBytesWritten, NULL);
+			ReadFile(_dev, &readBuff, 1, &dwBytesRead, NULL);
+			ReadFile(_dev, &readBuffer, 4, &dwBytesRead, NULL);
+			watchdog++;
+			if (watchdog > 100){
+				::MessageBox(NULL, "We may be stuck in an infinite loop", "Get slit position failed", MB_OK | MB_ICONERROR);
+				break;
+			}
+		}
+				
+		msgStream << readBuffer;
+		int output;
+
+		msgStream >> output;
+
+		return output;
+	};
+
+	double LogicIface::GetPos()
+	{
+		char readBuff = 0;
+		char readBuffer[255];
+		DWORD dwBytesRead, dwBytesWritten;
+		ZeroMemory(readBuffer, 255);
+		stringstream msgStream;		
+
+		int watchdog = 0;
+		while (readBuff != 'o'){
+			WriteFile(_dev, _absPosStr.c_str(), _absPosStr.length(), &dwBytesWritten, NULL);
+			ReadFile(_dev, &readBuff, 1, &dwBytesRead, NULL);
+			ReadFile(_dev, &readBuffer, 8, &dwBytesRead, NULL);
+			watchdog++;
+			if (watchdog > 100){
+				::MessageBox(NULL, "We may be stuck in an infinite loop", "Get wavelength failed", MB_OK | MB_ICONERROR);
+				break;
+			}
+		}
+
+		msgStream << readBuffer;
+		double output;
+
+		msgStream >> output;
+
+		return output;		
+	};
+
+	int LogicIface::GetTurret()
+	{
+		char readBuff = 0;
+		char readBuffer[255];
+		DWORD dwBytesRead, dwBytesWritten;
+		ZeroMemory(readBuffer, 255);
+		stringstream msgStream;
+
+		int watchdog = 0;
+		while (readBuff != 'o'){
+			WriteFile(_dev, _turPosStr.c_str(), _turPosStr.length(), &dwBytesWritten, NULL);
+			ReadFile(_dev, &readBuff, 1, &dwBytesRead, NULL);
+			ReadFile(_dev, &readBuffer, 1, &dwBytesRead, NULL);
+			watchdog++;
+			if (watchdog > 100){
+				::MessageBox(NULL, "We may be stuck in an infinite loop", "Get turret position failed", MB_OK | MB_ICONERROR);
+				break;
+			}
+		}
+
+		msgStream << readBuffer;
+		int output;
+
+		msgStream >> output;
+
+		return output;
 	};
 
 	void LogicIface::SetTurret(int turret)
