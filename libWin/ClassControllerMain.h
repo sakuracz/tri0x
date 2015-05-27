@@ -28,6 +28,7 @@ namespace Win
 		Dow _main;
 		Dow _monoDow;
 		Dow _expDow;
+		Dow *_outWnd;
 
 		Synchronizer _synch;
 	};

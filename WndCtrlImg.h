@@ -20,8 +20,6 @@ namespace Win
 		void Serialize(Serializer &)const;
 		void DeSerialize(DeSerializer &){};
 	private:		//plot details:
-		double _rangeMinFFT;
-		double _rangeMaxFFT;
 		double _rangeMinX;
 		double _rangeMaxX;
 		double _rangeMinY;
@@ -31,7 +29,6 @@ namespace Win
 		double _start;
 		double _stop;
 		int _size;
-		bool _fft;
 	protected:
 		ButtonControl *_btnArray[2];
 	};

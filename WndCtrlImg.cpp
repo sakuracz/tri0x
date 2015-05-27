@@ -15,11 +15,7 @@ namespace Win
 		_dataY = NULL;
 		_size = 0;
 		_rangeMinY = 100;
-		_rangeMaxY = -100;
-
-		_rangeMinFFT = 0;
-		_rangeMaxFFT = 19980363866666.6666666666;
-		_fft = false;		
+		_rangeMaxY = -100;	
 
 		for(int i = 0; i < 2; i++){
 			_btnArray[i] = new ButtonControl(0);
@@ -106,8 +102,7 @@ namespace Win
 				}
 			}
 			break;
-		case 4301:		// "Split button
-			_fft = !_fft;
+		case 4301:		// "Split button			
 			::InvalidateRect(_hwnd, NULL, TRUE);
 			break;
 		}		
@@ -162,21 +157,6 @@ namespace Win
 			}
 #endif
 
-			if(_fft){
-				gsl_fft_real_wavetable *real;
-				gsl_fft_real_workspace *work;
-				real = gsl_fft_real_wavetable_alloc(_size);
-				work = gsl_fft_real_workspace_alloc(_size);
-
-				memcpy(fft, _dataY, _size*sizeof(double));
-				gsl_fft_real_transform(fft, 1, _size, real, work);				
-
-				gsl_fft_real_workspace_free(work);
-			}
-
-			for(int i = 0; i < _size; i++)
-				fft[i] = 20*log(abs(fft[i]));
-
 			PAINTSTRUCT paint;
 			if(::BeginPaint(_hwnd, &paint) == NULL){
 				::MessageBox(NULL, "Begin paint failed", "Error", MB_OK);
@@ -191,36 +171,6 @@ namespace Win
 			mglData data(_dataY, _size);
 			mglGraph gr(0, width, height);
 
-			if(_fft){
-				mglData fftData(fft, _size);
-				gr.SubPlot(1, 2, 0);
-				gr.SetRange('x', _dataX[0], _dataX[_size-1]);
-				gr.SetRange('y', _rangeMinY, _rangeMaxY);
-				gr.SetOrigin(_dataX[_size-1], _rangeMaxY);
-				gr.Axis();
-	 			gr.Box();
-				gr.ColumnPlot(1, 0);
-				gr.Plot(data);
-				gr.ColumnPlot(1, 1);
-//				int xMin = 0, xMax = _size-1;
-//				while(fft[xMin] == 0)
-//					xMin++;
-//				while(fft[xMax] == 0)
-//					xMax--;
-				double interval;
-				if(_size == 0 )
-					interval = 1;
-				else
-					interval = (_dataX[1] - _dataX[0])*0.00000019;
-				double tStep = 2*interval/299705458;
-				double Fs = 299705458/2/interval;
-				gr.SetRange('x', 0, Fs);
-				gr.SetRange('y', fftData.Minimal(), fftData.Maximal());
-				gr.SetOrigin(0, fftData.Minimal());
-				gr.Axis();
-	 			gr.Box();
-				gr.Plot(fftData);
-			} else {
 				gr.SubPlot(1, 1, 0);
 				gr.SetRange('x', _dataX[0], _dataX[_size-1]);
 				gr.SetRange('y', _rangeMinY, _rangeMaxY);
@@ -228,7 +178,7 @@ namespace Win
 	 			gr.Box();
 				gr.ColumnPlot(1, 0);
 				gr.Plot(data);
-			}
+
 /*			gr.SetRange('x', _dataX[0], _dataX[_size-1]);
 			gr.SetRange('y', _rangeMinY, _rangeMaxY);
 			gr.Axis();
@@ -296,8 +246,6 @@ namespace Win
 			::DeleteObject(bMap);
 			::EndPaint(_hwnd, &paint);
 
-			delete []fft;
-
 			return true;
 		} else 
 		{
@@ -309,6 +257,7 @@ namespace Win
 	
 	bool ImgWndController::OnSize(int width, int height, int flags)
 	{
+		::MessageBox(NULL, "Przed", "MB", MB_OK);
 		RECT client;
 		::GetClientRect(_hwnd, &client);
 		int size = 50;

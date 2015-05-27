@@ -289,6 +289,7 @@ namespace Win
 			text = stringstream();
 			text << setprecision(4) << fixed << val;
 			text >> _stopPos;
+			::SendMessage(_edtArray[6]->GetHandle(), WM_SETTEXT, NULL, (LPARAM)text.str().c_str());
 		}
 		else if (hFrom == _edtArray[9]->GetHandle()){		//Increment
 			::SendMessage(_edtArray[9]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
@@ -298,6 +299,7 @@ namespace Win
 			text = stringstream();
 			text << setprecision(4) << fixed << val;
 			text >> _incPos;
+			::SendMessage(_edtArray[8]->GetHandle(), WM_SETTEXT, NULL, (LPARAM)text.str().c_str());
 		}
 		else if (hFrom == _edtArray[11]->GetHandle()){		//Set point
 			::SendMessage(_edtArray[11]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
@@ -380,7 +382,7 @@ namespace Win
 		Button_Enable(_btnArray[12]->GetHandle(), false);
 		Button_Enable(_btnArray[11]->GetHandle(), true);
 
-		for (int i = 0; i < 19; i++)
+		for (int i = 1; i < 19; i+=2)
 			Edit_Enable(_edtArray[i]->GetHandle(), true);
 
 		return;
@@ -391,7 +393,7 @@ namespace Win
 		Button_Enable(_btnArray[12]->GetHandle(), true);
 		Button_Enable(_btnArray[11]->GetHandle(), false);
 
-		for (int i = 0; i < 20; i++)
+		for (int i = 1; i < 20; i+=2)
 			Edit_Enable(_edtArray[i]->GetHandle(), false);
 
 		return;

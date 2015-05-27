@@ -81,6 +81,28 @@ namespace Win
 			_synch.progStopExp();
 			break;
 		case 2213:	// "Run" experiment:
+			
+	/*		_outCtrl = new Win::ImgWndController();
+			
+			static int j = 0;
+			unsigned int i = 100000 + j * 1000;
+			Win::ChildMaker maker("Output", _main, 1, *_outCtrl);
+			std::stringstream wndName;
+			wndName << "Output window " << j++;
+			::MessageBox(NULL, "Przed", "MB", MB_OK);
+
+			maker.AddExStyle(WS_EX_COMPOSITED);
+			
+			maker.Create(wndName.str().c_str());
+
+			
+			_outWnd = new Win::Dow(maker);
+
+			_outWnd->Init(maker);
+			maker.Show();
+
+			_synch.SetOutputWindow(_outCtrl);
+			_outCtrl = NULL;			*/
 			_synch.progStartExp();
 			break;
 		}	

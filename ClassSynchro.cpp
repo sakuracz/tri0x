@@ -184,13 +184,13 @@ void Synchronizer::Measure()	//func tab[3]
 	} else {
 		if(point != 0){
 			double data[3];
-			double average[3] = { 0.0, 0.0, 0.0 };
+			double average[4] = { 0.0, 0.0, 0.0, 0.0 };
 			for (unsigned int i = 0; i < numPoints; i++){
 				_iface->queryData(data);
 				::Sleep(interval);
-				average[0] += data[0] / i;
-				average[1] += data[1] / i;
-				average[2] += data[2] / i;
+				average[1] += data[0] / i;
+				average[2] += data[1] / i;
+				average[3] += data[2] / i;
 			}
 
 			_dataX[point-1] = start + inc*point;
@@ -199,10 +199,11 @@ void Synchronizer::Measure()	//func tab[3]
 			_dataX1[point - 1] = average[2];
 
 			_iface->Goto(_iface->GetPos() + inc);
-			_exp.UpdatePos(_iface->GetPos());			
+			_exp.UpdatePos(_iface->GetPos());	
+			_exp.UpdateEditBox(average, 4);
 //			_dataY[point-1] = _lockIface.GetMeasuredValues();
 //			::MessageBox(NULL, "Przed", "MB", MB_OK);
-			_outCtrl->UpdateData(_dataX, _dataCh1, point);
+//			_outCtrl->UpdateData(_dataX, _dataCh1, point);
 //			::MessageBox(NULL, "Po", "MB", MB_OK);
 		}
 		point++;
@@ -214,6 +215,7 @@ void Synchronizer::Measure()	//func tab[3]
 
 void Synchronizer::StopExp()	//func tab[4]
 {
+	::MessageBox(NULL, "HFH", "JUJ", MB_OK);
 	_exp.visibleRun();
 
 	toggleRunning();
