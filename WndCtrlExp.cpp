@@ -260,7 +260,7 @@ namespace Win
 			text >> val;
 			text = stringstream();
 			text << val;
-//			MessageBox(NULL, text.str().c_str(), "DUR", MB_OK);
+////TODO: should send notification to parent window to change monos' front slit size
 		}
 		else if (hFrom == _edtArray[3]->GetHandle()){		//Exit slit
 			::SendMessage(_edtArray[3]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
@@ -269,7 +269,7 @@ namespace Win
 			text >> val;
 			text = stringstream();
 			text << val;
-//			MessageBox(NULL, text.str().c_str(), "DUR2", MB_OK);
+//TODO: should send notification to parent window to change monos' rear slit size
 		}
 		else if (hFrom == _edtArray[5]->GetHandle()){		//Start point
 			::SendMessage(_edtArray[5]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
@@ -278,7 +278,8 @@ namespace Win
 			text >> val;
 			text = stringstream();
 			text << setprecision(4) << fixed << val;
-//			MessageBox(NULL, text.str().c_str(), "DUR3", MB_OK);
+			text >> _startPos;
+//TODO: should send notification to parent window to move mono
 		}
 		else if (hFrom == _edtArray[7]->GetHandle()){		//End point
 			::SendMessage(_edtArray[7]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
@@ -287,6 +288,7 @@ namespace Win
 			text >> val;
 			text = stringstream();
 			text << setprecision(4) << fixed << val;
+			text >> _stopPos;
 		}
 		else if (hFrom == _edtArray[9]->GetHandle()){		//Increment
 			::SendMessage(_edtArray[9]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
@@ -295,6 +297,7 @@ namespace Win
 			text >> val;
 			text = stringstream();
 			text << setprecision(4) << fixed << val;
+			text >> _incPos;
 		}
 		else if (hFrom == _edtArray[11]->GetHandle()){		//Set point
 			::SendMessage(_edtArray[11]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
@@ -303,6 +306,7 @@ namespace Win
 			text >> val;
 			text = stringstream();
 			text << setprecision(4) << fixed << val;
+////TODO: should send notification to parent window to move mono
 		}
 		else if (hFrom == _edtArray[13]->GetHandle()){		//Time const
 			::SendMessage(_edtArray[13]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
@@ -311,6 +315,7 @@ namespace Win
 			text >> val;
 			text = stringstream();
 			text << setprecision(4) << fixed << val;
+			text >> _timeConst;
 		}
 		else if (hFrom == _edtArray[15]->GetHandle()){		//point count
 			::SendMessage(_edtArray[15]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
@@ -319,6 +324,7 @@ namespace Win
 			text >> val;
 			text = stringstream();
 			text << setprecision(4) << fixed << val;
+			text >> _pointCount;
 		}
 		else if (hFrom == _edtArray[17]->GetHandle()){		//interval
 			::SendMessage(_edtArray[17]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
@@ -327,6 +333,7 @@ namespace Win
 			text >> val;
 			text = stringstream();
 			text << setprecision(4) << fixed << val;
+			text >> _interval;
 		}
 
 		return true;
