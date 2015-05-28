@@ -168,10 +168,6 @@ namespace Logic
 			ReadFile(_dev, readBuffer, 1, &dwBytesRead, NULL);
 		}
 
-		//		stringstream res;
-		//		res << readBuffer << "\t Force:" << _force;
-		//		::MessageBoxA(NULL, res.str().c_str(), "First response from mono", MB_OK);
-
 		if (readBuffer[0] == 'B')	//if so then hung;
 		{
 			WriteFile(_dev, _boot2MainStr.c_str(), _boot2MainStr.length(), &dwBytesWritten, NULL);
@@ -183,10 +179,6 @@ namespace Logic
 			WriteFile(_dev, _whereStr.c_str(), _whereStr.length(), &dwBytesWritten, NULL);
 			ReadFile(_dev, readBuffer, 1, &dwBytesRead, NULL);
 		}
-
-		//		res = stringstream();
-		//		res << readBuffer;
-		//		::MessageBoxA(NULL, res.str().c_str(), "Second response from mono", MB_OK);
 
 		if ((readBuffer[0] == 'F') || (readBuffer[0] == '*'))
 		{
@@ -211,9 +203,6 @@ namespace Logic
 				}
 			}
 
-			//				res = stringstream();
-			//				res << _turret;
-			//				::MessageBoxA(NULL, res.str().c_str(), "Current turret read from mono", MB_OK);
 			return;
 
 		}
@@ -263,10 +252,6 @@ namespace Logic
 		//TODO: check motor moving and position		
 		double currentVal = GetPos() / _gratingFactors[_turret];		//GetPos() return absolute values in nm (that's why it's being divided);
 
-		//		stringstream vals;
-		//		vals << currentVal << endl << val;
-		//		::MessageBoxA(NULL, vals.str().c_str(), "Position before move. iface->Goto()", MB_OK);
-
 		stringstream msgStream, dVal;
 		dVal.precision(3);
 		dVal << fixed << val;
@@ -315,12 +300,6 @@ namespace Logic
 			Sleep(100);
 		}
 
-		//currentVal = GetPos();
-
-		//		vals = stringstream();
-		//		vals << currentVal;
-		//		::MessageBoxA(NULL, vals.str().c_str(), "Position after move. iface->Goto()", MB_OK);
-
 		return;
 	};
 
@@ -336,22 +315,12 @@ namespace Logic
 		DWORD dwBytesRead, dwBytesWritten;
 		ZeroMemory(readBuffer, 255);
 
-		//int watchdog = 0;
-		//		while (readBuffer[0] != 'o'){
 		WriteFile(_dev, _absPosStr.c_str(), _absPosStr.length(), &dwBytesWritten, NULL);
 		ReadFile(_dev, &readBuffer, 9, &dwBytesRead, NULL);
-		//			watchdog++;
-		//			if (watchdog > 100){
-		//				::MessageBox(NULL, "We may be stuck in an infinite loop", "Get wavelength failed", MB_OK | MB_ICONERROR);
-		//				break;
-		//			}
-		//		}
+		
 		double output = atof(&readBuffer[1]);
-		//		stringstream msgStream;
-		//		msgStream << output << endl << readBuffer;
 		output = output*_gratingFactors[_turret];
 
-		//		::MessageBoxA(NULL, msgStream.str().c_str(), "Msg received and multiplied. iface->GetPos()", MB_OK);
 
 		return output;
 	};
@@ -377,11 +346,7 @@ namespace Logic
 				break;
 			}
 		}
-
-		//		msgStream << readBuffer[1];
 		int output = atoi(&readBuffer[1]);
-
-		//		msgStream >> output;
 
 		return output;
 	};
