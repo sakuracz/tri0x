@@ -13,17 +13,17 @@ class Synchronizer : public ActiveObject
 public:
 	Synchronizer(Win::ExpWndController&);
 	~Synchronizer();
-	void Update(void){;}
+	void Update(void){ ; }
 	typedef void (Synchronizer::*funcPtr)();
 	bool InitDev(int* params);
-	void SetSlitWithUpdate(int, int);
+	void SetSlitWithUpdate(int);
 	void GoToAndUpdate(double);
 	double GetTargetNM();
 	double GetTargetEV();
 	void ShutdownDev();
 	void StopLineMovement();
 	void updateSettings();
-	bool isRunning(){return running;}
+	bool isRunning(){ return running; }
 	void SetOutputWindow(Win::ImgWndController*);
 	void progLineHome();
 	void progLineParams();
@@ -52,7 +52,7 @@ private:
 	void MoveMono();
 	void Measure();
 	void StartExp();
-	void StopExp();	
+	void StopExp();
 	void CheckMovement();
 	void GoHome();
 
@@ -71,7 +71,7 @@ private:					// experiment control variables:
 	double inc;				// increment position
 	unsigned int interval;	// time interval between measurements in [ms]
 	unsigned int waitTime;	// lock-in time constant
-//	std::unique_ptr<std::vector<std::complex<double> > > vData;
+	//	std::unique_ptr<std::vector<std::complex<double> > > vData;
 
 private:					// output windows and helper functions
 	Win::ImgWndController	*_outCtrl;

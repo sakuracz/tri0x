@@ -20,7 +20,7 @@ namespace Win
 		void ReadExpParams();
 		bool OnCommand(WPARAM, LPARAM);
 		bool OnCreate(CreateData const*);
-		bool OnSize(int,int,int);
+		bool OnSize(int, int, int);
 		bool OnNotify(HWND, LPARAM);
 		void setEditVal(int, string);
 		void visibleRun();
@@ -31,9 +31,9 @@ namespace Win
 	protected:
 		EditController	_edtCtrl[20];
 		StaticControl	*_stcArray[13];
-		EditControl		*_edtArray[20];		
+		EditControl		*_edtArray[20];
 		ButtonControl	*_btnArray[16];
-	private:				
+	private:
 		double _interval;
 		double _timeConst;
 		int _pointCount;
@@ -41,7 +41,7 @@ namespace Win
 
 		double _startPos;
 		double _stopPos;
-		double _incPos;		
+		double _incPos;
 	};
 };
 

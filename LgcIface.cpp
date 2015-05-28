@@ -5,11 +5,12 @@
 
 using namespace std;
 
-#define NOHOMO			//NOHOMO - no lock-in nor triax; NOHOMO_ - use devs
+#define NOMONO_			//NOMONO - no triax; NOMONO_ - use triax
+#define NOHOMO_			//NOHOMO - no lock-in; NOHOMO_ - use lock-in
 
 namespace Logic
 {
-	LogicIface::LogicIface(int* params)		
+	LogicIface::LogicIface(int* params)
 	{
 		_gratingFactors[0] = 4.0;
 		_gratingFactors[1] = 16.0;
@@ -48,7 +49,7 @@ namespace Logic
 
 		//Commonly used strings:
 		stringstream stream;
-		stream << (char)222;
+		stream << "/1" << (char)222;
 		_resetStr = stream.str();
 		stream = stringstream();
 		stream << "/1 ";
@@ -63,45 +64,47 @@ namespace Logic
 		stream << "/2q1" << 0x0d << "q2" << 0x0d << "x1" << 0x0d;
 		_dataQuery = stream.str();
 		stream = stringstream();
-		stream << "f0" << (char)0x0D; 
+		stream << "/1f0" << (char)0x0D;
 		_mirRearStr = stream.str();
 		stream = stringstream();
-		stream << "e0" << (char)0x0D;
+		stream << "/1e0" << (char)0x0D;
 		_mirSideStr = stream.str();
 		stream = stringstream();
-		stream << "l";
+		stream << "/1l";
 		_mirCheckStr = stream.str();
 		stream = stringstream();
-		stream << "H0" << (char)0x0D;
+		stream << "/1H0" << (char)0x0D;
 		_motorReadStr = stream.str();
 		stream = stringstream();
-		stream << "E";
+		stream << "/1E";
 		_motorBusyStr = stream.str();
 		stream = stringstream();
-		stream << "C0" << (char)0x0D;
+		stream << "/1C0" << (char)0x0D;
 		_motorSpeedStr = stream.str();
 		stream = stringstream();
-		stream << "L";
+		stream << "/1L";
 		_motorStopStr = stream.str();
 		stream = stringstream();
-		stream << "Z452,0,0,0" << (char)0x0D;
+		stream << "/1Z452,0,0,0" << (char)0x0D;
 		_turPosStr = stream.str();
 		stream = stringstream();
-		stream << "Z453,0,0,0" << (char)0x0D;
+		stream << "/1Z453,0,0,0" << (char)0x0D;
 		_turStatusStr = stream.str();
 		stream = stringstream();
-		stream << "Z62,0" << (char)0x0D;
+		stream << "/1Z62,0" << (char)0x0D;
 		_absPosStr = stream.str();
 		// end of common string
-		
-#ifndef NOHOMO
+
+#ifndef NOMONO
 		Init();
 #endif
 	};
 
 	LogicIface::~LogicIface()
 	{
-
+		if (_dev)
+			CloseHandle(_dev);
+		_dev = nullptr;
 	};
 
 	void LogicIface::Init()
@@ -141,7 +144,7 @@ namespace Logic
 
 	void LogicIface::InitMono()
 	{
-#ifdef NOHOMO
+#ifdef NOMONO
 		return;
 #endif
 
@@ -156,7 +159,7 @@ namespace Logic
 		Sleep(500);
 
 		dwBytesRead = 0;
-		while (dwBytesRead == 0){		
+		while (dwBytesRead == 0){
 			WriteFile(_dev, _whereStr.c_str(), _whereStr.length(), &dwBytesWritten, NULL);
 			ReadFile(_dev, readBuffer, 1, &dwBytesRead, NULL);
 		}
@@ -165,18 +168,54 @@ namespace Logic
 			ReadFile(_dev, readBuffer, 1, &dwBytesRead, NULL);
 		}
 
-		if (readBuffer[0] != 'B')	//if so then hung;
+		//		stringstream res;
+		//		res << readBuffer << "\t Force:" << _force;
+		//		::MessageBoxA(NULL, res.str().c_str(), "First response from mono", MB_OK);
+
+		if (readBuffer[0] == 'B')	//if so then hung;
 		{
 			WriteFile(_dev, _boot2MainStr.c_str(), _boot2MainStr.length(), &dwBytesWritten, NULL);
+			Sleep(500);
+		}
+
+		ZeroMemory(readBuffer, 255);
+		while (readBuffer[0] != 'F'){
+			WriteFile(_dev, _whereStr.c_str(), _whereStr.length(), &dwBytesWritten, NULL);
 			ReadFile(_dev, readBuffer, 1, &dwBytesRead, NULL);
 		}
-		if (readBuffer[0] == 'F')
+
+		//		res = stringstream();
+		//		res << readBuffer;
+		//		::MessageBoxA(NULL, res.str().c_str(), "Second response from mono", MB_OK);
+
+		if ((readBuffer[0] == 'F') || (readBuffer[0] == '*'))
 		{
-			if (_force)
-			{
+			if (_force){
 				WriteFile(_dev, _initStr.c_str(), _initStr.length(), &dwBytesWritten, NULL);
+				for (int i = 0; i < 100; i++)
+					Sleep(1000);
 				return;
 			}
+
+			if (GetTurret() != _turret)
+			{
+				sstream = stringstream();
+				sstream << "/1Z451,0,0,0," << _turret << (char)0x0D;
+				ZeroMemory(readBuffer, 255);
+				while (readBuffer[0] != 'o'){
+					WriteFile(_dev, sstream.str().c_str(), sstream.str().length(), &dwBytesWritten, NULL);
+					ReadFile(_dev, readBuffer, 1, &dwBytesRead, NULL);
+				}
+				while (isTurretBusy()){
+					Sleep(500);
+				}
+			}
+
+			//				res = stringstream();
+			//				res << _turret;
+			//				::MessageBoxA(NULL, res.str().c_str(), "Current turret read from mono", MB_OK);
+			return;
+
 		}
 		else
 		{
@@ -192,7 +231,7 @@ namespace Logic
 
 	void LogicIface::queryData(double* outArr)
 	{
-#ifndef NOHOMO
+#ifndef NOMONO
 		DWORD dwBytesWritten, dwBytesRead;
 		char readBuff[255];
 		std::stringstream inpStream;
@@ -212,42 +251,35 @@ namespace Logic
 
 	void LogicIface::Goto(double target)		// target in nm
 	{
-#ifdef NOHOMO
+#ifdef NOMONO
 		return;
 #endif
 		DWORD dwBytesWritten, dwBytesRead;
 		char readBuffer[255];
 		char readBuff = 0;
 		ZeroMemory(readBuffer, 255);
-		stringstream msgStream;		
 		double val = target / _gratingFactors[_turret];
 
-		msgStream.precision(2);
-		
-		//TODO: checking movement direction
-		msgStream << "/1Z61,0," << val << (char)0x0D;
-		int watchdog = 0;
-		while (readBuff != 'o'){
-			WriteFile(_dev, msgStream.str().c_str(), msgStream.str().length(), &dwBytesWritten, NULL);
-			ReadFile(_dev, &readBuff, 1, &dwBytesRead, NULL);
-			ReadFile(_dev, readBuffer, 8, &dwBytesRead, NULL);
-			watchdog++;
-			if (watchdog > 100){
-				::MessageBox(NULL, "We may be stuck in an infinite loop", "Set wavelength failed", MB_OK | MB_ICONERROR);
-				break;
-			}
-		}
+		//TODO: check motor moving and position		
+		double currentVal = GetPos() / _gratingFactors[_turret];		//GetPos() return absolute values in nm (that's why it's being divided);
 
-		msgStream = stringstream();
+		//		stringstream vals;
+		//		vals << currentVal << endl << val;
+		//		::MessageBoxA(NULL, vals.str().c_str(), "Position before move. iface->Goto()", MB_OK);
+
+		stringstream msgStream, dVal;
+		dVal.precision(3);
+		dVal << fixed << val;
+		msgStream << "/1Z61,0," << dVal.str() << (char)0x0D;
 		msgStream << readBuffer;
 
-		double currentVal;
 		msgStream >> currentVal;
 
 		msgStream = stringstream();
-
+		int watchdog = 0;
 		if (currentVal > val){		// movement in the wrong direction - need to add offset 120
-			double offsetVal = val - 120;			
+			//			MessageBox(NULL, "Target wavelenght < current wavelength", "DUH", MB_OK);
+			double offsetVal = val - 120;
 			msgStream << "/1Z61,0," << offsetVal << (char)0x0D;
 			watchdog = 0;
 			readBuff = 0;
@@ -262,6 +294,7 @@ namespace Logic
 			}
 			while (isMotorMoving()){
 				//TODO: send notification to parent window(?) to update position - or just simply wait
+				Sleep(100);
 			}
 		}
 		// movement in the right direction - no need for offset			
@@ -279,79 +312,53 @@ namespace Logic
 		}
 		while (isMotorMoving()){
 			//TODO: send notification to parent window(?) to update position - or just simply wait
+			Sleep(100);
 		}
-		
+
+		//currentVal = GetPos();
+
+		//		vals = stringstream();
+		//		vals << currentVal;
+		//		::MessageBoxA(NULL, vals.str().c_str(), "Position after move. iface->Goto()", MB_OK);
+
 		return;
 	};
 
-	int LogicIface::GetSlitPos(int slit)
+
+	double LogicIface::GetPos()
 	{
-#ifdef NOHOMO
+#ifdef NOMONO
 		return rand();
 #endif
-		char readBuff = 0;
+		PurgeComm(_dev, PURGE_RXCLEAR);
+
 		char readBuffer[255];
 		DWORD dwBytesRead, dwBytesWritten;
 		ZeroMemory(readBuffer, 255);
-		stringstream msgStream;
 
-		msgStream << "/1j0," << slit << (char)0x0D;
+		//int watchdog = 0;
+		//		while (readBuffer[0] != 'o'){
+		WriteFile(_dev, _absPosStr.c_str(), _absPosStr.length(), &dwBytesWritten, NULL);
+		ReadFile(_dev, &readBuffer, 9, &dwBytesRead, NULL);
+		//			watchdog++;
+		//			if (watchdog > 100){
+		//				::MessageBox(NULL, "We may be stuck in an infinite loop", "Get wavelength failed", MB_OK | MB_ICONERROR);
+		//				break;
+		//			}
+		//		}
+		double output = atof(&readBuffer[1]);
+		//		stringstream msgStream;
+		//		msgStream << output << endl << readBuffer;
+		output = output*_gratingFactors[_turret];
 
-		int watchdog = 0;
-		while (readBuff != 'o'){
-			WriteFile(_dev, msgStream.str().c_str(), msgStream.str().length(), &dwBytesWritten, NULL);
-			ReadFile(_dev, &readBuff, 1, &dwBytesRead, NULL);
-			ReadFile(_dev, &readBuffer, 4, &dwBytesRead, NULL);
-			watchdog++;
-			if (watchdog > 100){
-				::MessageBox(NULL, "We may be stuck in an infinite loop", "Get slit position failed", MB_OK | MB_ICONERROR);
-				break;
-			}
-		}
-				
-		msgStream << readBuffer;
-		int output;
-
-		msgStream >> output;
+		//		::MessageBoxA(NULL, msgStream.str().c_str(), "Msg received and multiplied. iface->GetPos()", MB_OK);
 
 		return output;
 	};
 
-	double LogicIface::GetPos()
-	{
-#ifdef NOHOMO
-		return rand();
-#endif
-		char readBuff = 0;
-		char readBuffer[255];
-		DWORD dwBytesRead, dwBytesWritten;
-		ZeroMemory(readBuffer, 255);
-		stringstream msgStream;		
-
-		int watchdog = 0;
-		while (readBuff != 'o'){
-			WriteFile(_dev, _absPosStr.c_str(), _absPosStr.length(), &dwBytesWritten, NULL);
-			ReadFile(_dev, &readBuff, 1, &dwBytesRead, NULL);
-			ReadFile(_dev, &readBuffer, 8, &dwBytesRead, NULL);
-			watchdog++;
-			if (watchdog > 100){
-				::MessageBox(NULL, "We may be stuck in an infinite loop", "Get wavelength failed", MB_OK | MB_ICONERROR);
-				break;
-			}
-		}
-
-		msgStream << readBuffer;
-		double output;		
-
-		msgStream >> output;
-		output = output*_gratingFactors[_turret];
-
-		return output;		
-	};
-
 	int LogicIface::GetTurret()
 	{
-#ifdef NOHOMO
+#ifdef NOMONO
 		return 1;
 #endif
 		char readBuff = 0;
@@ -361,28 +368,27 @@ namespace Logic
 		stringstream msgStream;
 
 		int watchdog = 0;
-		while (readBuff != 'o'){
+		while (readBuffer[0] != 'o'){
 			WriteFile(_dev, _turPosStr.c_str(), _turPosStr.length(), &dwBytesWritten, NULL);
-			ReadFile(_dev, &readBuff, 1, &dwBytesRead, NULL);
-			ReadFile(_dev, &readBuffer, 1, &dwBytesRead, NULL);
+			ReadFile(_dev, readBuffer, 2, &dwBytesRead, NULL);
 			watchdog++;
 			if (watchdog > 100){
-				::MessageBox(NULL, "We may be stuck in an infinite loop", "Get turret position failed", MB_OK | MB_ICONERROR);
+				::MessageBox(NULL, "Wea may be stuck in an infinite loop", "Get turret position failed", MB_OK | MB_ICONERROR);
 				break;
 			}
 		}
 
-		msgStream << readBuffer;
-		int output;
+		//		msgStream << readBuffer[1];
+		int output = atoi(&readBuffer[1]);
 
-		msgStream >> output;
+		//		msgStream >> output;
 
 		return output;
 	};
 
 	void LogicIface::SetTurret(int turret)
 	{
-#ifdef NOHOMO
+#ifdef NOMONO
 		return;
 #endif
 		DWORD dwBytesWritten, dwBytesRead;
@@ -404,9 +410,46 @@ namespace Logic
 		return;
 	};
 
+	int LogicIface::GetSlitPos(int slit)
+	{
+#ifdef NOMONO
+		return rand();
+#endif
+		PurgeComm(_dev, PURGE_RXCLEAR);
+
+		char readBuff = 0;
+		char readBuffer[255];
+		DWORD dwBytesRead, dwBytesWritten;
+		ZeroMemory(readBuffer, 255);
+		stringstream msgStream;
+
+		msgStream << "/1j0," << slit << (char)0x0D;
+
+		int watchdog = 0;
+		while (readBuffer[0] != 'o'){
+			WriteFile(_dev, msgStream.str().c_str(), msgStream.str().length(), &dwBytesWritten, NULL);
+			ReadFile(_dev, readBuffer, 7, &dwBytesRead, NULL);
+			watchdog++;
+			if (watchdog > 100){
+				::MessageBox(NULL, "We may be stuck in an infinite loop", "Get slit position failed", MB_OK | MB_ICONERROR);
+				break;
+			}
+		}
+		int output = atoi(&readBuffer[1]);
+		//		msgStream << readBuffer << endl << output;
+		//		::MessageBox(NULL, msgStream.str().c_str(), "Read slit position", MB_OK | MB_ICONERROR);
+		//	int output;
+
+		//		msgStream >> output;
+
+
+
+		return output;
+	};
+
 	void LogicIface::SetSlit(int slit, int size)
 	{
-#ifdef NOHOMO
+#ifdef NOMONO
 		return;
 #endif
 		DWORD dwBytesWritten, dwBytesRead;
@@ -414,7 +457,9 @@ namespace Logic
 		ZeroMemory(readBuffer, 255);
 		stringstream msgStream;
 
-		msgStream << "/1i0," << slit << "," << size << (char)0x0D;
+		int currVal = GetSlitPos(slit);
+
+		msgStream << "/1k0," << slit << "," << size - currVal << (char)0x0D;
 		int watchdog = 0;
 		while (readBuffer[0] != 'o'){
 			WriteFile(_dev, msgStream.str().c_str(), msgStream.str().length(), &dwBytesWritten, NULL);
@@ -428,37 +473,55 @@ namespace Logic
 		return;
 	};
 
-	void LogicIface::Close()
+	bool LogicIface::isTurretBusy()
 	{
-		if(_dev)
-			CloseHandle(_dev);
-		_dev = nullptr;
-
-		return;
-	};
-
-	bool LogicIface::isMotorMoving()
-	{
-#ifdef NOHOMO
-		return false; 
+#ifdef NOMONO
+		return false;
 #endif
+		PurgeComm(_dev, PURGE_RXCLEAR);
+
+		//		stringstream msg;
+		//		msg << "/1Z453,0,0,0" << (char)0x0D;
 		DWORD dwBytesWritten, dwBytesRead;
 		char readBuffer[10];
-		char readBuff = 0; 
-		ZeroMemory(readBuffer, 10);		
-		
+		ZeroMemory(readBuffer, 10);
+
 		int watchdog = 0;
-		while (readBuff != 'o'){
-			WriteFile(_dev, _motorBusyStr.c_str(), _motorBusyStr.length(), &dwBytesWritten, NULL);
-			ReadFile(_dev, &readBuff, 1, &dwBytesRead, NULL);
-			ReadFile(_dev, readBuffer, 1, &dwBytesRead, NULL);
+		while (readBuffer[0] != 'o'){
+			WriteFile(_dev, _turStatusStr.c_str(), _turStatusStr.length(), &dwBytesWritten, NULL);
+			ReadFile(_dev, readBuffer, 2, &dwBytesRead, NULL);
 			if (watchdog > 100){
 				::MessageBox(NULL, "We may be stuck in an infinite loop", "Check motor state failed", MB_OK | MB_ICONERROR);
 				break;
 			}
 		}
 
-		return checkBusy(readBuffer[0]);
+		return checkBusy(readBuffer[1]);
+	}
+
+	bool LogicIface::isMotorMoving()
+	{
+#ifdef NOMONO
+		return false;
+#endif
+		PurgeComm(_dev, PURGE_RXCLEAR);
+
+		DWORD dwBytesWritten, dwBytesRead;
+		char readBuffer[10];
+		char readBuff = 0;
+		ZeroMemory(readBuffer, 10);
+
+		int watchdog = 0;
+		while (readBuffer[0] != 'o'){
+			WriteFile(_dev, _motorBusyStr.c_str(), _motorBusyStr.length(), &dwBytesWritten, NULL);
+			ReadFile(_dev, readBuffer, 2, &dwBytesRead, NULL);
+			if (watchdog > 100){
+				::MessageBox(NULL, "We may be stuck in an infinite loop", "Check motor state failed", MB_OK | MB_ICONERROR);
+				break;
+			}
+		}
+
+		return checkBusy(readBuffer[1]);
 	};
 
 	bool LogicIface::checkBusy(char inp)
@@ -467,15 +530,17 @@ namespace Logic
 			return true;
 		if (inp == 'z')
 			return false;
-		else
+		else {
+			//		::MessageBoxA(NULL, "Wrong read at check motor busy", "ERR", MB_OK);
 			return true;
+		}
 	};
 
 	bool LogicIface::checkStatus(char inp)
 	{
 		if (inp == 'o')
 			return true;
-		else 
+		else
 			return false;
 	};
 };

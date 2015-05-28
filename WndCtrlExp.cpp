@@ -250,11 +250,11 @@ namespace Win
 	};
 
 	bool ExpWndController::OnNotify(HWND hFrom, LPARAM lParam)
-	{		
+	{
 		stringstream text;
 		char readBuff[255];
 		if (hFrom == _edtArray[1]->GetHandle()){			//Front slit
-			int width = (int)GetEditVal(1);			 
+			int width = (int)GetEditVal(1);
 			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 2101, (LPARAM)width);
 		}
 		else if (hFrom == _edtArray[3]->GetHandle()){		//Exit slit
@@ -263,30 +263,26 @@ namespace Win
 		}
 		else if (hFrom == _edtArray[5]->GetHandle()){		//Start point
 			_startPos = GetEditVal(5);
-//TODO: should send notification to parent window to move mono
 			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 2105, 0);
 		}
-		else if (hFrom == _edtArray[7]->GetHandle()){		//End point
-			double val = GetEditVal(7);	
-			_stopPos = val;
+		else if (hFrom == _edtArray[7]->GetHandle()){		//End point	
+			_stopPos = GetEditVal(7);
 			stringstream text;
-			text << setprecision(4) << fixed << val;
+			text << setprecision(4) << fixed << _stopPos;
 			::SendMessage(_edtArray[6]->GetHandle(), WM_SETTEXT, NULL, (LPARAM)text.str().c_str());
 		}
 		else if (hFrom == _edtArray[9]->GetHandle()){		//Increment
-			double val = GetEditVal(9);
-			_incPos = val;
+			_incPos = GetEditVal(9);
 			stringstream text;
-			text << setprecision(4) << fixed << val;
+			text << setprecision(4) << fixed << _incPos;
 			::SendMessage(_edtArray[8]->GetHandle(), WM_SETTEXT, NULL, (LPARAM)text.str().c_str());
 		}
 		else if (hFrom == _edtArray[11]->GetHandle()){		//Set point
 			GetEditVal(11);
-////TODO: should send notification to parent window to move mono
 			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 2111, 0);
 		}
 		else if (hFrom == _edtArray[13]->GetHandle()){		//Time const
-			_timeConst = GetEditVal(11); 
+			_timeConst = GetEditVal(11);
 		}
 		else if (hFrom == _edtArray[15]->GetHandle()){		//point count
 			_pointCount = GetEditVal(15);
@@ -364,7 +360,7 @@ namespace Win
 		textEV << energy;
 		textNM << wavelength;
 
-		::SendMessage(_edtArray[4]->GetHandle(), WM_SETTEXT, 0, (LPARAM)textEV.str().c_str());		
+		::SendMessage(_edtArray[4]->GetHandle(), WM_SETTEXT, 0, (LPARAM)textEV.str().c_str());
 		::SendMessage(_edtArray[10]->GetHandle(), WM_SETTEXT, 0, (LPARAM)textNM.str().c_str());
 	}
 
@@ -375,7 +371,7 @@ namespace Win
 		char readBuff[255];
 
 		::SendMessage(_edtArray[num]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
-		text << readBuff;		
+		text << readBuff;
 		text << setprecision(4) << fixed;
 		text >> val;
 

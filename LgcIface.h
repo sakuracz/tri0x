@@ -12,7 +12,6 @@ namespace Logic
 		LogicIface(int*);
 		~LogicIface();
 		void InitMono();
-		void Close();
 		int GetSlitPos(int);
 		double GetPos();
 		int GetTurret();
@@ -21,7 +20,8 @@ namespace Logic
 		void SetTurret(int);
 		void SetSlit(int, int);
 		bool isMotorMoving();
-	private:			
+		bool isTurretBusy();
+	private:
 		void SetHandle(HANDLE dev){ _dev = dev; }
 
 		HANDLE		_dev;
