@@ -17,6 +17,9 @@ public:
 	typedef void (Synchronizer::*funcPtr)();
 	bool InitDev(int* params);
 	void SetSlitWithUpdate(int, int);
+	void GoToAndUpdate(double);
+	double GetTargetNM();
+	double GetTargetEV();
 	void ShutdownDev();
 	void StopLineMovement();
 	void updateSettings();

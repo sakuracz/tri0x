@@ -192,19 +192,19 @@ namespace Logic
 
 	void LogicIface::queryData(double* outArr)
 	{
+#ifndef NOHOMO
 		DWORD dwBytesWritten, dwBytesRead;
 		char readBuff[255];
 		std::stringstream inpStream;
 
-#ifndef NOHOMO
 		WriteFile(_dev, _dataQuery.c_str(), _dataQuery.length(), &dwBytesWritten, NULL);
 		ReadFile(_dev, readBuff, 255, &dwBytesRead, NULL);
 		inpStream << readBuff;
 		inpStream >> outArr[0] >> outArr[1] >> outArr[2];
 #else
-		outArr[0] = 123.1;
-		outArr[1] = 321.2;
-		outArr[2] = 231.3;
+		outArr[0] = rand()/(RAND_MAX*1.0);
+		outArr[1] = rand()/(RAND_MAX*1.0);
+		outArr[2] = rand()/(RAND_MAX*1.0);
 #endif
 
 		return;
@@ -217,6 +217,7 @@ namespace Logic
 #endif
 		DWORD dwBytesWritten, dwBytesRead;
 		char readBuffer[255];
+		char readBuff = 0;
 		ZeroMemory(readBuffer, 255);
 		stringstream msgStream;		
 		double val = target / _gratingFactors[_turret];
@@ -226,9 +227,10 @@ namespace Logic
 		//TODO: checking movement direction
 		msgStream << "/1Z61,0," << val << (char)0x0D;
 		int watchdog = 0;
-		while (readBuffer[0] != 'o'){
+		while (readBuff != 'o'){
 			WriteFile(_dev, msgStream.str().c_str(), msgStream.str().length(), &dwBytesWritten, NULL);
-			ReadFile(_dev, readBuffer, 1, &dwBytesRead, NULL);
+			ReadFile(_dev, &readBuff, 1, &dwBytesRead, NULL);
+			ReadFile(_dev, readBuffer, 8, &dwBytesRead, NULL);
 			watchdog++;
 			if (watchdog > 100){
 				::MessageBox(NULL, "We may be stuck in an infinite loop", "Set wavelength failed", MB_OK | MB_ICONERROR);
@@ -236,6 +238,49 @@ namespace Logic
 			}
 		}
 
+		msgStream = stringstream();
+		msgStream << readBuffer;
+
+		double currentVal;
+		msgStream >> currentVal;
+
+		msgStream = stringstream();
+
+		if (currentVal > val){		// movement in the wrong direction - need to add offset 120
+			double offsetVal = val - 120;			
+			msgStream << "/1Z61,0," << offsetVal << (char)0x0D;
+			watchdog = 0;
+			readBuff = 0;
+			while (readBuff != 'o'){
+				WriteFile(_dev, msgStream.str().c_str(), msgStream.str().length(), &dwBytesWritten, NULL);
+				ReadFile(_dev, &readBuff, 1, &dwBytesRead, NULL);
+				watchdog++;
+				if (watchdog > 100){
+					::MessageBox(NULL, "We may be stuck in an infinite loop", "Set wavelength failed", MB_OK | MB_ICONERROR);
+					break;
+				}
+			}
+			while (isMotorMoving()){
+				//TODO: send notification to parent window(?) to update position - or just simply wait
+			}
+		}
+		// movement in the right direction - no need for offset			
+		msgStream << "/1Z61,0," << val << (char)0x0D;
+		watchdog = 0;
+		readBuff = 0;
+		while (readBuff != 'o'){
+			WriteFile(_dev, msgStream.str().c_str(), msgStream.str().length(), &dwBytesWritten, NULL);
+			ReadFile(_dev, &readBuff, 1, &dwBytesRead, NULL);
+			watchdog++;
+			if (watchdog > 100){
+				::MessageBox(NULL, "We may be stuck in an infinite loop", "Set wavelength failed", MB_OK | MB_ICONERROR);
+				break;
+			}
+		}
+		while (isMotorMoving()){
+			//TODO: send notification to parent window(?) to update position - or just simply wait
+		}
+		
 		return;
 	};
 
@@ -422,6 +467,8 @@ namespace Logic
 			return true;
 		if (inp == 'z')
 			return false;
+		else
+			return true;
 	};
 
 	bool LogicIface::checkStatus(char inp)

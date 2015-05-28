@@ -104,6 +104,28 @@ void Synchronizer::SetSlitWithUpdate(int slit, int width)
 
 };
 
+void Synchronizer::GoToAndUpdate(double wavelength)
+{
+	_iface->Goto(wavelength);
+	double current = _iface->GetPos();
+	stringstream text;
+	text << current;
+	_exp.setEditVal(10, text.str());
+	text = stringstream();
+	text << 1239.8384 / current;
+	_exp.setEditVal(4, text.str());
+}
+
+double Synchronizer::GetTargetEV()
+{
+	return _exp.GetEditVal(5);
+}
+
+double Synchronizer::GetTargetNM()
+{
+	return _exp.GetEditVal(11);
+}
+
 bool Synchronizer::InitDev(int* params)
 {
 	_iface = new Logic::LogicIface(params);
@@ -202,10 +224,10 @@ void Synchronizer::MoveMono()	//func tab[2]
 void Synchronizer::Measure()	//func tab[3]
 {
 	if(point == 0){		
-		_iface->Goto(start);
+		_iface->Goto(1239.8384/start);
 		if (inc != 0){
 			::MessageBox(NULL, "KL", "op", MB_OK);
-			int pCount = (stop - start) / inc + 1;
+			int pCount = (start - stop) / inc + 1;
 			if ((_dataCh1 == NULL) && (pCount != 0)) {	
 				_dataX = new double[pCount];
 				_dataCh1 = new double[pCount];
@@ -215,7 +237,7 @@ void Synchronizer::Measure()	//func tab[3]
 		}
 	};
 
-	if((start + inc*point >= stop)){					
+	if((start - inc*point < stop)){					
 		_program = 4;			
 		return;
 	};
@@ -229,9 +251,9 @@ void Synchronizer::Measure()	//func tab[3]
 			for (unsigned int i = 0; i < numPoints; i++){
 				_iface->queryData(data);
 				::Sleep(interval);
-				average[1] += data[0] / i;
-				average[2] += data[1] / i;
-				average[3] += data[2] / i;
+				average[1] += data[0] / (i*1.0);
+				average[2] += data[1] / (i*1.0);
+				average[3] += data[2] / (i*1.0);
 			}
 
 			_dataX[point-1] = start + inc*point;
@@ -239,7 +261,8 @@ void Synchronizer::Measure()	//func tab[3]
 			_dataCh2[point - 1] = average[1];
 			_dataX1[point - 1] = average[2];
 
-			_iface->Goto(_iface->GetPos() + inc);
+			double nextPos = 1239.8384 / (1239.8384 / _iface->GetPos() - inc);
+			_iface->Goto(nextPos);
 			_exp.UpdatePos(_iface->GetPos());	
 			_exp.UpdateEditBox(average, 4);
 //			_dataY[point-1] = _lockIface.GetMeasuredValues();

@@ -80,10 +80,10 @@ namespace Win
 			_synch.SetSlitWithUpdate(2, (int)lParam);
 			break;
 		case 2105:	// Start point changed:
-
+			_synch.GoToAndUpdate(_synch.GetTargetEV());
 			break;
 		case 2111:	// Set point changed:
-
+			_synch.GoToAndUpdate(_synch.GetTargetNM());
 			break;
 		case 2211:	// "Back" to mono setup window (from exp setup)
 			::SetWindowPos(_expDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_HIDEWINDOW);
