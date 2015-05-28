@@ -210,7 +210,7 @@ namespace Logic
 		return;
 	};
 
-	void LogicIface::Goto(double target)
+	void LogicIface::Goto(double target)		// target in nm
 	{
 #ifdef NOHOMO
 		return;
@@ -392,6 +392,30 @@ namespace Logic
 		return;
 	};
 
+	bool LogicIface::isMotorMoving()
+	{
+#ifdef NOHOMO
+		return false; 
+#endif
+		DWORD dwBytesWritten, dwBytesRead;
+		char readBuffer[10];
+		char readBuff = 0; 
+		ZeroMemory(readBuffer, 10);		
+		
+		int watchdog = 0;
+		while (readBuff != 'o'){
+			WriteFile(_dev, _motorBusyStr.c_str(), _motorBusyStr.length(), &dwBytesWritten, NULL);
+			ReadFile(_dev, &readBuff, 1, &dwBytesRead, NULL);
+			ReadFile(_dev, readBuffer, 1, &dwBytesRead, NULL);
+			if (watchdog > 100){
+				::MessageBox(NULL, "We may be stuck in an infinite loop", "Check motor state failed", MB_OK | MB_ICONERROR);
+				break;
+			}
+		}
+
+		return checkBusy(readBuffer[0]);
+	};
+
 	bool LogicIface::checkBusy(char inp)
 	{
 		if (inp == 'q')
@@ -404,12 +428,7 @@ namespace Logic
 	{
 		if (inp == 'o')
 			return true;
-		else if (inp == 'z')
+		else 
 			return false;
-//		else {
-//			::MessageBox(NULL, "Bad status byte received", "Communication error", MB_OK);
-//			return false;
-//		}
-
 	};
 };

@@ -20,6 +20,7 @@ namespace Logic
 		void Goto(double);
 		void SetTurret(int);
 		void SetSlit(int, int);
+		bool isMotorMoving();
 	private:			
 		void SetHandle(HANDLE dev){ _dev = dev; }
 

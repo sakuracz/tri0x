@@ -64,6 +64,46 @@ bool Synchronizer::CreateOpenKey()
 	}
 };
 
+void Synchronizer::SetSlitWithUpdate(int slit, int width)
+{
+	int tWidth;
+	if (width > 2300)
+		tWidth = 2300;
+	else if (width < 0)
+		tWidth = 0;
+	else
+		tWidth = width;
+	stringstream pos;
+	switch (slit){
+	case 0:		
+		_iface->SetSlit(slit, tWidth);
+		while (_iface->isMotorMoving()){
+			pos << _iface->GetSlitPos(0);
+			_exp.setEditVal(0, pos.str());
+			pos = stringstream();
+		};
+		pos << _iface->GetSlitPos(0);
+		_exp.setEditVal(0, pos.str());
+		break;
+	case 1:
+		break;
+	case 2:
+		_iface->SetSlit(slit, tWidth);
+		while (_iface->isMotorMoving()){
+			pos << _iface->GetSlitPos(0);
+			_exp.setEditVal(0, pos.str());
+			pos = stringstream();
+		};
+		pos << _iface->GetSlitPos(0);
+		_exp.setEditVal(2, pos.str());
+		break;
+
+	case 3:
+		break;
+	}
+
+};
+
 bool Synchronizer::InitDev(int* params)
 {
 	_iface = new Logic::LogicIface(params);
@@ -164,6 +204,7 @@ void Synchronizer::Measure()	//func tab[3]
 	if(point == 0){		
 		_iface->Goto(start);
 		if (inc != 0){
+			::MessageBox(NULL, "KL", "op", MB_OK);
 			int pCount = (stop - start) / inc + 1;
 			if ((_dataCh1 == NULL) && (pCount != 0)) {	
 				_dataX = new double[pCount];
@@ -215,7 +256,6 @@ void Synchronizer::Measure()	//func tab[3]
 
 void Synchronizer::StopExp()	//func tab[4]
 {
-	::MessageBox(NULL, "HFH", "JUJ", MB_OK);
 	_exp.visibleRun();
 
 	toggleRunning();

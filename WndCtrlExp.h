@@ -27,6 +27,7 @@ namespace Win
 		void visibleStop();
 		void UpdateEditBox(double*, int);
 		void UpdatePos(double);
+		double GetEditVal(int);
 	protected:
 		EditController	_edtCtrl[20];
 		StaticControl	*_stcArray[13];

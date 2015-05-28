@@ -135,7 +135,7 @@ namespace Win
 		::SendMessage(_stcArray[1]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Exit slit [um]:");
 		::SendMessage(_stcArray[2]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Start Point [eV]");
 		::SendMessage(_stcArray[3]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"End Point [eV]");
-		::SendMessage(_stcArray[4]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Increment [eV]");
+		::SendMessage(_stcArray[4]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Decrement [eV]");
 		::SendMessage(_stcArray[5]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Set point [nm]");
 		::SendMessage(_stcArray[6]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Y1");
 		::SendMessage(_stcArray[7]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Y2");
@@ -250,92 +250,49 @@ namespace Win
 	};
 
 	bool ExpWndController::OnNotify(HWND hFrom, LPARAM lParam)
-	{
+	{		
 		stringstream text;
 		char readBuff[255];
 		if (hFrom == _edtArray[1]->GetHandle()){			//Front slit
-			::SendMessage(_edtArray[1]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
-			text << readBuff;
-			int val;
-			text >> val;
-			text = stringstream();
-			text << val;
-////TODO: should send notification to parent window to change monos' front slit size
+			int width = (int)GetEditVal(1);			 
+			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 2101, (LPARAM)width);
 		}
 		else if (hFrom == _edtArray[3]->GetHandle()){		//Exit slit
-			::SendMessage(_edtArray[3]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
-			text << readBuff;
-			int val;
-			text >> val;
-			text = stringstream();
-			text << val;
-//TODO: should send notification to parent window to change monos' rear slit size
+			int width = (int)GetEditVal(3);
+			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 2103, (LPARAM)width);
 		}
 		else if (hFrom == _edtArray[5]->GetHandle()){		//Start point
-			::SendMessage(_edtArray[5]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
-			text << readBuff;
-			double val;
-			text >> val;
-			text = stringstream();
-			text << setprecision(4) << fixed << val;
-			text >> _startPos;
+			_startPos = GetEditVal(5);
 //TODO: should send notification to parent window to move mono
+			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 2105, 0);
 		}
 		else if (hFrom == _edtArray[7]->GetHandle()){		//End point
-			::SendMessage(_edtArray[7]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
-			text << readBuff;
-			double val;
-			text >> val;
-			text = stringstream();
+			double val = GetEditVal(7);	
+			_stopPos = val;
+			stringstream text;
 			text << setprecision(4) << fixed << val;
-			text >> _stopPos;
 			::SendMessage(_edtArray[6]->GetHandle(), WM_SETTEXT, NULL, (LPARAM)text.str().c_str());
 		}
 		else if (hFrom == _edtArray[9]->GetHandle()){		//Increment
-			::SendMessage(_edtArray[9]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
-			text << readBuff;
-			double val;
-			text >> val;
-			text = stringstream();
+			double val = GetEditVal(9);
+			_incPos = val;
+			stringstream text;
 			text << setprecision(4) << fixed << val;
-			text >> _incPos;
 			::SendMessage(_edtArray[8]->GetHandle(), WM_SETTEXT, NULL, (LPARAM)text.str().c_str());
 		}
 		else if (hFrom == _edtArray[11]->GetHandle()){		//Set point
-			::SendMessage(_edtArray[11]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
-			text << readBuff;
-			double val;
-			text >> val;
-			text = stringstream();
-			text << setprecision(4) << fixed << val;
+			GetEditVal(11);
 ////TODO: should send notification to parent window to move mono
+			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 2111, 0);
 		}
 		else if (hFrom == _edtArray[13]->GetHandle()){		//Time const
-			::SendMessage(_edtArray[13]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
-			text << readBuff;
-			double val;
-			text >> val;
-			text = stringstream();
-			text << setprecision(4) << fixed << val;
-			text >> _timeConst;
+			_timeConst = GetEditVal(11); 
 		}
 		else if (hFrom == _edtArray[15]->GetHandle()){		//point count
-			::SendMessage(_edtArray[15]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
-			text << readBuff;
-			int val;
-			text >> val;
-			text = stringstream();
-			text << setprecision(4) << fixed << val;
-			text >> _pointCount;
+			_pointCount = GetEditVal(15);
 		}
 		else if (hFrom == _edtArray[17]->GetHandle()){		//interval
-			::SendMessage(_edtArray[17]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
-			text << readBuff;
-			double val;
-			text >> val;
-			text = stringstream();
-			text << setprecision(4) << fixed << val;
-			text >> _interval;
+			_interval = GetEditVal(17);
 		}
 
 		return true;
@@ -410,4 +367,18 @@ namespace Win
 		::SendMessage(_edtArray[4]->GetHandle(), WM_SETTEXT, 0, (LPARAM)textEV.str().c_str());		
 		::SendMessage(_edtArray[10]->GetHandle(), WM_SETTEXT, 0, (LPARAM)textNM.str().c_str());
 	}
+
+	double ExpWndController::GetEditVal(int num)
+	{
+		stringstream text;
+		double val;
+		char readBuff[255];
+
+		::SendMessage(_edtArray[num]->GetHandle(), EM_GETLINE, NULL, (LPARAM)readBuff);
+		text << readBuff;		
+		text << setprecision(4) << fixed;
+		text >> val;
+
+		return val;
+	};
 }

@@ -16,6 +16,7 @@ public:
 	void Update(void){;}
 	typedef void (Synchronizer::*funcPtr)();
 	bool InitDev(int* params);
+	void SetSlitWithUpdate(int, int);
 	void ShutdownDev();
 	void StopLineMovement();
 	void updateSettings();
@@ -33,7 +34,6 @@ private:
 	HKEY _regKey;
 	HANDLE _hDevLine;
 	Dispatcher *_Disp;
-	unsigned int _selectedDevice;	
 	Win::ExpWndController& _exp;
 	Logic::LogicIface *_iface;
 	void Loop(void);

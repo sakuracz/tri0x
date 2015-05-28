@@ -73,6 +73,18 @@ namespace Win
 			::SetWindowPos(_monoDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_HIDEWINDOW);
 			::SetWindowPos(_expDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 			break;
+		case 2101:	// Front slit changed:
+			_synch.SetSlitWithUpdate(0, (int)lParam);
+			break;
+		case 2103:	// Rear slit changed:
+			_synch.SetSlitWithUpdate(2, (int)lParam);
+			break;
+		case 2105:	// Start point changed:
+
+			break;
+		case 2111:	// Set point changed:
+
+			break;
 		case 2211:	// "Back" to mono setup window (from exp setup)
 			::SetWindowPos(_expDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_HIDEWINDOW);
 			::SetWindowPos(_monoDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
