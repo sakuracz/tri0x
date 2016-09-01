@@ -26,7 +26,7 @@ namespace Win{
 	{
 		outArr[0] = ::SendMessage(_comboOpts[0]->GetHandle(), CB_GETCURSEL, NULL, NULL);
 		outArr[1] = ::SendMessage(_comboOpts[1]->GetHandle(), CB_GETCURSEL, NULL, NULL);
-		outArr[2] = (::IsDlgButtonChecked(_hwnd, 1201) ? 1 : 0);
+		outArr[2] = forceState;
 		
 		return true;
 	};
@@ -46,6 +46,9 @@ namespace Win{
 	{
 		if (LOWORD(wParam) == 1200){
 			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 1200, NULL);
+		}
+		if (LOWORD(wParam) == 1201){
+			forceState = forceState ^ 1;
 		}
 
 		return true;
@@ -126,12 +129,12 @@ namespace Win{
 	}
 
 	bool MonoWndCtrl::OnDrawItem(LPARAM lParam)
-	{
+	{		
 		DRAWITEMSTRUCT* pDIS = reinterpret_cast<DRAWITEMSTRUCT*>(lParam);
-
-		if (pDIS->itemState & ODS_SELECTED)
-			return forceBtn.Draw(0, pDIS->hDC);
+//		::MessageBox(NULL, "herp", "derp", MB_OK);
+		if (forceState == 0)
+			return forceBtn.Draw(0, pDIS);
 		else
-			return forceBtn.Draw(1, pDIS->hDC);		
+			return forceBtn.Draw(1, pDIS);		
 	}
 };

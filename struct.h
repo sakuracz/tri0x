@@ -14,7 +14,7 @@ struct tabList{
 class CustomButton {
 public:
 	void Load(const string&, const string&);
-	bool Draw(const int&, HDC);
+	bool Draw(const int&, DRAWITEMSTRUCT*);
 	~CustomButton();
 private:
 	HANDLE bmapPressed = 0;

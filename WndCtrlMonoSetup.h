@@ -25,6 +25,7 @@ namespace Win{
 		ComboControl *_comboOpts[2];
 		ButtonControl *_btnSelect, *_btnForce;
 		CustomButton forceBtn;
+		int forceState = 0;
 	};
 }
 
