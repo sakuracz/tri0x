@@ -188,10 +188,6 @@ namespace Win
 			if (pCtrl->OnNCCalcSize(wParam, lParam))
 				return 0;
 			break;		
-		case WM_NCPAINT:
-			if (pCtrl->OnPaint())
-				return 0;
-			break;
 		case WM_WINDOWPOSCHANGING:
 			if (pCtrl->OnWindowPosChanging(wParam, lParam))
 				return 0;

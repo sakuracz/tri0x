@@ -14,8 +14,8 @@ namespace Win
 		bool OnEraseBG(HDC) override;
 		bool OnMove(WPARAM, LPARAM) override;
 		bool OnNCCalcSize(WPARAM, LPARAM) override;
-		bool OnNCPaint(WPARAM, LPARAM) override;
-		bool OnPaint() override;
+//		bool OnNCPaint(WPARAM, LPARAM) override;
+//		bool OnPaint() override;
 		bool OnWindowPosChanging(WPARAM, LPARAM) override;
 		HWND parentHWND;
 		ComboController* parent_controller;

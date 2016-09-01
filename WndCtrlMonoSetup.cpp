@@ -98,18 +98,13 @@ namespace Win{
 				gratingCombo.Select(sel);
 				combo_controller.Invalidate();
 			}
-//				combo_controller.Invalidate();
 				break;
 			case CBN_SELENDOK:
-//				combo_controller.Invalidate();
 				gratingCombo.ToggleSelecting();
 				break;
 			case CBN_SETFOCUS:
-//				combo_controller.Invalidate();
-//				::MessageBox(NULL, "SETFOCUS", "Break", MB_OK);
 				break;
 			case CBN_CLOSEUP:				
-//				combo_controller.Invalidate();
 				break;
 			case CBN_DROPDOWN:
 			{				
@@ -121,44 +116,14 @@ namespace Win{
 				if (!subclassed){					
 					LONG listProc = ::GetWindowLong(comboInfo.hwndList, GWL_WNDPROC);
 					LONG comboProc = ::GetWindowLong(comboInfo.hwndCombo, GWL_WNDPROC);
-/*					stringstream sss;
-					sss << "Combo: " << comboProc << " List: " << listProc << " List(hex): " << std::hex << listProc << std::endl;										
-					sss << "Reiterpreted: " << reinterpret_cast<ProcPtr>(listProc) << std::endl;
-					sss << "Reiterpreted: " << reinterpret_cast<ProcPtr>(listProc) << std::endl;
-					::MessageBox(NULL, sss.str().c_str(), "H", MB_OK);	*/					
-
+				
 					ListController* pL = new ListController();
 					pL->Init(comboInfo.hwndList, reinterpret_cast<ProcPtr>(listProc), &combo_controller, gratingCombo);
 					::SetWindowLong(comboInfo.hwndList, GWL_USERDATA, reinterpret_cast<LONG>(pL));
 					::SetWindowLong(comboInfo.hwndList, GWL_WNDPROC, reinterpret_cast<LONG>(SpecialListProc));
 
-/*					stringstream sss;
-					sss << "&l: " << pL << " &l(hex): " << std::hex << pL << std::endl;
-					sss << "Reiterpreted: " << reinterpret_cast<LONG>(pL) << std::endl;					
-					::MessageBox(NULL, sss.str().c_str(), "H", MB_OK);
-					*/
 					subclassed = true;
 				};
-
-//				stringstream sss;
-//				sss << "Top: " << comboInfo.rcItem.top << " Bottom: " << comboInfo.rcItem.bottom << " Left: " << comboInfo.rcItem.left << " Right: " << comboInfo.rcItem.right << std::endl;
-//				sss << "Top: " << comboInfo.rcButton.top << " Bottom: " << comboInfo.rcButton.bottom << " Left: " << comboInfo.rcButton.left << " Right: " << comboInfo.rcButton.right << std::endl;
-//				sss << "ListHwnd: " << std::hex << comboInfo.hwndList << " ComboHwnd: " << comboInfo.hwndCombo << " ItemHwnd: " << comboInfo.hwndItem << std::endl;
-//				::MessageBox(NULL, sss.str().c_str(), "H", MB_OK);
-
-				RECT rc;
-				::GetWindowRect(comboInfo.hwndList, &rc);
-
-				stringstream sss;
-				sss << "Top: " << rc.top << " Bottom: " << rc.bottom << " Left: " << rc.left << " Right: " << rc.right << std::endl;
-//				sss << "Top: " << comboInfo.rcButton.top << " Bottom: " << comboInfo.rcButton.bottom << " Left: " << comboInfo.rcButton.left << " Right: " << comboInfo.rcButton.right << std::endl;
-				sss << "ListHwnd: " << std::hex << comboInfo.hwndList << " ComboHwnd: " << comboInfo.hwndCombo << " ItemHwnd: " << comboInfo.hwndItem << std::endl;
-//				::MessageBox(NULL, sss.str().c_str(), "H", MB_OK);
-
-//				::SetActiveWindow(comboInfo.hwndList);
-//				::SetForegroundWindow(comboInfo.hwndList);
-//				::MoveWindow(comboInfo.hwndList, rc.left, rc.top-4, 136, 90, TRUE);
-//				::SetWindowPos(comboInfo.hwndList, HWND_TOPMOST, rc.left, rc.top-5, 136, 90, SWP_NOACTIVATE);
 				break;
 			}
 			case CBN_KILLFOCUS:		

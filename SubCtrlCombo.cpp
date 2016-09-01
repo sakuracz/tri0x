@@ -24,12 +24,6 @@ namespace Win
 		return true;
 	}
 	
-	bool ComboController::OnEraseBG(HDC hDC)
-	{
-		return false;
-//		return true;
-	}
-
 	bool ComboController::OnLMouseButtonUp(WPARAM wParam, LPARAM lParam)
 	{
 //		::MessageBox(NULL, "Primo", "May work", MB_OK);
@@ -75,8 +69,6 @@ namespace Win
 				par->lppos->y = 11;
 				par->lppos->cx = 136;
 				par->lppos->cy = 30;
-
-//				::MessageBox(NULL, sss.str().c_str(), "1", MB_OK);
 			}
 			if (par->lppos->flags == 0x191e){
 				sss << "Wnd X: " << par->lppos->x << " Wnd Y: " << par->lppos->y << " Width: " << par->lppos->cx << " Height: " << par->lppos->cy << std::endl;
@@ -104,17 +96,9 @@ namespace Win
 				par->rgrc[2].right = 146;
 				par->rgrc[2].top = 11;
 				par->rgrc[2].bottom = 41;
-
-//				::MessageBox(NULL, sss.str().c_str(), "2", MB_OK);
 			}
 		}
 
-		return false;
-	}
-
-	bool ComboController::OnNCPaint(WPARAM wParam, LPARAM lParam)
-	{
-//		::MessageBox(NULL, "Inside NCPAINT", "GO", MB_OK);
 		return false;
 	}
 
@@ -128,10 +112,7 @@ namespace Win
 		::MessageBox(NULL, "::CreateCompatibleDC returned NULL", "Error in CustomCombo::Draw", MB_OK);
 
 		HBITMAP bm;
-		RECT rcItem = { 0, 0, 30, 136 };	//start with the top part
-		
-		
-		
+		RECT rcItem = { 0, 0, 30, 136 };	//start with the top part		
 		if (!combo.isBeingSelected && !combo.isSelected){
 			bm = (HBITMAP)combo.header_bmaps[0];
 		}
@@ -151,36 +132,11 @@ namespace Win
 			bm = (HBITMAP)combo.footer_bmaps[combo.selection];
 			::SelectObject(compHDC, bm);
 			::BitBlt(hDC, rcItem.left, rcItem.top, 136, 30, compHDC, 0, 0, SRCCOPY);
-		}
-
-
-//		bm = (HBITMAP)combo.header_bmaps[1];
-//		::SelectObject(compHDC, bm);
-//		::BitBlt(hDC, rcItem.left, rcItem.top, 136, 30, compHDC, 0, 0, SRCCOPY);
-		
+		}		
 	
 		::DeleteDC(compHDC);
 //		::EndPaint(_hwnd, &ps);
 //		::DeleteDC(hDC);
 		return true;
-	}
-
-	bool ComboController::OnWindowPosChanging(WPARAM wParam, LPARAM lParam)
-	{
-//		::MessageBox(NULL, "OK", "K", MB_OK);
-/*		WINDOWPOS* wndPos = (WINDOWPOS*)lParam;
-/*		RECT parRect;
-		::GetWindowRect(parentHWND, &parRect);
-		wndPos->x = parRect.left;
-		wndPos->y = parRect.bottom - 3;
-		wndPos->cx = 136;
-		wndPos->cy = 120;
-
-		stringstream ss;
-		ss << " cy:" <<wndPos->cx << " cy:" << wndPos->cy << " x: " << wndPos->x << " y: " << wndPos->y << std::endl;
-		ss << " Insert after: " << wndPos->hwndInsertAfter << " Flags: " << std::hex << wndPos->flags << std::endl;
-		::MessageBox(NULL, ss.str().c_str(), "WindowPosChanging()", MB_OK);
-*/
-		return false;
 	}
 }
