@@ -9,11 +9,7 @@ using std::stringstream;
 namespace Win{
 	MonoWndCtrl::MonoWndCtrl()
 	{
-		itemIndex = 0;
-		for (int i = 0; i < 3; i++){
-			_staticArr[i] = new StaticControl(0);
-		}
-		
+		itemIndex = 0;		
 		for (int i = 0; i < 2; i++){
 			_comboOpts[i] = new ComboControl(0);
 		}
@@ -38,13 +34,9 @@ namespace Win{
 	MonoWndCtrl::~MonoWndCtrl()
 	{
 		for (unsigned int i = 0; i < static_count; i++){
-			delete _staticArr[i];
-		}
-		for (unsigned int i = 0; i < static_count; i++){
 			delete _comboOpts[i];
 		}		
-		delete _btnSelect;
-//		delete _btnForce;
+
 		_btnForce.UnSubClass();
 	}
 
@@ -97,21 +89,8 @@ namespace Win{
 		width = client_rect.right - client_rect.left;
 
 		::SetWindowPos(_hwnd, NULL, (maxX - width) / 2, (maxY - height) / 2, width, height, SWP_SHOWWINDOW);
-
-		int j = 1000;
-		for (unsigned int i = 0; i < static_count; i++){
-			j += i;						// static control ids:[1000,1001]
-			StaticMaker stat(_hwnd, j);
-			stat.NoBG();
-			stat.AddExStyle(WS_EX_TRANSPARENT);
-			stat.AddStyle(WS_CLIPSIBLINGS);
-			stat.Create("");
-			stat.Show();
-
-			_staticArr[i]->Init(stat, j);
-		}
-
-		j = 1100;
+		
+		int j = 1100;
 		for (unsigned int i = 0; i < 2; i++){
 			j += i;						// combo control ids: [1100,1101]
 			ComboMaker comb(_hwnd, j);
@@ -141,16 +120,11 @@ namespace Win{
 		_btnForce.SubClass(&button_controller);
 		//_btnForce->Init(check, j);
 
-		::SetWindowPos(_staticArr[0]->GetHandle(), NULL, 10, 20, 65, 20, SWP_SHOWWINDOW);
-		::SetWindowPos(_staticArr[1]->GetHandle(), NULL, 10, 60, 65, 20, SWP_SHOWWINDOW);		
 		::SetWindowPos(_comboOpts[0]->GetHandle(), NULL, 85, 20, 65, 20, SWP_SHOWWINDOW);
 		::SetWindowPos(_comboOpts[1]->GetHandle(), NULL, 85, 60, 65, 20, SWP_SHOWWINDOW);
 		::SetWindowPos(_btnInit.GetHandle(), NULL, 67, 247, 103, 32, SWP_SHOWWINDOW);
 //		::SetWindowPos(_btnForce->GetHandle(), NULL, 10, 155, 90, 20, SWP_SHOWWINDOW);
 		::SetWindowPos(_btnForce.GetHandle(), NULL, 67, 186, 79, 31, SWP_SHOWWINDOW);
-
-		::SendMessage(_staticArr[0]->GetHandle(), WM_SETTEXT, NULL, (LPARAM)"Grating:");
-		::SendMessage(_staticArr[1]->GetHandle(), WM_SETTEXT, NULL, (LPARAM)"Mirror:");
 
 		::SendMessage(_comboOpts[0]->GetHandle(), CB_ADDSTRING, NULL, (LPARAM)"300");
 		::SendMessage(_comboOpts[0]->GetHandle(), CB_ADDSTRING, NULL, (LPARAM)"75");
