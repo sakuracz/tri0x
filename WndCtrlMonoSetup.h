@@ -14,6 +14,7 @@ namespace Win{
 		bool OnCommand(WPARAM, LPARAM);
 		bool OnSize(int, int, int);
 		bool OnNotify(HWND, LPARAM) override;
+		bool OnKeyDown(WPARAM, LPARAM) override { return false; }
 		bool GetInitParams(int*);
 
 	private:

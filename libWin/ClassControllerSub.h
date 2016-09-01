@@ -21,6 +21,7 @@ namespace Win
 		bool OnHotKey(WPARAM, LPARAM) override { return false; }
 		bool OnNotify(HWND, LPARAM) override { return false; }
 		virtual bool OnTabKeyDown(){return 0;}
+		virtual bool OnDrawItem(LPARAM) = 0;
 	protected:
 		ProcPtr _prevProc;
 		Controller* _prevController;
