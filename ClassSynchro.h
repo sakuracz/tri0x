@@ -6,45 +6,49 @@
 #include "LgcIface.h"
 #include "ClassDispatcher.h"
 #include "WndCtrlExp.h"
+#include "WndCtrlMonoSetup.h"
 //#include "WndCtrlImg.h"
 #include <memory>
 
 class Synchronizer : public ActiveObject
 {
 public:	
-	Synchronizer(Win::ExpWndController&);
+	Synchronizer(Win::ExpWndController&, Win::MonoWndCtrl&);
 	~Synchronizer();
 	void Update(void){ ; }
-	typedef void (Synchronizer::*funcPtr)();
-	bool InitDev(int* params);
+	typedef void (Synchronizer::*funcPtr)();	
 	void SetSlitWithUpdate(int);
 	void GoToAndUpdate(double);
 	double GetTargetNM();
 	double GetTargetEV();
 	void ShutdownDev();
-	void StopLineMovement();
+
 	void updateSettings();
 	bool isRunning(){ return running; }
 //	void SetOutputWindow(Win::ImgWndController*);
-	void progLineHome();
-	void progLineParams();
-	void progLockParams();
-	void progGoTo();
-	void progMeasure();
-	void progStartExp();
-	void progStopExp();
+	//program switching functions:
+	void progIdle(){ _program = 0; }
+	void progSetLineParams(){ _program = 1; }
+	void progMoveMono(){ _program = 2; }
+	void progMeasure(){ _program = 3; }
+	void progStopExp(){ _program = 4; }
+	void progCheckMovement(){ _program = 5; }
+	void progGoHome() { _program = 6; }		
+	void progStartExp(){ _program = 7; }		
+	void progInitDevs(){ _program = 8; }
+	
 
 private:
 	HKEY _regKey;
 	HANDLE _hDevLine;
-//	Dispatcher *_Disp;
 	Win::ExpWndController& _exp;
+	Win::MonoWndCtrl& _mono;
 	Logic::LogicIface _iface;
 	void Loop(void);
 	void InitThread(){};
 	void FlushThread(){};
 
-	funcPtr funcTab[9];
+	vector<funcPtr> funcTab;
 
 	//functions from the function tab:
 	unsigned int _program;
@@ -56,8 +60,9 @@ private:
 	void StopExp();
 	void CheckMovement();
 	void GoHome();
+	void InitDev();
 
-
+	void PerSecUpdate();
 	bool CreateOpenKey();
 
 private:					// experiment control variables:

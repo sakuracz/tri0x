@@ -3,11 +3,12 @@
 #include "libWin\WinClassMaker.h"
 #include "libWin\WinMaker.h"
 #include <vector>
+#include <thread>
 
 using std::vector;
 
-Synchronizer::Synchronizer(Win::ExpWndController& exp)
-	: _exp(exp), _iface()
+Synchronizer::Synchronizer(Win::ExpWndController& exp, Win::MonoWndCtrl& mono)
+	: _exp(exp), _mono(mono), _iface()
 {
 //	_Disp = NULL;
 	data = vvect(0, vector<double>(4));
@@ -20,14 +21,17 @@ Synchronizer::Synchronizer(Win::ExpWndController& exp)
 	_program = 0;
 	point = 0;
 
-	funcTab[0] = &Synchronizer::Idle;
-	funcTab[1] = &Synchronizer::SetLineParams;
-	funcTab[2] = &Synchronizer::MoveMono;
-	funcTab[3] = &Synchronizer::Measure;
-	funcTab[4] = &Synchronizer::StopExp;
-	funcTab[5] = &Synchronizer::CheckMovement;
-	funcTab[6] = &Synchronizer::GoHome;
-	funcTab[8] = &Synchronizer::StartExp;
+
+	funcTab = vector<funcPtr>();
+	funcTab.push_back(&Synchronizer::Idle);	
+	funcTab.push_back(&Synchronizer::SetLineParams);
+	funcTab.push_back(&Synchronizer::MoveMono);
+	funcTab.push_back(&Synchronizer::Measure);
+	funcTab.push_back(&Synchronizer::StopExp);
+	funcTab.push_back(&Synchronizer::CheckMovement);
+	funcTab.push_back(&Synchronizer::GoHome);
+	funcTab.push_back(&Synchronizer::StartExp);
+	funcTab.push_back(&Synchronizer::InitDev);
 
 	if(!CreateOpenKey())
 		::MessageBox(NULL, "Failed to create or open registry entry", "Error", MB_ICONERROR | MB_OK);
@@ -141,17 +145,30 @@ double Synchronizer::GetTargetNM()
 	return _exp.GetEditVal(11);
 }
 
-bool Synchronizer::InitDev(int* params)
+void Synchronizer::InitDev()
 {
-	_iface.paramSet(params[0], params[1], params[2]);
+	_iface.paramSet(_mono.init_params[0], _mono.init_params[1], _mono.init_params[2]);
 
-		stringstream initParam;
-		initParam << params[0] << "\t" << params[1] << "\t" << params[2];
-		::MessageBox(NULL, initParam.str().c_str(), "Init parameters", MB_OK);
+//		stringstream initParam;
+//		initParam << params[0] << "\t" << params[1] << "\t" << params[2];
+//		::MessageBox(NULL, initParam.str().c_str(), "Init parameters", MB_OK);
 
-	_iface.InitMono();
+
+	//TODO: spawn threads for concurrent mono initialization and window updates
+	thread t1{&Synchronizer::PerSecUpdate, this};
+	thread t2{&Logic::LogicIface::InitMono, this->_iface};
+//	thread t3{ &Synchronizer::Loop, this };
+
+	t1.join();
+	t2.join();
+//	t3.join();
+
+	::MessageBeep(MB_ICONERROR);
+
+//	_iface.InitMono();
+
+
 	GoToAndUpdate(1000);
-
 
 	double posNM = _iface.GetPos();
 	double posEV = 1239.8384 / posNM;
@@ -195,9 +212,12 @@ bool Synchronizer::InitDev(int* params)
 	_exp.setEditVal(15, "1");
 
 	_exp.setEditVal(16, "not used");
-	_exp.setEditVal(17, "0.1");
+	_exp.setEditVal(17, "0.1");	
 
-	return true;
+	::SetWindowPos(_mono._hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_HIDEWINDOW);
+	::SetWindowPos(_exp._hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+
+	progIdle();
 };
 
 void Synchronizer::Loop(void)
@@ -345,6 +365,16 @@ void Synchronizer::StartExp()			// func tab[8]
 	_program = 3;
 };
 
+void Synchronizer::PerSecUpdate()
+{
+	for (int i = 0; i < 100; i++)
+	{
+		Sleep(1000);
+		_mono.UpdateProgress(1);		
+	}
+
+}
+
 void Synchronizer::updateSettings()
 {
 	vector<double> params(6);
@@ -356,47 +386,6 @@ void Synchronizer::updateSettings()
 	waitTime = static_cast<unsigned int>(params[3]);			// wait time in [ms]
 	numPoints = static_cast<unsigned int>(params[4]);
 	interval = static_cast<unsigned int>(params[5]);			// interval in [ms]
-};
-
-void Synchronizer::progLineHome()
-{
-	_program = 6;
-};
-
-void Synchronizer::progLineParams()
-{
-	_program = 1;
-
-};
-
-void Synchronizer::progLockParams()
-{
-	_program = 7;
-};
-
-void Synchronizer::progGoTo()
-{
-	_program = 2;
-};
-
-void Synchronizer::progStopExp()
-{
-	_program = 4;
-};
-
-void Synchronizer::progMeasure()
-{
-	_program = 3;
-};
-
-void Synchronizer::progStartExp()
-{
-	_program = 8;
-};
-
-void Synchronizer::StopLineMovement()
-{
-	_program = 4;
 };
 
 void Synchronizer::toggleRunning()

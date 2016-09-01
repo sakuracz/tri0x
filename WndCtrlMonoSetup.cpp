@@ -69,11 +69,12 @@ namespace Win{
 		mirrorCombo.UnSubClass();		
 	}
 
-	bool MonoWndCtrl::GetInitParams(int *outArr)
+	bool MonoWndCtrl::GetInitParams()
 	{
-		outArr[0] = ::SendMessage(gratingCombo.GetHandle(), CB_GETCURSEL, NULL, NULL);
-		outArr[1] = ::SendMessage(mirrorCombo.GetHandle(), CB_GETCURSEL, NULL, NULL);
-		outArr[2] = forceState;
+		init_params = vector<int>();
+		init_params.push_back(::SendMessage(gratingCombo.GetHandle(), CB_GETCURSEL, NULL, NULL));
+		init_params.push_back(::SendMessage(mirrorCombo.GetHandle(), CB_GETCURSEL, NULL, NULL));
+		init_params.push_back(forceState);		
 		
 		return true;
 	};
@@ -93,8 +94,10 @@ namespace Win{
 	bool MonoWndCtrl::OnCommand(WPARAM wParam, LPARAM lParam)
 	{
 		if (LOWORD(wParam) == 1200){	// run button pressed - notify parent window
+			progress = 0;
 			initState = initState ^ 1;
 			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 1200, NULL);
+//			::InvalidateRect(_hwnd, NULL, TRUE);
 		}
 		if (LOWORD(wParam) == 1201){	//switch the state of the "Force init" button
 			forceState = forceState ^ 1;
@@ -303,5 +306,6 @@ namespace Win{
 		}
 
 		::InvalidateRect(_hwnd, NULL, TRUE);
+//		::MessageBox(NULL, "1", "Sec", MB_OK);
 	}
 };

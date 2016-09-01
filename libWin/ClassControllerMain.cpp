@@ -3,11 +3,12 @@
 #include "WinMaker.h"
 #include "ChildProcedure.h"
 #include <sstream>
+#include <thread>
 
 namespace Win
 {
 	MainController::MainController(HWND hwnd, CreateData *create)
-		: _main(hwnd), _monoDow(0), _expDow(0), _synch(expCtrl)
+		: _main(hwnd), _monoDow(0), _expDow(0), _synch(expCtrl, monoCtrl)
 	{
 		//window class names:
 		char classMonoName[] = "Monochromator";
@@ -69,12 +70,14 @@ namespace Win
 		switch (wParam)
 		{
 		case 1200:
+		{
 			int params[3];
-			monoCtrl.GetInitParams(params);
-			_synch.InitDev(params);
-			::SetWindowPos(_monoDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_HIDEWINDOW);
-			::SetWindowPos(_expDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+			monoCtrl.GetInitParams();
+			_synch.progInitDevs();
+//			::SetWindowPos(_monoDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_HIDEWINDOW);
+//			::SetWindowPos(_expDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 			break;
+		}
 		case 2101:	// Front slit changed:
 			//			val = (int)lParam;
 			//			msg << val;

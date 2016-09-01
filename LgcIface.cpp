@@ -145,6 +145,10 @@ namespace Logic
 	void LogicIface::InitMono()
 	{
 #ifdef NOMONO
+		for (int i = 0; i < 100; i++){
+			Sleep(1000);			
+		}
+		
 		return;
 #endif
 

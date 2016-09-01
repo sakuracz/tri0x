@@ -41,7 +41,7 @@ namespace Win
 		Dow _expDow;
 //		Dow *_outWnd;
 
-		Synchronizer _synch;
+		::Synchronizer _synch;
 	};
 };
 

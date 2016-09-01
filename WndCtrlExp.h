@@ -16,6 +16,7 @@ namespace Win
 	class ExpWndController : public ChildController
 	{
 	public:
+		friend class Synchronizer;
 		ExpWndController();
 		~ExpWndController();
 		void ReturnExpParams(vector<double>&);

@@ -13,6 +13,7 @@ namespace Win{
 	class MonoWndCtrl : public ChildController
 	{
 	public:
+		friend class Synchronizer;
 		MonoWndCtrl();
 		~MonoWndCtrl();
 		bool OnCreate(CreateData const *);
@@ -24,7 +25,7 @@ namespace Win{
 		bool OnNCPaint(WPARAM, LPARAM) override { return false; }
 		bool OnMeasureItem(WPARAM, LPARAM) override;
 		bool OnEraseBG(HDC) override;
-		bool GetInitParams(int*);
+		bool GetInitParams();
 		void ZeroInit(){ initState = 0; }
 
 	private:
@@ -39,6 +40,7 @@ namespace Win{
 		ComboController grating_controller, mirror_controller;		
 		HANDLE background_bmp;
 		vector<HANDLE> progress_bmps;
+		vector<int> init_params;
 		int forceState = 1, initState = 0;
 		int progress = 0; //percentage of init completion		
 	};
