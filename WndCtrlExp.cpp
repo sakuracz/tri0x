@@ -316,7 +316,7 @@ namespace Win
 		return;
 	};
 
-	void ExpWndController::UpdateEditBox(double* valArr, int num)
+	void ExpWndController::UpdateEditBox(vector<double>& valArr, int num)
 	{
 		stringstream valStream;
 		for (int i = 0; i < num; i++)

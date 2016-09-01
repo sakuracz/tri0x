@@ -5,6 +5,7 @@
 #include "SubCtrlEdit.h"
 #include "libWin\WindowControls.h"
 #include <string>
+#include <vector>
 //#include "struct.h"
 
 using namespace std;
@@ -25,7 +26,7 @@ namespace Win
 		void setEditVal(int, string);
 		void visibleRun();
 		void visibleStop();
-		void UpdateEditBox(double*, int);
+		void UpdateEditBox(vector<double>&, int);
 		void UpdatePos(double);
 		double GetEditVal(int);
 	protected:

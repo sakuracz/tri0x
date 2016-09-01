@@ -2,6 +2,9 @@
 #include <sstream>
 #include "libWin\WinClassMaker.h"
 #include "libWin\WinMaker.h"
+#include <vector>
+
+using std::vector;
 
 Synchronizer::Synchronizer(Win::ExpWndController& exp)
 	: _exp(exp), _iface()
@@ -267,8 +270,8 @@ void Synchronizer::Measure()	//func tab[3]
 		return;
 	} else {
 		if(point != 0){
-			double data[3];
-			double average[4] = { 0.0, 0.0, 0.0, 0.0 };
+			vector<double> data;
+			vector<double> average = { 0.0, 0.0, 0.0, 0.0 };
 			for (unsigned int i = 0; i < numPoints; i++){
 				_iface.queryData(data);
 				::Sleep(interval);

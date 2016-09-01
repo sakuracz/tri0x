@@ -12,17 +12,10 @@ namespace Logic
 {
 	LogicIface::LogicIface()
 	{
-		//default params:
-		_turret = 1; 
-		_mirror = 1;
-		_force = false;
-
 		_gratingFactors[0] = 4.0;
 		_gratingFactors[1] = 16.0;
 		_gratingFactors[2] = 2.0;
-
-		_dev = NULL;
-
+		
 		_comm.ReadIntervalTimeout = 5;
 		_comm.ReadTotalTimeoutConstant = 100;
 		_comm.ReadTotalTimeoutMultiplier = 100;
@@ -225,7 +218,7 @@ namespace Logic
 		return;
 	};
 
-	void LogicIface::queryData(double* outArr)
+	void LogicIface::queryData(vector<double>& out)
 	{
 #ifndef NOMONO
 		DWORD dwBytesWritten, dwBytesRead;
@@ -235,11 +228,11 @@ namespace Logic
 		WriteFile(_dev, _dataQuery.c_str(), _dataQuery.length(), &dwBytesWritten, NULL);
 		ReadFile(_dev, readBuff, 255, &dwBytesRead, NULL);
 		inpStream << readBuff;
-		inpStream >> outArr[0] >> outArr[1] >> outArr[2];
+		inpStream >> out[0] >> out[1] >> out[2];
 #else
-		outArr[0] = rand()/(RAND_MAX*1.0);
-		outArr[1] = rand()/(RAND_MAX*1.0);
-		outArr[2] = rand()/(RAND_MAX*1.0);
+		out[0] = rand()/(RAND_MAX*1.0);
+		out[1] = rand()/(RAND_MAX*1.0);
+		out[2] = rand()/(RAND_MAX*1.0);
 #endif
 
 		return;
