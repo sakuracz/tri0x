@@ -44,10 +44,10 @@ namespace Win{
 
 	bool MonoWndCtrl::OnCommand(WPARAM wParam, LPARAM lParam)
 	{
-		if (LOWORD(wParam) == 1200){
+		if (LOWORD(wParam) == 1200){	// run button pressed - notify parent window
 			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 1200, NULL);
 		}
-		if (LOWORD(wParam) == 1201){
+		if (LOWORD(wParam) == 1201){	//switch the state of the "Force init" button
 			forceState = forceState ^ 1;
 		}
 
