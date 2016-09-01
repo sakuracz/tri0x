@@ -75,16 +75,16 @@ private:					// experiment control variables:
 	//	std::unique_ptr<std::vector<std::complex<double> > > vData;
 
 private:					// output windows and helper functions
-	Win::ImgWndController	*_outCtrl;
+//	Win::ImgWndController	*_outCtrl;
 
 private:		//data vector
 	typedef vector<vector<double>> vvect;
 	vvect data;
-public:
-	double *_dataX;
-	double *_dataCh1;
-	double *_dataCh2;
-	double *_dataX1;
+//public:
+//	double *_dataX;
+//	double *_dataCh1;
+//	double *_dataCh2;
+//	double *_dataX1;
 };
 
 #endif

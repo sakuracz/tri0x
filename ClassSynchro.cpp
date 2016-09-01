@@ -70,8 +70,8 @@ bool Synchronizer::CreateOpenKey()
 
 void Synchronizer::SetSlitWithUpdate(int slit)
 {
-	int frontSlit = _exp.GetEditVal(1);
-	int rearSlit = _exp.GetEditVal(3);
+	int frontSlit = static_cast<int>(_exp.GetEditVal(1));
+	int rearSlit = static_cast<int>(_exp.GetEditVal(3));
 	//	stringstream str;
 	//	str << frontSlit << "\t" << rearSlit;
 	//	::MessageBoxA(NULL, str.str().c_str(), "Set slit with update", MB_OK);
@@ -251,8 +251,8 @@ void Synchronizer::Measure()	//func tab[3]
 	if(point == 0){
 		_iface.Goto(1239.8384/start);
 		if (inc != 0){
-			//			::MessageBox(NULL, "KL", "op", MB_OK);
-			int pCount = (start - stop) / inc + 1;
+			//::MessageBox(NULL, "KL", "op", MB_OK);
+			int pCount = static_cast<int>((start - stop) / inc + 1);
 //			if ((_dataCh1 == NULL) && (pCount != 0)) {
 //				_dataX = new double[pCount];
 //				_dataCh1 = new double[pCount];
@@ -281,14 +281,14 @@ void Synchronizer::Measure()	//func tab[3]
 			average[2] += (dat[1] / (numPoints*1.0));
 			average[3] += (dat[2] / (numPoints*1.0));
 		}
-		average[0] = start - inc*point;
-				
-		_dataX[point-1] = start + inc*point;
-		_dataCh1[point - 1] = average[1];
-		_dataCh2[point - 1] = average[2];
-		_dataX1[point - 1] = average[3];
+		average[0] = _iface.GetPos();
+	
+//		_dataX[point-1] = start + inc*point;
+//		_dataCh1[point - 1] = average[1];
+//		_dataCh2[point - 1] = average[2];
+//		_dataX1[point - 1] = average[3];
 			
-		double nextPos = 1239.8384 / (1239.8384 / _iface.GetPos() - inc);
+		double nextPos = 1239.8384 / (1239.8384 / average[0] - inc);
 		_iface.Goto(nextPos);
 		_exp.UpdatePos(_iface.GetPos());
 		_exp.UpdateEditBox(average, 4);
@@ -315,9 +315,9 @@ void Synchronizer::StopExp()	//func tab[4]
 	point = 0;
 	time = ::GetTickCount();
 
-	_dataCh1 = NULL;
-	_dataCh2 = NULL;
-	_dataX1 = NULL;
+//	_dataCh1 = NULL;
+//	_dataCh2 = NULL;
+//	_dataX1 = NULL;
 
 	_program = 0;
 };
