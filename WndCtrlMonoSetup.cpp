@@ -14,12 +14,8 @@ namespace Win{
 			_comboOpts[i] = new ComboControl(0);
 		}
 		
-//		_btnSelect = new ButtonControl(0);
-//		_btnForce = new ButtonControl(0);
-
 		_btnForce.LoadBMPs(string("switch"));
 		_btnInit.LoadBMPs(string("init"));
-//		initButton.Load(string("init-off"), string("init-on"));
 
 		string bg_name = string("WndCtrlMonoBg.bmp");
 		background_bmp = ::LoadImage(NULL, bg_name.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
@@ -107,23 +103,19 @@ namespace Win{
 		butto.Show();
 
 		_btnInit.Init(butto, j);
-//		_btnSelect->Init(butto, j);
 
 		j++;							// button control id: {1201} - checkbox
-		ButtonMaker check(_hwnd, j);
-		//		check.AddStyle(BS_CHECKBOX | BS_AUTOCHECKBOX);
+		ButtonMaker check(_hwnd, j);		
 		check.SetStyle(BS_OWNERDRAW);
 		check.Create("Force init");
 		check.Show();
 
 		_btnForce.Init(check, j);
-		_btnForce.SubClass(&button_controller);
-		//_btnForce->Init(check, j);
+		_btnForce.SubClass(&button_controller);		
 
 		::SetWindowPos(_comboOpts[0]->GetHandle(), NULL, 85, 20, 65, 20, SWP_SHOWWINDOW);
 		::SetWindowPos(_comboOpts[1]->GetHandle(), NULL, 85, 60, 65, 20, SWP_SHOWWINDOW);
 		::SetWindowPos(_btnInit.GetHandle(), NULL, 67, 247, 103, 32, SWP_SHOWWINDOW);
-//		::SetWindowPos(_btnForce->GetHandle(), NULL, 10, 155, 90, 20, SWP_SHOWWINDOW);
 		::SetWindowPos(_btnForce.GetHandle(), NULL, 67, 186, 79, 31, SWP_SHOWWINDOW);
 
 		::SendMessage(_comboOpts[0]->GetHandle(), CB_ADDSTRING, NULL, (LPARAM)"300");

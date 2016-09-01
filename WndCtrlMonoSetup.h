@@ -25,7 +25,6 @@ namespace Win{
 
 	private:
 		unsigned int itemIndex;
-		const unsigned int static_count = 2;
 		const unsigned int combo_count = 2;
 		ComboControl *_comboOpts[2];
 		CustomButton _btnForce;
