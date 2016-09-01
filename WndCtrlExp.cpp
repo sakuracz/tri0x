@@ -93,7 +93,7 @@ namespace Win
 
 		EditMaker edit(_hwnd, 2119);
 		edit.AddStyle(WS_VSCROLL | ES_MULTILINE | ES_AUTOVSCROLL | ES_WANTRETURN | ES_READONLY);
-		edit.Create("");
+		edit.Create("X \t Y1 \t Y2 \t Y3");
 		edit.Show();
 		_edtArray[19]->Init(edit, 2119);
 //		_edtArray[19]->SubClass(&_edtCtrl[19]);
@@ -250,15 +250,13 @@ namespace Win
 	};
 
 	bool ExpWndController::OnNotify(HWND hFrom, LPARAM lParam)
-	{
-		stringstream text;
-		char readBuff[255];
+	{		
 		if (hFrom == _edtArray[1]->GetHandle()){			//Front slit
-			int width = (int)GetEditVal(1);
+			int width = static_cast<int>(GetEditVal(1));
 			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 2101, (LPARAM)width);
 		}
 		else if (hFrom == _edtArray[3]->GetHandle()){		//Exit slit
-			int width = (int)GetEditVal(3);
+			int width = static_cast<int>(GetEditVal(3));
 			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 2103, (LPARAM)width);
 		}
 		else if (hFrom == _edtArray[5]->GetHandle()){		//Start point
@@ -285,7 +283,7 @@ namespace Win
 			_timeConst = GetEditVal(13);
 		}
 		else if (hFrom == _edtArray[15]->GetHandle()){		//point count
-			_pointCount = GetEditVal(15);
+			_pointCount = static_cast<int>(GetEditVal(15));
 		}
 		else if (hFrom == _edtArray[17]->GetHandle()){		//interval
 			_interval = GetEditVal(17);

@@ -11,10 +11,10 @@ Synchronizer::Synchronizer(Win::ExpWndController& exp)
 {
 //	_Disp = NULL;
 	data = vvect(0, vector<double>(4));
-	_dataX = NULL;
-	_dataCh1 = NULL;
-	_dataCh2 = NULL;
-	_dataX1 = NULL;
+//	_dataX = NULL;
+//	_dataCh1 = NULL;
+//	_dataCh2 = NULL;
+//	_dataX1 = NULL;
 
 	running = false;
 	_program = 0;
@@ -147,7 +147,6 @@ bool Synchronizer::InitDev(int* params)
 
 //		stringstream initParam;
 //		initParam << params[0] << "\t" << params[1] << "\t" << params[2];
-
 //		::MessageBox(NULL, initParam.str().c_str(), "Init parameters", MB_OK);
 
 	_iface.InitMono();
@@ -213,6 +212,7 @@ void Synchronizer::Idle()		//funct tab[0]
 	//	_program = _line.GetProg();
 	//	if(_program == 0)
 	//		_program = _exp.GetProg();	
+	::Sleep(100);
 };
 
 void Synchronizer::SetLineParams()		// func tab[1]

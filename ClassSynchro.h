@@ -6,7 +6,7 @@
 #include "LgcIface.h"
 #include "ClassDispatcher.h"
 #include "WndCtrlExp.h"
-#include "WndCtrlImg.h"
+//#include "WndCtrlImg.h"
 #include <memory>
 
 class Synchronizer : public ActiveObject
