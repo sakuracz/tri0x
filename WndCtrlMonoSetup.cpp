@@ -1,5 +1,8 @@
 #include "WndCtrlMonoSetup.h"
 #include "libWin\WinMaker.h"
+#include <string>
+
+using std::string;
 
 namespace Win{
 	MonoWndCtrl::MonoWndCtrl()
@@ -15,6 +18,8 @@ namespace Win{
 		
 		_btnSelect = new ButtonControl(0);
 		_btnForce = new ButtonControl(0);
+
+		forceBtn.Load(string("mainOn.bmp"), string("mainOff.bmp"));
 	}
 
 	bool MonoWndCtrl::GetInitParams(int *outArr)
@@ -88,7 +93,8 @@ namespace Win{
 
 		j++;							// button control id: {1201} - checkbox
 		ButtonMaker check(_hwnd, j);
-		check.AddStyle(BS_CHECKBOX | BS_AUTOCHECKBOX);
+//		check.AddStyle(BS_CHECKBOX | BS_AUTOCHECKBOX);
+		check.SetStyle(BS_OWNERDRAW | WS_CHILD | WS_VISIBLE);
 		check.Create("Force init");
 		check.Show();
 
@@ -100,7 +106,8 @@ namespace Win{
 		::SetWindowPos(_comboOpts[0]->GetHandle(), NULL, 85, 20, 65, 20, SWP_SHOWWINDOW);
 		::SetWindowPos(_comboOpts[1]->GetHandle(), NULL, 85, 60, 65, 20, SWP_SHOWWINDOW);
 		::SetWindowPos(_btnSelect->GetHandle(), NULL, 85, 120, 65, 30, SWP_SHOWWINDOW);
-		::SetWindowPos(_btnForce->GetHandle(), NULL, 10, 155, 90, 20, SWP_SHOWWINDOW);
+//		::SetWindowPos(_btnForce->GetHandle(), NULL, 10, 155, 90, 20, SWP_SHOWWINDOW);
+		::SetWindowPos(_btnForce->GetHandle(), NULL, 10, 155, 200, 100, SWP_SHOWWINDOW);
 
 		::SendMessage(_staticArr[0]->GetHandle(), WM_SETTEXT, NULL, (LPARAM)"Grating:");
 		::SendMessage(_staticArr[1]->GetHandle(), WM_SETTEXT, NULL, (LPARAM)"Mirror:");
@@ -116,5 +123,15 @@ namespace Win{
 		::SendMessage(_comboOpts[1]->GetHandle(), CB_SETCURSEL, 0, NULL);
 
 		return true;
+	}
+
+	bool MonoWndCtrl::OnDrawItem(LPARAM lParam)
+	{
+		DRAWITEMSTRUCT* pDIS = reinterpret_cast<DRAWITEMSTRUCT*>(lParam);
+
+		if (pDIS->itemState & ODS_SELECTED)
+			return forceBtn.Draw(0, pDIS->hDC);
+		else
+			return forceBtn.Draw(1, pDIS->hDC);		
 	}
 };

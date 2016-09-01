@@ -3,6 +3,7 @@
 
 #include "libWin\ClassChildController.h"
 #include "libWin\WindowControls.h"
+#include "struct.h"
 
 namespace Win{
 
@@ -15,6 +16,7 @@ namespace Win{
 		bool OnSize(int, int, int);
 		bool OnNotify(HWND, LPARAM) override;
 		bool OnKeyDown(WPARAM, LPARAM) override { return false; }
+		bool OnDrawItem(LPARAM) override;
 		bool GetInitParams(int*);
 
 	private:
@@ -22,7 +24,7 @@ namespace Win{
 		StaticControl *_staticArr[3];
 		ComboControl *_comboOpts[2];
 		ButtonControl *_btnSelect, *_btnForce;
-		
+		CustomButton forceBtn;
 	};
 }
 

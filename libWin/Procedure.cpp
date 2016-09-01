@@ -74,6 +74,9 @@ namespace Win
 			if (pCtrl->OnCreate(reinterpret_cast<CreateData const *>(lParam)))
 				return 0;
 			break;
+		case WM_DRAWITEM:
+			if (pCtrl->OnDrawItem(lParam))
+				return TRUE;
 		case WM_HOTKEY:
 			//				::MessageBoxA(NULL, "LOL", "Dur", MB_OK);
 			if (pCtrl->OnHotKey(wParam, lParam))
