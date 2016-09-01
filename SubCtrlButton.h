@@ -2,15 +2,10 @@
 #define BUTTONSUBCONTROLLER_H_
 
 #include "libWin\ClassControllerSub.h"
+#include <string>
 
-namespace Win
-{
-	class ButtonController : public SubController
-	{
-	public:
-		bool OnDrawItem(LPARAM){ return false; }
-	};
-}
+using std::string;
+
 
 
 

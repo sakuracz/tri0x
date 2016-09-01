@@ -111,7 +111,6 @@
     <ClInclude Include="libWin\WindowEx.h" />
     <ClInclude Include="libWin\WinMaker.h" />
     <ClInclude Include="struct.h" />
-    <ClInclude Include="SubCtrlButton.h" />
     <ClInclude Include="SubCtrlEdit.h" />
     <ClInclude Include="WndCtrlExp.h" />
     <ClInclude Include="WndCtrlMonoSetup.h" />
@@ -133,6 +132,7 @@
     <ClCompile Include="libWin\WindowControls.cpp" />
     <ClCompile Include="libWin\WinMaker.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="struct.cpp" />
     <ClCompile Include="SubCtrlEdit.cpp" />
     <ClCompile Include="WndCtrlExp.cpp" />
     <ClCompile Include="WndCtrlMonoSetup.cpp" />
