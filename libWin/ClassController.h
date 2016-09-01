@@ -34,6 +34,7 @@ namespace Win
 		virtual bool OnNCCalcSize(WPARAM, LPARAM) = 0;
 		virtual bool OnNCPaint(WPARAM, LPARAM) = 0;
 		virtual bool OnWindowPosChanging(WPARAM, LPARAM) = 0;
+		virtual HRESULT OnCTLColorEdit(HDC, HWND) = 0;
 		virtual HRESULT OnCTLColorStatic(HDC, HWND){return false;}
 		virtual HRESULT OnCTLColorBtn(HDC, HWND){return false;}		
 		virtual HRESULT OnCTLColorListBox(HDC, HWND) = 0;

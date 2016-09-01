@@ -95,12 +95,12 @@ void Synchronizer::SetSlitWithUpdate(int slit)
 		while (_iface.isMotorMoving()){
 			outVal = _iface.GetSlitPos(0);
 			pos << outVal;
-			_exp.setEditVal(0, pos.str());
+			_exp.SetEditVal(0, pos.str());
 			pos = stringstream();
 		};
 		outVal = _iface.GetSlitPos(0);
 		pos << outVal;
-		_exp.setEditVal(0, pos.str());
+		_exp.SetEditVal(0, pos.str());
 		break;
 	case 1:
 		break;
@@ -109,12 +109,12 @@ void Synchronizer::SetSlitWithUpdate(int slit)
 		while (_iface.isMotorMoving()){
 			outVal = _iface.GetSlitPos(2);
 			pos << outVal;
-			_exp.setEditVal(2, pos.str());
+			_exp.SetEditVal(2, pos.str());
 			pos = stringstream();
 		};
 		outVal = _iface.GetSlitPos(2);
 		pos << outVal;
-		_exp.setEditVal(2, pos.str());
+		_exp.SetEditVal(2, pos.str());
 		break;
 
 	case 3:
@@ -129,10 +129,10 @@ void Synchronizer::GoToAndUpdate(double wavelength)
 	double current = _iface.GetPos();
 	stringstream text;
 	text << current;
-	_exp.setEditVal(10, text.str());
+	_exp.SetEditVal(10, text.str());
 	text = stringstream();
 	text << 1239.8384 / current;
-	_exp.setEditVal(4, text.str());
+	_exp.SetEditVal(4, text.str());
 }
 
 double Synchronizer::GetTargetEV()
@@ -180,38 +180,38 @@ void Synchronizer::InitDev()
 
 	stringstream text;
 	text << frontSlit;
-	_exp.setEditVal(0, text.str());
-	_exp.setEditVal(1, "0");
+	_exp.SetEditVal(0, text.str());
+	_exp.SetEditVal(1, "0");
 
 	text = stringstream();
 	text << exitSlit;
-	_exp.setEditVal(2, text.str());
-	_exp.setEditVal(3, "0");
+	_exp.SetEditVal(2, text.str());
+	_exp.SetEditVal(3, "0");
 
 	text = stringstream();
 	text << posEV;
-	_exp.setEditVal(4, text.str());
-	_exp.setEditVal(5, "0.000");
+	_exp.SetEditVal(4, text.str());
+	_exp.SetEditVal(5, "0.000");
 
-	_exp.setEditVal(6, "0");
-	_exp.setEditVal(7, "0.000");
+	_exp.SetEditVal(6, "0");
+	_exp.SetEditVal(7, "0.000");
 
-	_exp.setEditVal(8, "0");
-	_exp.setEditVal(9, "0.000");
+	_exp.SetEditVal(8, "0");
+	_exp.SetEditVal(9, "0.000");
 
 	text = stringstream();
 	text << posNM;
-	_exp.setEditVal(10, text.str());
-	_exp.setEditVal(11, "0.00");
+	_exp.SetEditVal(10, text.str());
+	_exp.SetEditVal(11, "0.00");
 
-	_exp.setEditVal(12, "not used");
-	_exp.setEditVal(13, "0.3");
+	_exp.SetEditVal(12, "not used");
+	_exp.SetEditVal(13, "0.3");
 
-	_exp.setEditVal(14, "not used");
-	_exp.setEditVal(15, "1");
+	_exp.SetEditVal(14, "not used");
+	_exp.SetEditVal(15, "1");
 
-	_exp.setEditVal(16, "not used");
-	_exp.setEditVal(17, "0.1");	
+	_exp.SetEditVal(16, "not used");
+	_exp.SetEditVal(17, "0.1");	
 
 	::SetWindowPos(_mono._hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_HIDEWINDOW);
 	::SetWindowPos(_exp._hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
@@ -327,7 +327,7 @@ void Synchronizer::Measure()	//func tab[3]
 
 void Synchronizer::StopExp()	//func tab[4]
 {
-	_exp.visibleRun();
+	_exp.VisibleRun();
 
 	ToggleRunning();
 
@@ -358,7 +358,7 @@ void Synchronizer::GoHome()				// func tab[6]
 void Synchronizer::StartExp()			// func tab[8]
 {
 	ToggleRunning();
-	_exp.visibleStop();
+	_exp.VisibleStop();
 	UpdateSettings();
 
 	_program = 3;

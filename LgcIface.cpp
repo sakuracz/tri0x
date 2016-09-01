@@ -16,10 +16,11 @@ namespace Logic
 		_gratingFactors[1] = 16.0;
 		_gratingFactors[2] = 2.0;
 		
-		_comm.ReadIntervalTimeout = 5;
-		_comm.ReadTotalTimeoutConstant = 100;
-		_comm.ReadTotalTimeoutMultiplier = 100;
-		_comm.WriteTotalTimeoutConstant = 10;
+		_comm.ReadIntervalTimeout = 500;
+		_comm.ReadTotalTimeoutConstant = 0;
+		_comm.ReadTotalTimeoutMultiplier = 0;
+		_comm.WriteTotalTimeoutConstant = 500;
+		_comm.WriteTotalTimeoutMultiplier = 0;
 
 		_dcb.DCBlength = sizeof(_dcb);
 		_dcb.BaudRate = CBR_115200;

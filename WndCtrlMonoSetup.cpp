@@ -10,9 +10,7 @@ using std::vector;
 
 namespace Win{
 	MonoWndCtrl::MonoWndCtrl() : grating_controller(gratingCombo), mirror_controller(mirrorCombo)
-	{
-		itemIndex = 0;		
-		
+	{				
 		_btnForce.LoadBMPs(string("switch"));
 		_btnInit.LoadBMPs(string("init"));
 
@@ -110,11 +108,18 @@ namespace Win{
 				gratingCombo.ToggleSelected();		//grating selection used to be false - now it's true window needs to be resized				
 				unsigned int sel = ::SendMessage(gratingCombo.GetHandle(), CB_GETCURSEL, 0, 0);
 				gratingCombo.Select(sel);
-				grating_controller.Invalidate();
+				grating_controller.Invalidate();					
 			}
 				break;
 			case CBN_SELENDOK:
-				gratingCombo.ToggleSelecting();
+				gratingCombo.ToggleSelected();
+				//check if other combo is selected -> then enable the init button
+				if (mirrorCombo.IsSelected()){
+					if (!::IsWindowEnabled(_btnInit.GetHandle())){
+						::EnableWindow(_btnInit.GetHandle(), TRUE);
+						::InvalidateRect(_btnInit.GetHandle(), NULL, TRUE);
+					}
+				}
 				break;
 			case CBN_DROPDOWN:				
 				gratingCombo.ToggleSelecting();
@@ -138,7 +143,14 @@ namespace Win{
 			}
 			break;
 			case CBN_SELENDOK:
-				mirrorCombo.ToggleSelecting();
+				mirrorCombo.ToggleSelected();
+				//check if other combo is selected -> then enable the init button
+				if (gratingCombo.IsSelected()){
+					if (!::IsWindowEnabled(_btnInit.GetHandle())){
+						::EnableWindow(_btnInit.GetHandle(), TRUE);
+						::InvalidateRect(_btnInit.GetHandle(), NULL, TRUE);
+					}
+				}
 				break;
 			case CBN_DROPDOWN:			
 				mirrorCombo.ToggleSelecting();
@@ -211,6 +223,8 @@ namespace Win{
 		_btnForce.Init(check, j);
 		_btnForce.SubClass(&button_controller);		
 
+		::EnableWindow(_btnInit.GetHandle(), FALSE);
+
 		::SetWindowPos(gratingCombo.GetHandle(), NULL, (gratingCombo.GetBasePos()).first, (gratingCombo.GetBasePos()).second, 136, 30, SWP_SHOWWINDOW );
 		::SetWindowPos(mirrorCombo.GetHandle(), NULL, (mirrorCombo.GetBasePos()).first, (mirrorCombo.GetBasePos()).second, 136, 30, SWP_SHOWWINDOW);
 //		::SetWindowPos(mirrorCombo.GetHandle(), NULL, 10, 84, 136, 30, SWP_SHOWWINDOW);
@@ -247,15 +261,19 @@ namespace Win{
 			break;
 		case 1201:		//force init check button
 			if (forceState == 0)
-				res = _btnForce.Draw(1, pDIS);
-			else
 				res = _btnForce.Draw(0, pDIS);
+			else
+				res = _btnForce.Draw(1, pDIS);
 			break;
 		case 1200:		//init(start exp) button
-			if (initState == 0)
-				res = _btnInit.Draw(1, pDIS);
-			else
-				res = _btnInit.Draw(0, pDIS);
+			if (::IsWindowEnabled(_btnInit.GetHandle())){
+				if (initState == 0)
+					res = _btnInit.Draw(0, pDIS);
+				else
+					res = _btnInit.Draw(1, pDIS);
+			} else {
+				res = _btnInit.Draw(3, pDIS);
+			}
 			break;
 		}
 		return res;

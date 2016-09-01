@@ -28,13 +28,9 @@ namespace Win{
 		void ZeroInit(){ initState = 0; }
 
 	private:
-		void UpdateProgress(int);
-		unsigned int itemIndex;
-		const unsigned int combo_count = 2;
-		CustomButton _btnForce;
-		CustomButton _btnInit;		
+		void UpdateProgress(int);		
+		CustomButton _btnForce, _btnInit;
 		ButtonController button_controller;
-		CustomButton forceBtn, initButton;
 		CustomCombo gratingCombo, mirrorCombo;
 		ComboController grating_controller, mirror_controller;		
 		HANDLE background_bmp;

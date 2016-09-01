@@ -15,6 +15,7 @@ namespace Win
 		bool OnMove(WPARAM, LPARAM) override { return false; }
 		bool OnHotKey(WPARAM, LPARAM) override { return false; }
 		bool OnNotify(HWND, LPARAM) override { return false; }
+		HRESULT OnCTLColorEdit(HDC, HWND) { return false; }
 		HRESULT OnCTLColorListBox(HDC, HWND) override { return false; };
 		virtual bool OnLButtonDown(WPARAM, int, int){return false;}
 		virtual bool OnKillFocus(HWND){return false;}

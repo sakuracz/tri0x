@@ -6,15 +6,20 @@
 
 namespace Win
 {
-	ExpWndController::ExpWndController()
+	ExpWndController::ExpWndController() 
+		: radio_controller(custom_radio), edit_controller(custom_edit)
 	{
 		//		_prog = 0;
+
+		run_button.LoadBMPs("run");
+		back_button.LoadBMPs("back");
+		stop_button.LoadBMPs("stop");
 
 		for (int i = 0; i < 20; i++){
 			_edtArray[i] = new EditControl(0);
 		};
 
-		for (int i = 0; i < 14; i++){
+		for (int i = 1; i < 14; i++){
 			_btnArray[i] = new ButtonControl(0);
 		};
 
@@ -34,7 +39,7 @@ namespace Win
 			if (_edtArray[i] != NULL) delete _edtArray[i];
 		};
 
-		for (int i = 0; i < 14; i++){
+		for (int i = 1; i < 14; i++){
 			if (_btnArray[i] != NULL) delete _btnArray[i];
 		};
 	};
@@ -43,15 +48,79 @@ namespace Win
 	{
 		switch (LOWORD(wParam))
 		{
+		//2200-2210 radio buttons BN_CLICKED notifications
+		case 2200:
+			if (HIWORD(wParam) == BN_CLICKED){
+				
+			}
+			break;
+		case 2201:
+			if (HIWORD(wParam) == BN_CLICKED){
+
+			}
+			break;
+		case 2202:
+			if (HIWORD(wParam) == BN_CLICKED){
+
+			}
+			break;		
+		case 2203:
+			if (HIWORD(wParam) == BN_CLICKED){
+
+			}
+			break;
+		case 2204:
+			if (HIWORD(wParam) == BN_CLICKED){
+
+			}
+			break;
+		case 2205:
+			if (HIWORD(wParam) == BN_CLICKED){
+
+			}
+			break;
+		case 2206:
+			if (HIWORD(wParam) == BN_CLICKED){
+
+			}
+			break;
+		case 2207:
+			if (HIWORD(wParam) == BN_CLICKED){
+
+			}
+			break;
+		case 2208:
+			if (HIWORD(wParam) == BN_CLICKED){
+
+			}
+			break;
+		case 2209:
+			if (HIWORD(wParam) == BN_CLICKED){
+
+			}
+			break;
+		case 2210:
+			if (HIWORD(wParam) == BN_CLICKED){
+
+			}
+			break;
 		case 2211:		//Back button				
 			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 2211, NULL);
 			break;
 		case 2212:		//Stop button
-			visibleRun();
+			stopPressed = !stopPressed;
+			VisibleRun();
 			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 2212, NULL);
+			if (runPressed){
+				runPressed = !runPressed;
+				::InvalidateRect(run_button, NULL, TRUE);
+			}
+			stopPressed = !stopPressed;
 			break;
 		case 2213:		//Run button
-			visibleStop();
+			if (!runPressed)
+				runPressed = !runPressed;
+			VisibleStop();
 			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 2213, NULL);
 			break;
 		}
@@ -77,20 +146,29 @@ namespace Win
 		int height = desired.bottom - desired.top;
 		InitMinXY(width, height);
 		::SetWindowPos(_hwnd, NULL, (maxX - width) / 2, (maxY - height) / 2, width, height, SWP_SHOWWINDOW);
-		
-		//edit controls:		
-		for (int i = 0; i < 19; i++){
-			int j = 2100 + i;
+
+		{
+			int j = 2100;
 			EditMaker edit(_hwnd, j);
 			edit.Create("");
 			edit.Show();
+			custom_edit.Init(edit, j);
+			custom_edit.SubClass(&edit_controller);
+		}
+		//edit controls:		
+		for (int i = 1; i < 19; i++){
+			int j = 2100 + i;
+			EditMaker edit(_hwnd, j);
+//			edit.AddExStyle(WS_EX_NOBOR);
+			edit.Create("");
+			edit.Show();
 			_edtArray[i]->Init(edit, j);
-			_edtArray[i]->SubClass(&_edtCtrl[i]);
+//			_edtArray[i]->SubClass(&_edtCtrl[i]);
 		};
 
 		EditMaker edit(_hwnd, 2119);
 		edit.AddStyle(WS_VSCROLL | ES_MULTILINE | ES_AUTOVSCROLL | ES_WANTRETURN | ES_READONLY);
-		edit.Create("X \t Y1 \t Y2 \t Y3");
+		edit.Create("");
 		edit.Show();
 		_edtArray[19]->Init(edit, 2119);
 //		_edtArray[19]->SubClass(&_edtCtrl[19]);
@@ -99,8 +177,17 @@ namespace Win
 			Edit_Enable(_edtArray[i]->GetHandle(), false);
 		Edit_Enable(_edtArray[19]->GetHandle(), true);
 
+		//create custom radio button
+		ButtonMaker butt(_hwnd, 2200);
+		butt.AddStyle(BS_AUTORADIOBUTTON | WS_TABSTOP);
+		butt.Create("");
+		butt.Show();
+		custom_radio.Init(butt, 2200);
+		custom_radio.LoadBMPs(string("radio"));
+		custom_radio.SubClass(&radio_controller);
+
 		//button controls:		
-		for (int i = 0; i < 11; i++){
+		for (int i = 1; i < 11; i++){
 			int j = 2200 + i;
 			ButtonMaker butt(_hwnd, j);
 			if ((i == 2) || (i == 6) || (i == 10))
@@ -110,16 +197,33 @@ namespace Win
 			butt.Show();
 			_btnArray[i]->Init(butt, j);
 		};
-
-		for (int i = 11; i < 14; i++){
-			int j = 2200 + i;
+		
+		int j = 2211;
+		{
 			ButtonMaker butt(_hwnd, j);
+			butt.SetStyle(BS_OWNERDRAW);
 			butt.Create("");
 			butt.Show();
-			_btnArray[i]->Init(butt, j);
+			back_button.Init(butt, j);
+		}
+		j++;
+		{
+			ButtonMaker butt(_hwnd, j);
+			butt.SetStyle(BS_OWNERDRAW);
+			butt.Create("");
+			butt.Show();
+			stop_button.Init(butt, j);
+		}
+		j++;
+		{
+			ButtonMaker butt(_hwnd, j);
+			butt.SetStyle(BS_OWNERDRAW);
+			butt.Create("");
+			butt.Show();
+			run_button.Init(butt, j);
 		}
 
-		::SendMessage(_btnArray[0]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Ch1");
+		::SendMessage(custom_radio.GetHandle(), WM_SETTEXT, 0, (LPARAM)"Ch1");
 		::SendMessage(_btnArray[1]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Ch2");
 		::SendMessage(_btnArray[2]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Inp1");
 		::SendMessage(_btnArray[3]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Ch1");
@@ -130,11 +234,11 @@ namespace Win
 		::SendMessage(_btnArray[8]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Ch2");
 		::SendMessage(_btnArray[9]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Inp1");
 		::SendMessage(_btnArray[10]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"none");
-		::SendMessage(_btnArray[11]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Back");
-		::SendMessage(_btnArray[12]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Stop");
-		::SendMessage(_btnArray[13]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Run");
+//		::SendMessage(_btnArray[11]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Back");
+//		::SendMessage(_btnArray[12]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Stop");
+//		::SendMessage(_btnArray[13]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Run");
 
-		::SendMessage(_btnArray[0]->GetHandle(), BM_SETCHECK, BST_CHECKED, NULL);
+		::SendMessage(custom_radio.GetHandle(), BM_SETCHECK, BST_CHECKED, NULL);
 		::SendMessage(_btnArray[4]->GetHandle(), BM_SETCHECK, BST_CHECKED, NULL);
 		::SendMessage(_btnArray[9]->GetHandle(), BM_SETCHECK, BST_CHECKED, NULL);
 
@@ -142,6 +246,47 @@ namespace Win
 
 		return true;
 	};
+
+	bool ExpWndController::OnDrawItem(LPARAM lParam)
+	{
+		DRAWITEMSTRUCT* pDIS = reinterpret_cast<DRAWITEMSTRUCT*>(lParam);
+		switch (pDIS->CtlID)
+		{
+		case 2211:		//back button:
+			if (::IsWindowEnabled(back_button.GetHandle()))
+			{
+				if (backPressed == 0)
+					back_button.Draw(0, pDIS);
+				else
+					back_button.Draw(1, pDIS);
+			} else {
+				back_button.Draw(3, pDIS);
+			}
+			break;		
+		case 2212:		//stop button:
+			if (::IsWindowEnabled(stop_button.GetHandle()))
+			{
+				if (stopPressed == 0)
+					stop_button.Draw(0, pDIS);
+				else
+					stop_button.Draw(1, pDIS);
+			}
+			else {
+				stop_button.Draw(3, pDIS);
+			}
+			break;
+		case 2213:		//run button:
+
+				if (runPressed == 0)
+					run_button.Draw(0, pDIS);
+				else
+					run_button.Draw(1, pDIS);
+			
+			break;
+		}
+
+		return true;
+	}
 
 	bool ExpWndController::OnEraseBG(HDC hDC)
 	{
@@ -176,8 +321,8 @@ namespace Win
 		int xCol8 = 161, yRow8 = 291;	//buttons (run) right
 		int xCol9 = 147, yRow9 = 342;	//file edit
 		int xColA = 27, yRowA = 410;
-	
-		::SetWindowPos(_btnArray[0]->GetHandle(), HWND_TOP, xCol3, yRow2, dxRadio, dyRadio, SWP_SHOWWINDOW);
+		//radios:
+		::SetWindowPos(custom_radio.GetHandle(), HWND_TOP, xCol3, yRow2 + 3, dxRadio, dyRadio, SWP_SHOWWINDOW);
 		::SetWindowPos(_btnArray[1]->GetHandle(), HWND_TOP, xCol3, yRow3, dxRadio, dyRadio, SWP_SHOWWINDOW);
 		::SetWindowPos(_btnArray[2]->GetHandle(), HWND_TOP, xCol3, yRow4, dxRadio, dyRadio, SWP_SHOWWINDOW);
 
@@ -190,12 +335,12 @@ namespace Win
 		::SetWindowPos(_btnArray[8]->GetHandle(), HWND_TOP, xCol5, yRow3, dxRadio, dyRadio, SWP_SHOWWINDOW);
 		::SetWindowPos(_btnArray[9]->GetHandle(), HWND_TOP, xCol5, yRow4, dxRadio, dyRadio, SWP_SHOWWINDOW);
 		::SetWindowPos(_btnArray[10]->GetHandle(), HWND_TOP, xCol5, yRow5, dxRadio, dyRadio, SWP_SHOWWINDOW);
-
-		::SetWindowPos(_btnArray[11]->GetHandle(), HWND_TOP, xCol7, yRow8 + 3, dxButton, dyButton, SWP_SHOWWINDOW);
-		::SetWindowPos(_btnArray[12]->GetHandle(), HWND_TOP, xCol7, yRow7 + 3, dxButton, dyButton, SWP_SHOWWINDOW);
-		::SetWindowPos(_btnArray[13]->GetHandle(), HWND_TOP, xCol8, yRow8 + 3, dxButton, dyButton, SWP_SHOWWINDOW);
-	
-		::SetWindowPos(_edtArray[0]->GetHandle(), HWND_TOP, xCol1, yRow1, dxShortEdit, dyShortEdit, SWP_SHOWWINDOW);
+		//pushbuttons:
+		::SetWindowPos(back_button.GetHandle(), HWND_TOP, xCol7, yRow8 + 3, dxButton, dyButton, SWP_SHOWWINDOW);
+		::SetWindowPos(stop_button.GetHandle(), HWND_TOP, xCol7, yRow7 + 3, dxButton, dyButton, SWP_SHOWWINDOW);
+		::SetWindowPos(run_button.GetHandle(), HWND_TOP, xCol8, yRow8 + 3, dxButton, dyButton, SWP_SHOWWINDOW);
+		//edits:
+		::SetWindowPos(custom_edit.GetHandle(), HWND_TOP, xCol1, yRow1, dxShortEdit, dyShortEdit, SWP_SHOWWINDOW);
 		::SetWindowPos(_edtArray[1]->GetHandle(), HWND_TOP, xCol2, yRow1, dxShortEdit, dyShortEdit, SWP_SHOWWINDOW);
 		::SetWindowPos(_edtArray[2]->GetHandle(), HWND_TOP, xCol1, yRow2, dxShortEdit, dyShortEdit, SWP_SHOWWINDOW);
 		::SetWindowPos(_edtArray[3]->GetHandle(), HWND_TOP, xCol2, yRow2, dxShortEdit, dyShortEdit, SWP_SHOWWINDOW);
@@ -217,6 +362,8 @@ namespace Win
 
 		::SetWindowPos(_edtArray[18]->GetHandle(), HWND_TOP, xCol9, yRow9, dxFileEdit, dyFileEdit, SWP_SHOWWINDOW);
 		::SetWindowPos(_edtArray[19]->GetHandle(), HWND_TOP, xColA, yRowA, dxOutEdit, dyOutEdit, SWP_SHOWWINDOW);
+
+		::EnableWindow(stop_button.GetHandle(), FALSE);
 
 		return true;
 	};
@@ -275,7 +422,7 @@ namespace Win
 		return;
 	};
 
-	void ExpWndController::setEditVal(int editNum, string text)
+	void ExpWndController::SetEditVal(int editNum, string text)
 	{
 		::SendMessage(_edtArray[editNum]->GetHandle(), WM_SETTEXT, 0, (LPARAM)text.c_str());
 		return;
@@ -295,10 +442,11 @@ namespace Win
 		return;
 	};
 
-	void ExpWndController::visibleRun()
+	void ExpWndController::VisibleRun()
 	{
-		Button_Enable(_btnArray[12]->GetHandle(), false);
-		Button_Enable(_btnArray[11]->GetHandle(), true);
+		Button_Enable(stop_button.GetHandle(), false);
+		Button_Enable(back_button.GetHandle(), true);
+		Button_Enable(run_button.GetHandle(), true);
 
 		for (int i = 1; i < 19; i+=2)
 			Edit_Enable(_edtArray[i]->GetHandle(), true);
@@ -306,10 +454,11 @@ namespace Win
 		return;
 	};
 
-	void ExpWndController::visibleStop()
+	void ExpWndController::VisibleStop()
 	{
-		Button_Enable(_btnArray[12]->GetHandle(), true);
-		Button_Enable(_btnArray[11]->GetHandle(), false);
+		Button_Enable(run_button.GetHandle(), false);
+		Button_Enable(stop_button.GetHandle(), true);
+		Button_Enable(back_button.GetHandle(), false);
 
 		for (int i = 1; i < 20; i+=2)
 			Edit_Enable(_edtArray[i]->GetHandle(), false);

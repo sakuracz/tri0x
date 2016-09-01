@@ -3,6 +3,7 @@
 
 #include "libWin\ClassChildController.h"
 #include "SubCtrlEdit.h"
+#include "SubCtrlRadio.h"
 #include "libWin\WindowControls.h"
 #include <string>
 #include <vector>
@@ -25,17 +26,22 @@ namespace Win
 		bool OnSize(int, int, int) override;
 		bool OnNotify(HWND, LPARAM) override;	//reads input parameters since edit boxes trigger this message
 		bool OnEraseBG(HDC) override;
-		void setEditVal(int, string);
-		void visibleRun();
-		void visibleStop();
+		bool OnDrawItem(LPARAM) override;
+		void SetEditVal(int, string);
+		void VisibleRun();
+		void VisibleStop();
 		void UpdateEditBox(vector<double>&, int);
 		void UpdatePos(double);
 		double GetEditVal(int);		
 	protected:
-		EditController	_edtCtrl[20];
-		CustomButton run_button, stop_button, back_buton;		
+		CustomEdit custom_edit;
+		EditController edit_controller;
+//		EditController	_edtCtrl[20];		
+		RadioController radio_controller;
+		CustomButton run_button, stop_button, back_button;		
 		EditControl		*_edtArray[20];
 		ButtonControl	*_btnArray[14];
+		CustomRadio custom_radio;
 	private:
 		double _interval;
 		double _timeConst;
@@ -50,6 +56,7 @@ namespace Win
 		double _incPos;
 
 		HANDLE background_bmp;
+		bool runPressed = false, stopPressed = false, backPressed = false;
 	};
 };
 

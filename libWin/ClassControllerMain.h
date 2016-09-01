@@ -17,6 +17,7 @@ namespace Win
 		MainController(HWND, CreateData*);
 		~MainController();
 		bool OnCreate(CreateData const*) override;		
+		HRESULT OnCTLColorEdit(HDC, HWND) { return false; }
 		HRESULT OnCTLColorListBox(HDC, HWND) override { return false; };
 		bool OnHotKey(WPARAM, LPARAM) override { return false; }
 		bool OnMove(WPARAM, LPARAM) override { return false; }

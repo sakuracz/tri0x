@@ -38,6 +38,12 @@ namespace Win
 		SubController* pCtrl = Win::GetLong<SubController*>(hwnd);
 		switch(message)
 		{
+		case WM_CTLCOLOREDIT:
+			return pCtrl->OnCTLColorEdit((HDC)wParam, (HWND)lParam);
+			break;
+		case WM_CTLCOLORSTATIC:
+			return pCtrl->OnCTLColorStatic((HDC)wParam, (HWND)lParam);
+			break;
 		case WM_ERASEBKGND:
 			if (pCtrl->OnEraseBG((HDC)wParam))
 				return TRUE;
@@ -51,7 +57,12 @@ namespace Win
 				return 0;
 			break;
 		case WM_KILLFOCUS:
-			return 0;
+			if (pCtrl->OnKillFocus(wParam, lParam))
+				return 0;
+			break;
+		case WM_LBUTTONDOWN:
+			if (pCtrl->OnLMouseButtonDown(wParam, lParam))
+				return 0;
 			break;
 		case WM_LBUTTONUP:
 			if(pCtrl->OnLMouseButtonUp(wParam, lParam))

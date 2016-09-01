@@ -114,6 +114,7 @@
     <ClInclude Include="SubCtrlButton.h" />
     <ClInclude Include="SubCtrlCombo.h" />
     <ClInclude Include="SubCtrlEdit.h" />
+    <ClInclude Include="SubCtrlRadio.h" />
     <ClInclude Include="WndCtrlExp.h" />
     <ClInclude Include="WndCtrlMonoSetup.h" />
   </ItemGroup>
@@ -137,6 +138,7 @@
     <ClCompile Include="SubCtrlButton.cpp" />
     <ClCompile Include="SubCtrlCombo.cpp" />
     <ClCompile Include="SubCtrlEdit.cpp" />
+    <ClCompile Include="SubCtrlRadio.cpp" />
     <ClCompile Include="WndCtrlExp.cpp" />
     <ClCompile Include="WndCtrlMonoSetup.cpp" />
   </ItemGroup>

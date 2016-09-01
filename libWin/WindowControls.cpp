@@ -27,10 +27,56 @@ namespace Win
 	{
 	};
 
-	CustomRadio::CustomRadio(HWND win = 0)
+	CustomRadio::CustomRadio(HWND win)
 		: SimpleControl(win)
 	{
 	};
+
+	void CustomRadio::GetShare(const CustomRadio& shareObj)
+	{
+		bmapIdle = shareObj.bmapIdle;
+		bmapCheck = shareObj.bmapCheck;
+		bmapDis = shareObj.bmapDis;
+		bmapMask = shareObj.bmapMask;
+	}
+
+	void CustomRadio::LoadBMPs(const string& name)
+	{
+		string main = string("res/" + name + "-idle.bmp");
+		string check = string("res/" + name + "-check.bmp");
+		string disable = string("res/" + name + "-dis.bmp");
+		string mask = string("res/" + name + "-mask.bmp");
+
+		stringstream stream;
+
+		bmapIdle = shared_ptr<HANDLE>((HANDLE*)::LoadImage(NULL, main.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE), [=](HANDLE handle){::DeleteObject(handle); });
+		if (bmapIdle.get() == NULL){
+			DWORD dw = GetLastError();
+			stream << "Got error #: " << dw;
+			::MessageBox(NULL, stream.str().c_str(), "No idle bitmap", MB_OK);
+		}
+		bmapCheck = shared_ptr<HANDLE>((HANDLE*)::LoadImage(NULL, check.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE), [=](HANDLE handle){::DeleteObject(handle); });
+		if (bmapCheck.get() == NULL){
+			DWORD dw = GetLastError();
+			stream = stringstream();
+			stream << "Got error #: " << dw;
+	-		::MessageBox(NULL, stream.str().c_str(), "No checked bitmap", MB_OK);
+		}
+		bmapDis = shared_ptr<HANDLE>((HANDLE*)::LoadImage(NULL, disable.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE), [=](HANDLE handle){::DeleteObject(handle); });
+		if (bmapDis.get() == NULL){
+			DWORD dw = GetLastError();
+			stream = stringstream();
+			stream << "Got error #: " << dw;
+			::MessageBox(NULL, stream.str().c_str(), "No disabled bitmap", MB_OK);
+		}
+		bmapMask = shared_ptr<HANDLE>((HANDLE*)::LoadImage(NULL, mask.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE), [=](HANDLE handle){::DeleteObject(handle); });
+		if (bmapMask.get() == NULL){
+			DWORD dw = GetLastError();
+			stream = stringstream();
+			stream << "Got error #: " << dw;
+			::MessageBox(NULL, stream.str().c_str(), "No mask bitmap", MB_OK);
+		}
+	}
 
 	void SimpleControl::Init(HWND win, int id)
 	{
@@ -54,8 +100,8 @@ namespace Win
 		return _id;
 	};
 
-	EditControl::EditControl(HWND winParent, int id)
-		: SimpleControl(winParent, id)
+	EditControl::EditControl(HWND win, int id)
+		: SimpleControl(win, id)
 	{};
 
 	EditControl::EditControl(HWND win = 0)
@@ -94,6 +140,27 @@ namespace Win
 		SendMessage (WM_SETTEXT, 0, (LPARAM) buf);
 	};
 
+	CustomEdit::CustomEdit(HWND win, int id)
+		: EditControl(win, id)
+	{
+	}
+
+	CustomEdit::CustomEdit(HWND win)
+		: EditControl(win)
+	{}
+
+	void CustomEdit::LoadBMPs(const string& name)
+	{
+		stringstream stream;
+		string bg = string("res/" + name + ".bmp");
+		bmapBack = ::LoadImage(NULL, bg.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+		if (bmapBack == NULL){
+			DWORD dw = GetLastError();
+			stream << "Got error #: " << dw;
+			::MessageBox(NULL, stream.str().c_str(), "Nope1", MB_OK);
+		}
+	}
+
 	StaticControl::StaticControl(HWND winParent, int id)
 		: SimpleControl(winParent, id)
 	{};
@@ -121,6 +188,8 @@ namespace Win
 		stringstream stream;
 		string press = "res/" + nameBase + "-on.bmp";
 		string dpress = "res/" + nameBase + "-off.bmp";
+		string disable = "res/" + nameBase + "-dis.bmp";
+		string hover = "res/" + nameBase + "-over.bmp";
 		bmapPressed = ::LoadImage(NULL, press.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 		if (bmapPressed == NULL){
 			DWORD dw = GetLastError();
@@ -134,47 +203,49 @@ namespace Win
 			stream << "Got error #: " << dw;
 			::MessageBox(NULL, stream.str().c_str(), "Nope2", MB_OK);
 		}
+
+		bmapDisabled = ::LoadImage(NULL, disable.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+		bmapHover = ::LoadImage(NULL, hover.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 	}
 
 	bool CustomButton::Draw(const int& which, DRAWITEMSTRUCT* pDIS)
 	{
 		RECT rectItem = pDIS->rcItem;
 		HDC hDC = pDIS->hDC;
+		HANDLE toDraw = NULL;
 
-		if (which == 0){
-			if (bmapPressed != NULL){
-				RECT rcImage;
-				BITMAP bm;
-				LONG cxBitmap, cyBitmap;
-				if (GetObject(bmapPressed, sizeof(bm), &bm)){
-					cxBitmap = bm.bmWidth;
-					cyBitmap = bm.bmHeight;
-				}
-				CopyRect(&rcImage, &rectItem);
-				LONG image_width = rcImage.right - rcImage.left;
-				LONG image_height = rcImage.bottom - rcImage.top;
-				rcImage.left = (image_width - cxBitmap) / 2;
-				rcImage.top = (image_height - cyBitmap) / 2;
-				DrawState(hDC, NULL, NULL, (LPARAM)bmapPressed, 0, rcImage.left, rcImage.top, rcImage.right - rcImage.left, rcImage.bottom - rcImage.top, DSS_NORMAL | DST_BITMAP);
-			}
+		switch (which)
+		{
+		case 3:
+			toDraw = bmapDisabled;
+			break;
+		case 2:
+			toDraw = bmapHover;
+			break;
+		case 1:
+			toDraw = bmapPressed;
+			break;
+		case 0:
+			toDraw = bmapDepressed;
+			break;
 		}
-		else {
-			if (bmapPressed != NULL){
-				RECT rcImage;
-				BITMAP bm;
-				LONG cxBitmap, cyBitmap;
-				if (GetObject(bmapPressed, sizeof(bm), &bm)){
-					cxBitmap = bm.bmWidth;
-					cyBitmap = bm.bmHeight;
-				}
-				CopyRect(&rcImage, &rectItem);
-				LONG image_width = rcImage.right - rcImage.left;
-				LONG image_height = rcImage.bottom - rcImage.top;
-				rcImage.left = (image_width - cxBitmap) / 2;
-				rcImage.top = (image_height - cyBitmap) / 2;
-				DrawState(hDC, NULL, NULL, (LPARAM)bmapDepressed, 0, rcImage.left, rcImage.top, rcImage.right - rcImage.left, rcImage.bottom - rcImage.top, DSS_NORMAL | DST_BITMAP);
+		
+		if (toDraw != NULL){
+			RECT rcImage;
+			BITMAP bm;
+			LONG cxBitmap, cyBitmap;
+			if (GetObject(toDraw, sizeof(bm), &bm)){
+				cxBitmap = bm.bmWidth;
+				cyBitmap = bm.bmHeight;
 			}
+			CopyRect(&rcImage, &rectItem);
+			LONG image_width = rcImage.right - rcImage.left;
+			LONG image_height = rcImage.bottom - rcImage.top;
+			rcImage.left = (image_width - cxBitmap) / 2;
+			rcImage.top = (image_height - cyBitmap) / 2;
+			DrawState(hDC, NULL, NULL, (LPARAM)toDraw, 0, rcImage.left, rcImage.top, rcImage.right - rcImage.left, rcImage.bottom - rcImage.top, DSS_NORMAL | DST_BITMAP);
 		}
+
 		//	if (which == 0)
 		//		::DrawIconEx(hDC, 0, 0, (HICON)bmapPressed, 0, 0, NULL, NULL, DI_NORMAL);
 		//	else

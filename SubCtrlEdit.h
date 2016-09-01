@@ -7,11 +7,17 @@ namespace Win
 {
 	class EditController : public SubController
 	{
-	public:
-		bool OnLMouseButtonUp(WPARAM, LPARAM);
-		bool OnKeyDown(WPARAM, LPARAM);
-//		bool OnDrawItem(LPARAM) override { return false; }				
-		bool OnEraseBG(HDC) override { return false; }		
+	public:		
+		EditController(CustomEdit& edit);
+		HRESULT OnCTLColorEdit(HDC, HWND) override;
+		HRESULT OnCTLColorStatic(HDC, HWND) override;
+		bool OnLMouseButtonDown(WPARAM, LPARAM);
+		bool OnKeyDown(WPARAM, LPARAM);		
+		bool OnEraseBG(HDC) override;
+		bool OnKillFocus(WPARAM, LPARAM) override;
+		bool OnLMouseDblClick() override;		
+	private:
+		CustomEdit& edit;
 	};
 };
 

@@ -16,7 +16,8 @@ namespace Win
 		virtual void Init(HWND, ProcPtr, Controller*);
 		LRESULT CallPrevProc(UINT, WPARAM, LPARAM);
 		ProcPtr GetPrevProc();
-		Controller * GetPrevController();			
+		Controller * GetPrevController();	
+		HRESULT OnCTLColorEdit(HDC, HWND) { return false; }
 		HRESULT OnCTLColorListBox(HDC, HWND) override { return false; }
 		bool OnHotKey(WPARAM, LPARAM) override { return false; }
 		bool OnLMouseDblClick() override { return false; }
@@ -31,6 +32,7 @@ namespace Win
 		virtual bool OnNCActivate(WPARAM, LPARAM) { return false; }
 		virtual bool OnPaint() { return false; }
 		virtual bool OnTabKeyDown(){return 0;}
+		virtual bool OnKillFocus(WPARAM, LPARAM){ return false; }
 //		virtual bool OnDrawItem(LPARAM) = 0;
 	protected:
 		ProcPtr _prevProc;

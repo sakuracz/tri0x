@@ -13,12 +13,14 @@
 #include "Window.h"
 #include <string>
 #include <vector>
+#include <memory>
 #include <utility>
 
 using std::string;
 using std::vector;
 using std::pair;
 using std::make_pair;
+using std::shared_ptr;
 
 namespace Win
 {
@@ -39,10 +41,14 @@ namespace Win
 	class CustomRadio : public SimpleControl
 	{
 	public:
+		friend class RadioController;
 		CustomRadio(HWND, int);
-		CustomRadio(HWND);
+		CustomRadio(HWND win = 0);
+		void LoadBMPs(const string& name);
+		void GetShare(const CustomRadio&);
 	private:
-		HANDLE sel, idle, mask;
+		shared_ptr<HANDLE> bmapDis, bmapCheck, bmapIdle, bmapMask;
+		bool isChecked = false;
 	};
 
 	class EditControl : public SimpleControl
@@ -59,6 +65,17 @@ namespace Win
 		string GetText();
 		void Select();
 		void Clear();
+	};
+
+	class CustomEdit : public EditControl
+	{
+	public:
+		friend class EditController;
+		CustomEdit(HWND, int);
+		CustomEdit(HWND win = 0);
+		void LoadBMPs(const string&);
+	private:
+		HANDLE bmapBack = NULL;
 	};
 
 	class StaticControl : public SimpleControl
@@ -85,6 +102,8 @@ namespace Win
 	private:	
 		HANDLE bmapPressed = 0;
 		HANDLE bmapDepressed = 0;
+		HANDLE bmapDisabled = 0;
+		HANDLE bmapHover = 0;
 	};
 
 	class ComboControl : public SimpleControl
@@ -97,14 +116,14 @@ namespace Win
 	class CustomCombo : public ComboControl
 	{
 	public:
-		friend class ComboController;	
-		friend class ListController;
+		friend class ComboController;			
 		~CustomCombo();
 		void Load(const string&, const vector<string>&, const RECT& coords);	//loads bitmaps and inits rects
 		void Fill();
 		bool Draw(const int&, DRAWITEMSTRUCT*);
 		unsigned int GetWidth(){ return idle.right - idle.left; }
 		unsigned int GetHeight() { return idle.bottom-idle.top; }
+		bool IsSelected() { return isSelected; }
 		void Select(unsigned int& sel){ selection = sel; }
 		void ToggleSelected();		
 		void ToggleSelecting();
