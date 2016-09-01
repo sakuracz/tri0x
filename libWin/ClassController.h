@@ -19,6 +19,8 @@ namespace Win
 		~Controller();
 //		virtual bool OnDestroy(){return false;}
 		virtual bool OnCommand(WPARAM, LPARAM){return false;}
+		virtual bool OnHotKey(WPARAM, LPARAM) = 0;
+		virtual bool OnNotify(HWND, LPARAM) = 0;
 		virtual bool OnChar(){return false;}
 		virtual bool OnCreate(CreateData const *);	
 		virtual bool OnKeyDown(WPARAM, LPARAM){return false;}
@@ -28,8 +30,7 @@ namespace Win
 		virtual bool OnSizing(RECT*){return false;}
 		virtual HRESULT OnCTLColorStatic(HDC, HWND){return false;}
 		virtual HRESULT OnCTLColorBtn(HDC, HWND){return false;}
-		virtual bool OnMaxMinInfo(MINMAXINFO*){return false;}
-		virtual bool OnNotify(HWND, LPARAM){return false;}
+		virtual bool OnMaxMinInfo(MINMAXINFO*){return false;}		
 	protected:
 		Dow _hwnd;
 		void SetWindowHandle(HWND wind){_hwnd.Init(wind);}

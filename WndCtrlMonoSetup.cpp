@@ -28,7 +28,6 @@ namespace Win{
 
 	bool MonoWndCtrl::OnNotify(HWND hFrom, LPARAM lParam)
 	{
-
 		return true;
 	}
 

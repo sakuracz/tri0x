@@ -6,6 +6,7 @@
 #include "libWin\WindowControls.h"
 #include <string>
 #include <vector>
+#include <list>
 //#include "struct.h"
 
 using namespace std;
@@ -38,6 +39,9 @@ namespace Win
 		double _timeConst;
 		int _pointCount;
 		int _chann;
+
+		list<HWND> tabList;
+		list<HWND>::const_iterator tabIter;
 
 		double _startPos;
 		double _stopPos;

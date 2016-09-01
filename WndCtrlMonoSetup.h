@@ -13,7 +13,7 @@ namespace Win{
 		bool OnCreate(CreateData const *);
 		bool OnCommand(WPARAM, LPARAM);
 		bool OnSize(int, int, int);
-		bool OnNotify(HWND, LPARAM);
+		bool OnNotify(HWND, LPARAM) override;
 		bool GetInitParams(int*);
 
 	private:

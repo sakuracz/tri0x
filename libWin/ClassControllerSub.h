@@ -18,6 +18,8 @@ namespace Win
 		ProcPtr GetPrevProc();
 		Controller * GetPrevController();
 		bool OnLMouseDblClick(){return true;}
+		bool OnHotKey(WPARAM, LPARAM) override { return false; }
+		bool OnNotify(HWND, LPARAM) override { return false; }
 		virtual bool OnTabKeyDown(){return 0;}
 	protected:
 		ProcPtr _prevProc;

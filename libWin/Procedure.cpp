@@ -83,6 +83,10 @@ namespace Win
 			if (pCtrl->OnKillFocus((HWND)wParam))
 				return 0;
 			break;
+		case WM_KEYDOWN:
+			if (pCtrl->OnKeyDown(wParam, lParam))
+				return 0;
+			break;
 		case WM_LBUTTONDOWN:
 			if (pCtrl->OnLButtonDown(wParam, LOWORD(lParam), HIWORD(lParam)))
 				return 0;

@@ -250,7 +250,7 @@ namespace Win
 	};
 
 	bool ExpWndController::OnNotify(HWND hFrom, LPARAM lParam)
-	{		
+	{				
 		if (hFrom == _edtArray[1]->GetHandle()){			//Front slit
 			int width = static_cast<int>(GetEditVal(1));
 			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 2101, (LPARAM)width);

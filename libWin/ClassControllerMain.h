@@ -17,6 +17,8 @@ namespace Win
 		MainController(HWND, CreateData*);
 		~MainController();
 		bool OnCreate(CreateData const*) override;
+		bool OnHotKey(WPARAM, LPARAM) override { return false; }
+		bool OnNotify(HWND, LPARAM) override { return false; }
 		bool OnNotify(WPARAM, LPARAM);
 	private:
 		//controllers:
