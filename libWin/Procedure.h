@@ -18,6 +18,9 @@ namespace Win
 	LRESULT CALLBACK SubProc
 		(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
+	LRESULT CALLBACK SpecialListProc
+		(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
+
 	class CreateData : public CREATESTRUCT
 	{
     public:

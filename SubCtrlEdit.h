@@ -8,11 +8,10 @@ namespace Win
 	class EditController : public SubController
 	{
 	public:
-		bool OnLMouseButtonUp();
+		bool OnLMouseButtonUp(WPARAM, LPARAM);
 		bool OnKeyDown(WPARAM, LPARAM);
-//		bool OnDrawItem(LPARAM) override { return false; }
-		bool OnLMouseDblClick() override { return false; }
-		bool OnEraseBG(HDC) override { return false; }
+//		bool OnDrawItem(LPARAM) override { return false; }				
+		bool OnEraseBG(HDC) override { return false; }		
 	};
 };
 

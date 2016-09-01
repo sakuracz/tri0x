@@ -96,6 +96,12 @@
     <ClInclude Include="SubCtrlButton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SubCtrlCombo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SubCtrlList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libWin\WinMaker.cpp">
@@ -156,6 +162,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SubCtrlButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SubCtrlCombo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SubCtrlList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

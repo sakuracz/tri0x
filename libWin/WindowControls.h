@@ -10,8 +10,13 @@
 
 #include "Window.h"
 #include <string>
+#include <vector>
+#include <utility>
 
 using std::string;
+using std::vector;
+using std::pair;
+using std::make_pair;
 
 namespace Win
 {
@@ -75,7 +80,35 @@ namespace Win
 	{
 	public:
 		ComboControl(HWND, int);
-		ComboControl(HWND);
+		ComboControl(HWND win = 0);
+	};
+
+	class CustomCombo : public ComboControl
+	{
+	public:
+		friend class ComboController;	
+		friend class ListController;
+		~CustomCombo();
+		void Load(const string&, const vector<string>&, const RECT& coords);	//loads bitmaps and inits rects
+		void Fill();
+		bool Draw(const int&, DRAWITEMSTRUCT*);
+		unsigned int GetWidth(){ return idle.right - idle.left; }
+		unsigned int GetHeight() { return (idle.bottom-idle.top)+(selecting.bottom - selecting.top); }
+		void Select(unsigned int& sel){ selection = sel; }
+		void ToggleSelected();		
+		void ToggleSelecting();
+		pair<unsigned int, unsigned int> GetBasePos(){ return pair<unsigned int, unsigned int>(idle.top, idle.left); }
+		pair<unsigned int, unsigned int> GetExpPos() { return pair<unsigned int, unsigned int>(selected.top, selected.left); }
+	private:
+		bool isSelected = false;
+		bool isBeingSelected = false;
+		int selection = -1;
+		RECT idle, selected, selecting;
+		vector<HANDLE> header_bmaps;	
+		vector<HANDLE> footer_bmaps;
+		vector<HANDLE> hover_bmaps;
+		vector<HANDLE> idle_bmaps;
+		HFONT font;
 	};
 
 	class ListViewControl : public SimpleControl

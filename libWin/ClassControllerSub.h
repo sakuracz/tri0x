@@ -13,14 +13,23 @@ namespace Win
 	{
 	public:
 		SubController();
-		void Init(HWND, ProcPtr, Controller*);
+		virtual void Init(HWND, ProcPtr, Controller*);
 		LRESULT CallPrevProc(UINT, WPARAM, LPARAM);
 		ProcPtr GetPrevProc();
-		Controller * GetPrevController();
-		virtual bool OnLMouseDblClick() = 0;
+		Controller * GetPrevController();			
+		HRESULT OnCTLColorListBox(HDC, HWND) override { return false; }
 		bool OnHotKey(WPARAM, LPARAM) override { return false; }
+		bool OnLMouseDblClick() override { return false; }
+		bool OnLMouseButtonUp(WPARAM, LPARAM) override { return false; }
+		bool OnLMouseButtonDown(WPARAM, LPARAM) override { return false; }
+		bool OnMove(WPARAM, LPARAM) override { return false; }		
 		bool OnNotify(HWND, LPARAM) override { return false; }
 		bool OnEraseBG(HDC) override { return false; }
+		bool OnNCCalcSize(WPARAM, LPARAM) override { return false; };
+		bool OnNCPaint(WPARAM, LPARAM) override { return false; }
+		bool OnWindowPosChanging(WPARAM, LPARAM) override { return false; }
+		virtual bool OnNCActivate(WPARAM, LPARAM) { return false; }
+		virtual bool OnPaint() { return false; }
 		virtual bool OnTabKeyDown(){return 0;}
 //		virtual bool OnDrawItem(LPARAM) = 0;
 	protected:

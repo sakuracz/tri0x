@@ -2,7 +2,7 @@
 
 namespace Win
 {
-	bool EditController::OnLMouseButtonUp()
+	bool EditController::OnLMouseButtonUp(WPARAM wParam, LPARAM lParam)
 	{
 		::SetFocus(_hwnd);
 

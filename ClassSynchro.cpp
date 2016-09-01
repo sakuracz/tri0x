@@ -145,9 +145,9 @@ bool Synchronizer::InitDev(int* params)
 {
 	_iface.paramSet(params[0], params[1], params[2]);
 
-//		stringstream initParam;
-//		initParam << params[0] << "\t" << params[1] << "\t" << params[2];
-//		::MessageBox(NULL, initParam.str().c_str(), "Init parameters", MB_OK);
+		stringstream initParam;
+		initParam << params[0] << "\t" << params[1] << "\t" << params[2];
+		::MessageBox(NULL, initParam.str().c_str(), "Init parameters", MB_OK);
 
 	_iface.InitMono();
 	GoToAndUpdate(1000);

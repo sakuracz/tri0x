@@ -19,6 +19,8 @@ namespace Win
 		void Create(char const * title);	
 		void Show(int cmdShow = SW_SHOWNORMAL );
 		void SetStyle(DWORD style){_style |= style;}
+		void ResStyle(DWORD style){ _style = style; }
+		void ResExStyle(DWORD exStyle){ _exStyle = exStyle; }
 		operator HWND() {return _hwnd;}
 	protected:
 		Dow	_hwnd;

@@ -38,21 +38,50 @@ namespace Win
 		SubController* pCtrl = Win::GetLong<SubController*>(hwnd);
 		switch(message)
 		{
-		case WM_LBUTTONUP:
-			if(pCtrl->OnLMouseButtonUp())
-				return 0;
-			break;
-		case WM_LBUTTONDBLCLK:
-			if(pCtrl->OnLMouseDblClick())
-				return 0;
+		case WM_ERASEBKGND:
+			if (pCtrl->OnEraseBG((HDC)wParam))
+				return TRUE;
 			break;
 		case WM_KEYDOWN:
 			if (pCtrl->OnKeyDown(wParam, lParam))
 				return 0;
 			break;
+		case WM_LBUTTONDBLCLK:
+			if (pCtrl->OnLMouseDblClick())
+				return 0;
+			break;
+		case WM_KILLFOCUS:
+			return 0;
+			break;
+		case WM_LBUTTONUP:
+			if(pCtrl->OnLMouseButtonUp(wParam, lParam))
+				return 0;
+			break;
+		case WM_NCACTIVATE:		
+			if (pCtrl->OnNCActivate(wParam,lParam))
+				return FALSE;
+			else
+				return FALSE;
+			break;
+		case WM_NCCALCSIZE:
+			if (pCtrl->OnNCCalcSize(wParam, lParam))
+				return WVR_VALIDRECTS;
+			break;
+		case WM_NCPAINT:
+			if (pCtrl->OnNCPaint(wParam, lParam))
+				return 0;
+			break;
+		case WM_PAINT:
+			if (pCtrl->OnPaint())
+				return 0;
+			break;
+		case WM_WINDOWPOSCHANGING:
+			if (pCtrl->OnWindowPosChanging(wParam, lParam))
+				return 0;
+			break;
 		};
 		return pCtrl->CallPrevProc(message, wParam, lParam);
-	};
+	}; 
 
 	LRESULT CALLBACK childProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
@@ -73,6 +102,12 @@ namespace Win
 		case WM_CREATE:
 			if (pCtrl->OnCreate(reinterpret_cast<CreateData const *>(lParam)))
 				return 0;
+			break;	
+		case WM_CTLCOLORLISTBOX:
+			if (pCtrl->OnCTLColorListBox((HDC)wParam, (HWND)lParam))
+				return (INT_PTR)::CreateSolidBrush(RGB(0,0,0));
+			else
+				return (INT_PTR)FALSE;
 			break;
 		case WM_DRAWITEM:
 			if (pCtrl->OnDrawItem(lParam))
@@ -98,8 +133,16 @@ namespace Win
 			if (pCtrl->OnLButtonDown(wParam, LOWORD(lParam), HIWORD(lParam)))
 				return 0;
 			break;
+		case WM_MEASUREITEM:
+			if (pCtrl->OnMeasureItem(wParam, lParam))
+				return TRUE;
+			break;
 		case WM_SIZE:
 			if (pCtrl->OnSize(LOWORD(lParam), HIWORD(lParam), wParam))
+				return 0;
+			break;
+		case WM_NCPAINT:
+			if (pCtrl->OnNCPaint(wParam, lParam))
 				return 0;
 			break;
 		case WM_NOTIFY:
@@ -123,4 +166,40 @@ namespace Win
 		}
 		return ::DefWindowProc(hwnd, message, wParam, lParam);
 	};
+
+	LRESULT CALLBACK SpecialListProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+	{
+		SubController* pCtrl = Win::GetLong<SubController*>(hwnd);
+		switch (message)
+		{
+/*		case WM_DESTROY:
+			if (pCtrl != NULL)
+				delete pCtrl;
+			break;
+		case WM_KEYDOWN:
+			if (pCtrl->OnKeyDown(wParam, lParam))
+				return 0;
+			break;
+		case WM_MOVE:
+			if (pCtrl->OnMove(wParam, lParam))
+				return 0;
+			break;	*/
+		case WM_NCCALCSIZE:
+			if (pCtrl->OnNCCalcSize(wParam, lParam))
+				return 0;
+			break;		
+		case WM_NCPAINT:
+			if (pCtrl->OnPaint())
+				return 0;
+			break;
+		case WM_WINDOWPOSCHANGING:
+			if (pCtrl->OnWindowPosChanging(wParam, lParam))
+				return 0;
+			break;	
+		default:
+			break;
+		};
+		return pCtrl->CallPrevProc(message, wParam, lParam);
+	};
+
 };
