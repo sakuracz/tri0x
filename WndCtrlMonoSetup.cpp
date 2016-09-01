@@ -113,8 +113,8 @@ namespace Win{
 		_btnForce.Init(check, j);
 		_btnForce.SubClass(&button_controller);		
 
-		::SetWindowPos(_comboOpts[0]->GetHandle(), NULL, 10, 11, 136, 90, SWP_SHOWWINDOW);
-		::SetWindowPos(_comboOpts[1]->GetHandle(), NULL, 10, 83, 136, 90, SWP_SHOWWINDOW);
+		::SetWindowPos(_comboOpts[0]->GetHandle(), NULL, 10, 11, 136, 63, SWP_SHOWWINDOW);
+		::SetWindowPos(_comboOpts[1]->GetHandle(), NULL, 10, 83, 136, 63, SWP_SHOWWINDOW);
 		::SetWindowPos(_btnInit.GetHandle(), NULL, 67, 247, 103, 32, SWP_SHOWWINDOW);
 		::SetWindowPos(_btnForce.GetHandle(), NULL, 67, 186, 79, 31, SWP_SHOWWINDOW);
 
