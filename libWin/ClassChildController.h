@@ -20,6 +20,7 @@ namespace Win
 		virtual bool OnMoving(RECT*){return false;}
 		virtual bool OnSize(int w, int h, int f){return false;}		
 		virtual bool OnDrawItem(LPARAM){ return false; }
+		bool OnEraseBG(HDC) override { return false; }
 		void InitMinXY(int, int);
 	protected:		
 		int _minX;

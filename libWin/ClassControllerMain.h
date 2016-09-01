@@ -20,6 +20,7 @@ namespace Win
 		bool OnHotKey(WPARAM, LPARAM) override { return false; }
 		bool OnNotify(HWND, LPARAM) override { return false; }
 		bool OnNotify(WPARAM, LPARAM);
+		bool OnEraseBG(HDC) override { return false; }
 	private:
 		//controllers:
 		MonoWndCtrl monoCtrl;

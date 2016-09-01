@@ -6,7 +6,13 @@
 
 using std::string;
 
-
-
+namespace Win
+{
+	class ButtonController : public SubController
+	{
+	public:
+		bool OnLMouseDblClick() override;
+	};
+}
 
 #endif

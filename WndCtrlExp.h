@@ -23,6 +23,7 @@ namespace Win
 		bool OnCreate(CreateData const*) override;
 		bool OnSize(int, int, int) override;
 		bool OnNotify(HWND, LPARAM) override;	//reads input parameters since edit boxes trigger this message
+		bool OnEraseBG(HDC) override { return false; }
 		void setEditVal(int, string);
 		void visibleRun();
 		void visibleStop();

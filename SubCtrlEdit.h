@@ -10,7 +10,9 @@ namespace Win
 	public:
 		bool OnLMouseButtonUp();
 		bool OnKeyDown(WPARAM, LPARAM);
-		bool OnDrawItem(LPARAM) override { return false; }
+//		bool OnDrawItem(LPARAM) override { return false; }
+		bool OnLMouseDblClick() override { return false; }
+		bool OnEraseBG(HDC) override { return false; }
 	};
 };
 

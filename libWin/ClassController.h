@@ -30,6 +30,7 @@ namespace Win
 		virtual bool OnSizing(RECT*){return false;}
 		virtual HRESULT OnCTLColorStatic(HDC, HWND){return false;}
 		virtual HRESULT OnCTLColorBtn(HDC, HWND){return false;}
+		virtual bool OnEraseBG(HDC) = 0;
 		virtual bool OnMaxMinInfo(MINMAXINFO*){return false;}		
 	protected:
 		Dow _hwnd;

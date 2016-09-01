@@ -94,6 +94,7 @@ namespace Win
 			break;
 		case 2211:	// "Back" to mono setup window (from exp setup)
 			_synch.ShutdownDev();
+			monoCtrl.ZeroInit();
 			::SetWindowPos(_expDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_HIDEWINDOW);
 			::SetWindowPos(_monoDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 			break;

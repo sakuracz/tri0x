@@ -77,6 +77,10 @@ namespace Win
 		case WM_DRAWITEM:
 			if (pCtrl->OnDrawItem(lParam))
 				return TRUE;
+		case WM_ERASEBKGND:
+			if (pCtrl->OnEraseBG((HDC)wParam))
+				return TRUE;
+			break;
 		case WM_HOTKEY:
 			//				::MessageBoxA(NULL, "LOL", "Dur", MB_OK);
 			if (pCtrl->OnHotKey(wParam, lParam))

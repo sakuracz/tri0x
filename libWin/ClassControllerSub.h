@@ -17,11 +17,12 @@ namespace Win
 		LRESULT CallPrevProc(UINT, WPARAM, LPARAM);
 		ProcPtr GetPrevProc();
 		Controller * GetPrevController();
-		bool OnLMouseDblClick(){return true;}
+		virtual bool OnLMouseDblClick() = 0;
 		bool OnHotKey(WPARAM, LPARAM) override { return false; }
 		bool OnNotify(HWND, LPARAM) override { return false; }
+		bool OnEraseBG(HDC) override { return false; }
 		virtual bool OnTabKeyDown(){return 0;}
-		virtual bool OnDrawItem(LPARAM) = 0;
+//		virtual bool OnDrawItem(LPARAM) = 0;
 	protected:
 		ProcPtr _prevProc;
 		Controller* _prevController;

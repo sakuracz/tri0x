@@ -93,6 +93,9 @@
     <ClInclude Include="LgcIface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SubCtrlButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libWin\WinMaker.cpp">
@@ -152,7 +155,7 @@
     <ClCompile Include="LgcIface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="struct.cpp">
+    <ClCompile Include="SubCtrlButton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

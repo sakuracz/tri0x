@@ -11,6 +11,8 @@
 #include "Window.h"
 #include <string>
 
+using std::string;
+
 namespace Win
 {
 	class SimpleControl : public Dow
@@ -38,7 +40,7 @@ namespace Win
 		bool IsChanged(int);
 		int GetLen();
 		void SetText(char *, int);
-		std::string GetText();
+		string GetText();
 		void Select();
 		void Clear();
 	};
@@ -54,10 +56,21 @@ namespace Win
 	{
 	public:
 		ButtonControl(HWND, int);
-		ButtonControl(HWND);
+		ButtonControl(HWND win = 0);
 		void SetText(char const *);		
 	};
 	
+	class CustomButton : public ButtonControl
+	{
+	public:		
+		void LoadBMPs(const string&);
+		bool Draw(const int&, DRAWITEMSTRUCT*);
+		~CustomButton();
+	private:	
+		HANDLE bmapPressed = 0;
+		HANDLE bmapDepressed = 0;
+	};
+
 	class ComboControl : public SimpleControl
 	{
 	public:
