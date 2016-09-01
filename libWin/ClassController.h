@@ -1,8 +1,8 @@
-﻿#ifndef CLASSCONTROLLER_H_
+#ifndef CLASSCONTROLLER_H_
 #define CLASSCONTROLLER_H_
 
 #include "View.h"
-#include <Windows.h>
+#include <windows.h>
 #include "Procedure.h"
 #include "WindowControls.h"
 #include <memory>
@@ -45,6 +45,6 @@ namespace Win
 		Dow _hwnd;
 		void SetWindowHandle(HWND wind){_hwnd.Init(wind);}
 	};
-};
+}
 
 #endif

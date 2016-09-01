@@ -2,7 +2,7 @@
 #define COMBOSUBCONTROLLER_H_
 
 #include <memory>
-#include "libWin\ClassControllerSub.h"
+#include "libWin/ClassControllerSub.h"
 #include "CustomControls.h"
 
 using std::unique_ptr;

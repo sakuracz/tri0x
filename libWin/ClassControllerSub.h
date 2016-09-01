@@ -38,6 +38,6 @@ namespace Win
 		ProcPtr _prevProc;
 		Controller* _prevController;
 	};
-};
+}
 
 #endif

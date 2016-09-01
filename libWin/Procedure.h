@@ -1,7 +1,7 @@
 #ifndef PROCEDURE_H_
 #define PROCEDURE_H_
 
-#include <Windows.h>
+#include <windows.h>
 #include "Window.h"
 
 namespace Win

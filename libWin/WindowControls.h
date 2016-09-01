@@ -97,6 +97,6 @@ namespace Win
 		TreeViewControl(HWND, int);
 		TreeViewControl(HWND);
 	};
-};
+}
 
 #endif

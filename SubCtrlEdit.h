@@ -1,7 +1,7 @@
 #ifndef EDITSUBCONTROLLER_H_
 #define EDITSUBCONTROLLER_H_
 
-#include "libWin\ClassControllerSub.h"
+#include "libWin/ClassControllerSub.h"
 #include "CustomControls.h"
 
 namespace Win

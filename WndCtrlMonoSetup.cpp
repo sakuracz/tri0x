@@ -1,5 +1,5 @@
 #include "WndCtrlMonoSetup.h"
-#include "libWin\WinMaker.h"
+#include "libWin/WinMaker.h"
 #include <string>
 #include <sstream>
 #include <vector>

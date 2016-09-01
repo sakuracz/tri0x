@@ -1,8 +1,8 @@
 #ifndef CLASSIMGWNDCONTROLLER_
 #define CLASSIMGWNDCONTROLLER_
 
-#include "libWin\ClassChildController.h"
-#include "libWin\ClassSerializable.h"
+#include "libWin/ClassChildController.h"
+#include "libWin/ClassSerializable.h"
 
 namespace Win
 {

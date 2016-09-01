@@ -1,5 +1,5 @@
 #include "WndCtrlExp.h"
-#include "libWin\WinMaker.h"
+#include "libWin/WinMaker.h"
 #include <windowsx.h>
 #include <sstream>
 #include <iomanip>

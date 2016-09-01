@@ -1,7 +1,7 @@
 #ifndef STRUCT_H_
 #define STRUCT_H_
 
-#include <Windows.h>
+#include <windows.h>
 #include <string>
 
 using std::string;

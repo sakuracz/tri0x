@@ -1,7 +1,7 @@
 #ifndef LOGICINTERFACE_H_
 #define LOGICINTERFACE_H_
 
-#include <Windows.h>
+#include <windows.h>
 #include <string>
 #include <vector>
 

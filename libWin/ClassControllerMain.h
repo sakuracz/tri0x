@@ -1,7 +1,7 @@
 #ifndef CLASSCONTROLLERMAIN_H_
 #define CLASSCONTROLLERMAIN_H_
 
-#include <Windows.h>
+#include <windows.h>
 #include "../WndCtrlExp.h"
 #include "../WndCtrlImg.h"
 #include "../WndCtrlMonoSetup.h"

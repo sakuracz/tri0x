@@ -35,6 +35,6 @@ namespace Win
 		int _minX;
 		int _minY;
 	};
-};
+}
 
 #endif

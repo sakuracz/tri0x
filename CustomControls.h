@@ -1,7 +1,7 @@
 #ifndef CUSTOMCONTROLS_H_
 #define CUSTOMCONTROLS_H_
 
-#include "libWin\WindowControls.h"
+#include "libWin/WindowControls.h"
 
 namespace Win
 {

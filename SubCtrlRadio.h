@@ -1,7 +1,7 @@
 #ifndef SUBCONTROLLERRADIO_H_
 #define SUBCONTROLLERRADIO_H_
 
-#include "libWin\ClassControllerSub.h"
+#include "libWin/ClassControllerSub.h"
 #include "CustomControls.h"
 
 namespace Win

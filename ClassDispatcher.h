@@ -3,7 +3,7 @@
 #ifndef CLASSDISPATCHER_H_
 #define CLASSDISPATCHER_H_
 
-#include "libWin\ActiveObject.h"
+#include "libWin/ActiveObject.h"
 
 class Synchronizer;
 

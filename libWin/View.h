@@ -3,7 +3,7 @@
 #ifndef VIEW_H_
 #define VIEW_H_
 
-#include <Windows.h>
+#include <windows.h>
 #include "Window.h"
 
 class View

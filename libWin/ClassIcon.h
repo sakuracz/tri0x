@@ -1,7 +1,7 @@
 #ifndef CLASSICON_H_
 #define CLASSICON_H_
 
-#include <Windows.h>
+#include <windows.h>
 
 class CIcon
 {

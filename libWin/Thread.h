@@ -1,7 +1,7 @@
 #ifndef THREAD_H_
 #define THREAD_H_
 
-#include <Windows.h>
+#include <windows.h>
 #include <process.h>
 
 class Thread
@@ -112,4 +112,4 @@ private:
 	long _counter;
 };
 
-#endif THREAD_H_
+#endif

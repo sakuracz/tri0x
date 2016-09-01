@@ -1,8 +1,8 @@
 #ifndef CLASSSYNCHRO_H_
 #define CLASSSYNCHRO_H_
 
-#include "libWin\ActiveObject.h"
-#include "libWin\Window.h"
+#include "libWin/ActiveObject.h"
+#include "libWin/Window.h"
 #include "LgcIface.h"
 #include "ClassDispatcher.h"
 #include "WndCtrlExp.h"

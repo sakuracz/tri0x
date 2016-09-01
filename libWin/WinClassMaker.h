@@ -26,6 +26,6 @@ namespace Win
 	public:
 		ChildClassMaker(WNDPROC WinProcedure, char const * className, HINSTANCE hInst);
 	};
-};
+}
 
 #endif

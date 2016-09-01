@@ -1,7 +1,7 @@
 #include "ClassSynchro.h"
 #include <sstream>
-#include "libWin\WinClassMaker.h"
-#include "libWin\WinMaker.h"
+#include "libWin/WinClassMaker.h"
+#include "libWin/WinMaker.h"
 #include <vector>
 #include <thread>
 

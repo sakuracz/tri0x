@@ -56,6 +56,6 @@ namespace Win
 	protected:
 		HWND _h;
 	};
-};
+}
 
 #endif

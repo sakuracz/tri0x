@@ -5,10 +5,10 @@
 #ifndef WINMAKER_H_
 #define WINMAKER_H_
 
-#include <Windows.h>
+#include <windows.h>
 #include "Window.h"
 #include "ClassController.h"
-#include <CommCtrl.h>
+#include <commctrl.h>
 
 namespace Win
 {
@@ -112,4 +112,4 @@ namespace Win
 	};
 };
 
-#endif _WinMaker
+#endif

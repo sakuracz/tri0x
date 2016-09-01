@@ -1,5 +1,5 @@
 #include "WndCtrlImg.h"
-#include "libWin\WinMaker.h"
+#include "libWin/WinMaker.h"
 #include <gsl/gsl_fft_real.h>
 #include <gsl/gsl_fft_halfcomplex.h>
 #include <mgl2/mgl.h>

@@ -1,10 +1,10 @@
 #ifndef CLASSEXPWNDCONTROLLER_H_
 #define CLASSEXPWNDCONTROLLER_H_
 
-#include "libWin\ClassChildController.h"
+#include "libWin/ClassChildController.h"
 #include "SubCtrlEdit.h"
 #include "SubCtrlRadio.h"
-#include "libWin\WindowControls.h"
+#include "libWin/WindowControls.h"
 #include "CustomControls.h"
 #include <string>
 #include <vector>

@@ -1,10 +1,10 @@
 #ifndef MONOSETUPWINDOWCONTROLLER_H_
 #define MONOSETUPWINDOWCONTROLLER_H_
 
-#include "libWin\ClassChildController.h"
+#include "libWin/ClassChildController.h"
 #include "SubCtrlButton.h"
 #include "SubCtrlCombo.h"
-#include "libWin\WindowControls.h"
+#include "libWin/WindowControls.h"
 #include "CustomControls.h"
 #include "struct.h"
 
