@@ -4,7 +4,6 @@
 #include "libWin\ClassChildController.h"
 #include "SubCtrlButton.h"
 #include "SubCtrlCombo.h"
-#include "SubCtrlList.h"
 #include "libWin\WindowControls.h"
 #include "struct.h"
 

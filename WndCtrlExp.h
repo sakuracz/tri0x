@@ -24,18 +24,18 @@ namespace Win
 		bool OnCreate(CreateData const*) override;
 		bool OnSize(int, int, int) override;
 		bool OnNotify(HWND, LPARAM) override;	//reads input parameters since edit boxes trigger this message
-		bool OnEraseBG(HDC) override { return false; }
+		bool OnEraseBG(HDC) override;
 		void setEditVal(int, string);
 		void visibleRun();
 		void visibleStop();
 		void UpdateEditBox(vector<double>&, int);
 		void UpdatePos(double);
-		double GetEditVal(int);
+		double GetEditVal(int);		
 	protected:
 		EditController	_edtCtrl[20];
-		StaticControl	*_stcArray[13];
+		CustomButton run_button, stop_button, back_buton;		
 		EditControl		*_edtArray[20];
-		ButtonControl	*_btnArray[16];
+		ButtonControl	*_btnArray[14];
 	private:
 		double _interval;
 		double _timeConst;
@@ -48,6 +48,8 @@ namespace Win
 		double _startPos;
 		double _stopPos;
 		double _incPos;
+
+		HANDLE background_bmp;
 	};
 };
 

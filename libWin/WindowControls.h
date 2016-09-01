@@ -4,6 +4,8 @@
 // ButtonControl class definition
 // ListViewControl class definition
 // ComboControl class definition
+// CustomButton class definition
+// CustomCombo class definition
 
 #ifndef WINDOWCONTROLS_H_
 #define WINDOWCONTROLS_H_
@@ -32,6 +34,15 @@ namespace Win
 		HWND GetHandle() const {return _h;}
 	protected:
 		int _id;
+	};
+
+	class CustomRadio : public SimpleControl
+	{
+	public:
+		CustomRadio(HWND, int);
+		CustomRadio(HWND);
+	private:
+		HANDLE sel, idle, mask;
 	};
 
 	class EditControl : public SimpleControl

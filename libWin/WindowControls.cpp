@@ -22,6 +22,16 @@ namespace Win
 		: Dow(win), _id(0)
 	{};
 
+	CustomRadio::CustomRadio(HWND winParent, int id)
+		: SimpleControl(winParent, id)
+	{
+	};
+
+	CustomRadio::CustomRadio(HWND win = 0)
+		: SimpleControl(win)
+	{
+	};
+
 	void SimpleControl::Init(HWND win, int id)
 	{
 		_h = win;
@@ -99,6 +109,7 @@ namespace Win
 	ButtonControl::ButtonControl(HWND win)
 		: SimpleControl(win)
 	{};
+
 	CustomButton::~CustomButton()
 	{
 		DeleteObject(bmapPressed);

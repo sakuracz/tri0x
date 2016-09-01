@@ -69,15 +69,10 @@ namespace Win
 //		stringstream msg;
 		switch (wParam)
 		{
-		case 1200:
-		{
-			int params[3];
+		case 1200:		
 			monoCtrl.GetInitParams();
 			_synch.progInitDevs();
-//			::SetWindowPos(_monoDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_HIDEWINDOW);
-//			::SetWindowPos(_expDow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 			break;
-		}
 		case 2101:	// Front slit changed:
 			//			val = (int)lParam;
 			//			msg << val;

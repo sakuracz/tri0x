@@ -153,20 +153,19 @@ void Synchronizer::InitDev()
 //		initParam << params[0] << "\t" << params[1] << "\t" << params[2];
 //		::MessageBox(NULL, initParam.str().c_str(), "Init parameters", MB_OK);
 
+	//TODO: spawning threads works fine; needs to calculate the necessary time based on forceInit variable and if gratings need changing
+	if (_mono.forceState) {
+		thread t1{ &Synchronizer::PerSecUpdate, this };
+		thread t2{ &Logic::LogicIface::InitMono, this->_iface };		
 
-	//TODO: spawn threads for concurrent mono initialization and window updates
-	thread t1{&Synchronizer::PerSecUpdate, this};
-	thread t2{&Logic::LogicIface::InitMono, this->_iface};
-//	thread t3{ &Synchronizer::Loop, this };
+		t1.join();
+		t2.join();		
+	} else {
+		_iface.InitMono();
+	}
 
-	t1.join();
-	t2.join();
-//	t3.join();
 
 	::MessageBeep(MB_ICONERROR);
-
-//	_iface.InitMono();
-
 
 	GoToAndUpdate(1000);
 
@@ -330,7 +329,7 @@ void Synchronizer::StopExp()	//func tab[4]
 {
 	_exp.visibleRun();
 
-	toggleRunning();
+	ToggleRunning();
 
 	point = 0;
 	time = ::GetTickCount();
@@ -358,9 +357,9 @@ void Synchronizer::GoHome()				// func tab[6]
 
 void Synchronizer::StartExp()			// func tab[8]
 {
-	toggleRunning();
+	ToggleRunning();
 	_exp.visibleStop();
-	updateSettings();
+	UpdateSettings();
 
 	_program = 3;
 };
@@ -375,7 +374,7 @@ void Synchronizer::PerSecUpdate()
 
 }
 
-void Synchronizer::updateSettings()
+void Synchronizer::UpdateSettings()
 {
 	vector<double> params(6);
 	_exp.ReturnExpParams(params);
@@ -388,7 +387,7 @@ void Synchronizer::updateSettings()
 	interval = static_cast<unsigned int>(params[5]);			// interval in [ms]
 };
 
-void Synchronizer::toggleRunning()
+void Synchronizer::ToggleRunning()
 {
 	running = !running;
 };

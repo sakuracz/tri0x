@@ -144,11 +144,7 @@ namespace Logic
 
 	void LogicIface::InitMono()
 	{
-#ifdef NOMONO
-		for (int i = 0; i < 100; i++){
-			Sleep(1000);			
-		}
-		
+#ifdef NOMONO		
 		return;
 #endif
 
@@ -306,7 +302,6 @@ namespace Logic
 
 		return;
 	};
-
 
 	double LogicIface::GetPos()
 	{

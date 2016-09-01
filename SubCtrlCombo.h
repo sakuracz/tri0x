@@ -3,7 +3,6 @@
 
 #include <memory>
 #include "libWin\ClassControllerSub.h"
-#include "SubCtrlList.h"
 
 using std::unique_ptr;
 
@@ -12,7 +11,7 @@ namespace Win
 	class ComboController : public SubController
 	{
 	public:
-		friend class ListController;
+		friend class SubListController;
 		ComboController(CustomCombo&);
 		~ComboController();
 		void Invalidate();
@@ -20,8 +19,20 @@ namespace Win
 	private:		
 		bool OnPaint() override;		
 		CustomCombo& combo;
-		const unique_ptr<ListController> sublist_controller;
+		const unique_ptr<SubListController> sublist_controller;
 		COMBOBOXINFO comboInfo;
+	};
+
+	class SubListController : public SubController
+	{
+	public:
+		void Init(HWND, ProcPtr, Controller*, HWND, RECT&);
+	private:
+		bool OnNCCalcSize(WPARAM, LPARAM) override;
+		bool OnWindowPosChanging(WPARAM, LPARAM) override;
+		HWND parentHWND;
+		RECT rect;
+		ComboController* parent_controller;
 	};
 }
 

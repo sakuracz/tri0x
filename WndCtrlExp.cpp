@@ -8,34 +8,33 @@ namespace Win
 {
 	ExpWndController::ExpWndController()
 	{
-		InitMinXY(565, 568);
-
 		//		_prog = 0;
-
-		for (int i = 0; i < 13; i++){
-			_stcArray[i] = new StaticControl(0);
-		};
 
 		for (int i = 0; i < 20; i++){
 			_edtArray[i] = new EditControl(0);
 		};
 
-		for (int i = 0; i < 16; i++){
+		for (int i = 0; i < 14; i++){
 			_btnArray[i] = new ButtonControl(0);
 		};
+
+		string bg_name = string("res/WndCtrlExpBg.bmp");
+		background_bmp = ::LoadImage(NULL, bg_name.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+		if (background_bmp == NULL){
+			DWORD dw = GetLastError();
+			stringstream stream;
+			stream << "Got error #: " << dw;
+			::MessageBox(NULL, stream.str().c_str(), "Failed to load ExpWnd background image.", MB_OK | MB_ICONERROR);
+		}
 	};
 
 	ExpWndController::~ExpWndController()
 	{
-		for (int i = 0; i < 13; i++){
-			if (_stcArray[i] != NULL) delete _stcArray[i];
-		};
-
 		for (int i = 0; i < 20; i++){
 			if (_edtArray[i] != NULL) delete _edtArray[i];
 		};
 
-		for (int i = 0; i < 16; i++){
+		for (int i = 0; i < 14; i++){
 			if (_btnArray[i] != NULL) delete _btnArray[i];
 		};
 	};
@@ -66,21 +65,19 @@ namespace Win
 		int maxX = rect.right;
 		int maxY = rect.bottom;
 
-		::SetWindowPos(_hwnd, NULL, 330, 50, _minX, _minY, SWP_SHOWWINDOW);
+		RECT desired;
+		desired.left = 0;
+		desired.right = 565;
+		desired.top = 0;
+		desired.bottom = 568;
 
-		//static controls:
+		::AdjustWindowRect(&desired, ::GetWindowLong(_hwnd, GWL_STYLE), FALSE);
 
-		for (int i = 0; i < 13; i++){
-			int j = 2000 + i;
-			StaticMaker stat(_hwnd, j);
-			stat.NoBG();
-			stat.AddExStyle(WS_EX_TRANSPARENT);
-			stat.AddStyle(WS_CLIPSIBLINGS);
-			stat.Create("");
-			stat.Show();
-			_stcArray[i]->Init(stat, j);
-		};
-
+		int width = desired.right - desired.left;
+		int height = desired.bottom - desired.top;
+		InitMinXY(width, height);
+		::SetWindowPos(_hwnd, NULL, (maxX - width) / 2, (maxY - height) / 2, width, height, SWP_SHOWWINDOW);
+		
 		//edit controls:		
 		for (int i = 0; i < 19; i++){
 			int j = 2100 + i;
@@ -122,29 +119,6 @@ namespace Win
 			_btnArray[i]->Init(butt, j);
 		}
 
-		for (int i = 14; i < 16; i++){
-			int j = 2200 + i;
-			ButtonMaker butt(_hwnd, j);
-			butt.AddStyle(BS_GROUPBOX | WS_EX_TRANSPARENT);
-			butt.Create("");
-			butt.Show();
-			_btnArray[i]->Init(butt, j);
-		}
-
-		::SendMessage(_stcArray[0]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Front slit [um]:");
-		::SendMessage(_stcArray[1]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Exit slit [um]:");
-		::SendMessage(_stcArray[2]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Start Point [eV]");
-		::SendMessage(_stcArray[3]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"End Point [eV]");
-		::SendMessage(_stcArray[4]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Decrement [eV]");
-		::SendMessage(_stcArray[5]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Set point [nm]");
-		::SendMessage(_stcArray[6]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Y1");
-		::SendMessage(_stcArray[7]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Y2");
-		::SendMessage(_stcArray[8]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Y3");
-		::SendMessage(_stcArray[9]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Time Const [s]");
-		::SendMessage(_stcArray[10]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Point Count");
-		::SendMessage(_stcArray[11]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Interval [s]");
-		::SendMessage(_stcArray[12]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Output File:");
-
 		::SendMessage(_btnArray[0]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Ch1");
 		::SendMessage(_btnArray[1]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Ch2");
 		::SendMessage(_btnArray[2]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Inp1");
@@ -159,8 +133,6 @@ namespace Win
 		::SendMessage(_btnArray[11]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Back");
 		::SendMessage(_btnArray[12]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Stop");
 		::SendMessage(_btnArray[13]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Run");
-		::SendMessage(_btnArray[14]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Mono settings");
-		::SendMessage(_btnArray[15]->GetHandle(), WM_SETTEXT, 0, (LPARAM)"Homo settings");
 
 		::SendMessage(_btnArray[0]->GetHandle(), BM_SETCHECK, BST_CHECKED, NULL);
 		::SendMessage(_btnArray[4]->GetHandle(), BM_SETCHECK, BST_CHECKED, NULL);
@@ -171,80 +143,80 @@ namespace Win
 		return true;
 	};
 
-	bool ExpWndController::OnSize(int width, int height, int flags)
+	bool ExpWndController::OnEraseBG(HDC hDC)
 	{
-		int xOff = 30, yOff = 30, xSpace = 10, ySpace = 10;	//offset
-		int dxStatic = 95, dxEdit = 65, dyStatic = 20, dyEdit = 25;
-		int xCol1 = xOff;
-		int xCol2 = xCol1 + dxStatic + xSpace;
-		int xCol3 = xCol2 + dxEdit + xSpace;
-		int xCol4 = xCol3 + dxEdit + xSpace;
-		int xCol5 = xCol4 + dxStatic + xSpace;
-		int xCol6 = xCol5 + dxEdit + xSpace;
+		HDC compHDC = ::CreateCompatibleDC(hDC);
+		BITMAP bm;
+		HBITMAP bg = (HBITMAP)background_bmp;
+		::GetObject(background_bmp, sizeof(BITMAP), &bm);
+		::SelectObject(compHDC, bg);
+		::BitBlt(hDC, 0, 0, bm.bmWidth, bm.bmHeight, compHDC, 0, 0, SRCCOPY);
 
-		int yRow[13];
-		yRow[0] = 0;
-		yRow[1] = yOff;
-		for (int i = 2; i < 13; i++)
-			yRow[i] = yOff + (i - 1)*dyEdit + (i - 1)*ySpace;
+		::DeleteDC(compHDC);
 
-		::SetWindowPos(_btnArray[0]->GetHandle(), HWND_TOP, xCol4 + (dxStatic - dxEdit), yRow[2], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_btnArray[1]->GetHandle(), HWND_TOP, xCol4 + (dxStatic - dxEdit), yRow[3], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_btnArray[2]->GetHandle(), HWND_TOP, xCol4 + (dxStatic - dxEdit), yRow[4], dxEdit, dyEdit, SWP_SHOWWINDOW);
+		return true;
+	}
 
-		::SetWindowPos(_btnArray[3]->GetHandle(), HWND_TOP, xCol5, yRow[2], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_btnArray[4]->GetHandle(), HWND_TOP, xCol5, yRow[3], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_btnArray[5]->GetHandle(), HWND_TOP, xCol5, yRow[4], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_btnArray[6]->GetHandle(), HWND_TOP, xCol5, yRow[5], dxEdit, dyEdit, SWP_SHOWWINDOW);
+	bool ExpWndController::OnSize(int width, int height, int flags)
+	{		
+		int dxShortEdit = 63, dyShortEdit = 26;
+		int dxEdit = 107, dyEdit = 27;
+		int dxFileEdit = 387, dyFileEdit = 27;
+		int dxOutEdit = 507, dyOutEdit = 144;
+		int dxRadio = 22, dyRadio = 22;
+		int dxButton = 100, dyButton = 30;
 
-		::SetWindowPos(_btnArray[7]->GetHandle(), HWND_TOP, xCol6, yRow[2], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_btnArray[8]->GetHandle(), HWND_TOP, xCol6, yRow[3], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_btnArray[9]->GetHandle(), HWND_TOP, xCol6, yRow[4], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_btnArray[10]->GetHandle(), HWND_TOP, xCol6, yRow[5], dxEdit, dyEdit, SWP_SHOWWINDOW);
+		int xCol1 = 147, yRow1 = 32;	//left mono edits
+		int xCol2 = 210, yRow2 = 69;	//right mono edits
+		int xCol3 = 423, yRow3 = 106;	//left radio group
+		int xCol4 = 467, yRow4 = 143;	//mid radio group
+		int xCol5 = 510, yRow5 = 180;	//right radio group
+		int xCol6 = 426, yRow6 = 217;	//homo edits
+		int xCol7 = 50, yRow7 = 254;	//buttons left
+		int xCol8 = 161, yRow8 = 291;	//buttons (run) right
+		int xCol9 = 147, yRow9 = 342;	//file edit
+		int xColA = 27, yRowA = 410;
+	
+		::SetWindowPos(_btnArray[0]->GetHandle(), HWND_TOP, xCol3, yRow2, dxRadio, dyRadio, SWP_SHOWWINDOW);
+		::SetWindowPos(_btnArray[1]->GetHandle(), HWND_TOP, xCol3, yRow3, dxRadio, dyRadio, SWP_SHOWWINDOW);
+		::SetWindowPos(_btnArray[2]->GetHandle(), HWND_TOP, xCol3, yRow4, dxRadio, dyRadio, SWP_SHOWWINDOW);
 
-		::SetWindowPos(_btnArray[11]->GetHandle(), HWND_TOP, xCol4 + (dxStatic - dxEdit), yRow[9], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_btnArray[12]->GetHandle(), HWND_TOP, xCol5, yRow[9], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_btnArray[13]->GetHandle(), HWND_TOP, xCol6, yRow[9], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_btnArray[14]->GetHandle(), HWND_TOP, xCol1 - 10, yRow[0], 2 * dxEdit + dxStatic + 3 * xSpace + 3, yRow[7] + 5, SWP_SHOWWINDOW);
-		::SetWindowPos(_btnArray[15]->GetHandle(), HWND_TOP, xCol4 - 5, yRow[0], 2 * dxEdit + dxStatic + 3 * xSpace, yRow[9] - 5, SWP_SHOWWINDOW);
+		::SetWindowPos(_btnArray[3]->GetHandle(), HWND_TOP, xCol4, yRow2, dxRadio, dyRadio, SWP_SHOWWINDOW);
+		::SetWindowPos(_btnArray[4]->GetHandle(), HWND_TOP, xCol4, yRow3, dxRadio, dyRadio, SWP_SHOWWINDOW);
+		::SetWindowPos(_btnArray[5]->GetHandle(), HWND_TOP, xCol4, yRow4, dxRadio, dyRadio, SWP_SHOWWINDOW);
+		::SetWindowPos(_btnArray[6]->GetHandle(), HWND_TOP, xCol4, yRow5, dxRadio, dyRadio, SWP_SHOWWINDOW);
 
-		::SetWindowPos(_stcArray[0]->GetHandle(), HWND_TOP, xCol1, yRow[1], dxStatic, dyStatic, SWP_SHOWWINDOW);	//"Front slit"
-		::SetWindowPos(_stcArray[1]->GetHandle(), HWND_TOP, xCol1, yRow[2], dxStatic, dyStatic, SWP_SHOWWINDOW);	//"Exit slit"
-		::SetWindowPos(_stcArray[2]->GetHandle(), HWND_TOP, xCol1, yRow[3], dxStatic, dyStatic, SWP_SHOWWINDOW);	//"Start point"
-		::SetWindowPos(_stcArray[3]->GetHandle(), HWND_TOP, xCol1, yRow[4], dxStatic, dyStatic, SWP_SHOWWINDOW);	//"End point"
-		::SetWindowPos(_stcArray[4]->GetHandle(), HWND_TOP, xCol1, yRow[5], dxStatic, dyStatic, SWP_SHOWWINDOW);	//"Increment"
-		::SetWindowPos(_stcArray[5]->GetHandle(), HWND_TOP, xCol1, yRow[6], dxStatic, dyStatic, SWP_SHOWWINDOW);	//"Set point"
-		::SetWindowPos(_stcArray[6]->GetHandle(), HWND_TOP, xCol4 + (dxStatic - dxEdit), yRow[1], dxEdit, dyStatic, SWP_SHOWWINDOW);	//"Y1"
-		::SetWindowPos(_stcArray[7]->GetHandle(), HWND_TOP, xCol5, yRow[1], dxEdit, dyStatic, SWP_SHOWWINDOW);	//"Y2"
-		::SetWindowPos(_stcArray[8]->GetHandle(), HWND_TOP, xCol6, yRow[1], dxEdit, dyStatic, SWP_SHOWWINDOW);	//"Y3"
-		::SetWindowPos(_stcArray[9]->GetHandle(), HWND_TOP, xCol4, yRow[6], dxStatic, dyStatic, SWP_SHOWWINDOW);	//"Time Const"
-		::SetWindowPos(_stcArray[10]->GetHandle(), HWND_TOP, xCol4, yRow[7], dxStatic, dyStatic, SWP_SHOWWINDOW);	//"Point Count"
-		::SetWindowPos(_stcArray[11]->GetHandle(), HWND_TOP, xCol4, yRow[8], dxStatic, dyStatic, SWP_SHOWWINDOW);	//"Interval"
-		::SetWindowPos(_stcArray[12]->GetHandle(), HWND_TOP, xCol1, yRow[9] + 10, dxStatic, dyStatic, SWP_SHOWWINDOW);	//"Output file"
-		//		::SetWindowPos(_stcArray[13]->GetHandle(), HWND_TOP, xCol1, yRow[11], dxStatic, dyStatic, SWP_SHOWWINDOW);	//"Output"
+		::SetWindowPos(_btnArray[7]->GetHandle(), HWND_TOP, xCol5, yRow2, dxRadio, dyRadio, SWP_SHOWWINDOW);
+		::SetWindowPos(_btnArray[8]->GetHandle(), HWND_TOP, xCol5, yRow3, dxRadio, dyRadio, SWP_SHOWWINDOW);
+		::SetWindowPos(_btnArray[9]->GetHandle(), HWND_TOP, xCol5, yRow4, dxRadio, dyRadio, SWP_SHOWWINDOW);
+		::SetWindowPos(_btnArray[10]->GetHandle(), HWND_TOP, xCol5, yRow5, dxRadio, dyRadio, SWP_SHOWWINDOW);
 
-		::SetWindowPos(_edtArray[0]->GetHandle(), HWND_TOP, xCol2, yRow[1], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_edtArray[1]->GetHandle(), HWND_TOP, xCol3, yRow[1], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_edtArray[2]->GetHandle(), HWND_TOP, xCol2, yRow[2], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_edtArray[3]->GetHandle(), HWND_TOP, xCol3, yRow[2], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_edtArray[4]->GetHandle(), HWND_TOP, xCol2, yRow[3], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_edtArray[5]->GetHandle(), HWND_TOP, xCol3, yRow[3], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_edtArray[6]->GetHandle(), HWND_TOP, xCol2, yRow[4], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_edtArray[7]->GetHandle(), HWND_TOP, xCol3, yRow[4], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_edtArray[8]->GetHandle(), HWND_TOP, xCol2, yRow[5], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_edtArray[9]->GetHandle(), HWND_TOP, xCol3, yRow[5], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_edtArray[10]->GetHandle(), HWND_TOP, xCol2, yRow[6], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_edtArray[11]->GetHandle(), HWND_TOP, xCol3, yRow[6], dxEdit, dyEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_btnArray[11]->GetHandle(), HWND_TOP, xCol7, yRow8 + 3, dxButton, dyButton, SWP_SHOWWINDOW);
+		::SetWindowPos(_btnArray[12]->GetHandle(), HWND_TOP, xCol7, yRow7 + 3, dxButton, dyButton, SWP_SHOWWINDOW);
+		::SetWindowPos(_btnArray[13]->GetHandle(), HWND_TOP, xCol8, yRow8 + 3, dxButton, dyButton, SWP_SHOWWINDOW);
+	
+		::SetWindowPos(_edtArray[0]->GetHandle(), HWND_TOP, xCol1, yRow1, dxShortEdit, dyShortEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_edtArray[1]->GetHandle(), HWND_TOP, xCol2, yRow1, dxShortEdit, dyShortEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_edtArray[2]->GetHandle(), HWND_TOP, xCol1, yRow2, dxShortEdit, dyShortEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_edtArray[3]->GetHandle(), HWND_TOP, xCol2, yRow2, dxShortEdit, dyShortEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_edtArray[4]->GetHandle(), HWND_TOP, xCol1, yRow3, dxShortEdit, dyShortEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_edtArray[5]->GetHandle(), HWND_TOP, xCol2, yRow3, dxShortEdit, dyShortEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_edtArray[6]->GetHandle(), HWND_TOP, xCol1, yRow4, dxShortEdit, dyShortEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_edtArray[7]->GetHandle(), HWND_TOP, xCol2, yRow4, dxShortEdit, dyShortEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_edtArray[8]->GetHandle(), HWND_TOP, xCol1, yRow5, dxShortEdit, dyShortEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_edtArray[9]->GetHandle(), HWND_TOP, xCol2, yRow5, dxShortEdit, dyShortEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_edtArray[10]->GetHandle(), HWND_TOP, xCol1, yRow6, dxShortEdit, dyShortEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_edtArray[11]->GetHandle(), HWND_TOP, xCol2, yRow6, dxShortEdit, dyShortEdit, SWP_SHOWWINDOW);
 
-		::SetWindowPos(_edtArray[12]->GetHandle(), HWND_TOP, xCol5, yRow[6], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_edtArray[13]->GetHandle(), HWND_TOP, xCol6, yRow[6], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_edtArray[14]->GetHandle(), HWND_TOP, xCol5, yRow[7], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_edtArray[15]->GetHandle(), HWND_TOP, xCol6, yRow[7], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_edtArray[16]->GetHandle(), HWND_TOP, xCol5, yRow[8], dxEdit, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_edtArray[17]->GetHandle(), HWND_TOP, xCol6, yRow[8], dxEdit, dyEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_edtArray[12]->GetHandle(), HWND_TOP, xCol6, yRow6, dxEdit, dyEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_edtArray[13]->GetHandle(), HWND_TOP, xCol6, yRow6, dxEdit, dyEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_edtArray[14]->GetHandle(), HWND_TOP, xCol6, yRow7, dxEdit, dyEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_edtArray[15]->GetHandle(), HWND_TOP, xCol6, yRow7, dxEdit, dyEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_edtArray[16]->GetHandle(), HWND_TOP, xCol6, yRow8, dxEdit, dyEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_edtArray[17]->GetHandle(), HWND_TOP, xCol6, yRow8, dxEdit, dyEdit, SWP_SHOWWINDOW);
 
-		::SetWindowPos(_edtArray[18]->GetHandle(), HWND_TOP, xCol1, yRow[10], xCol6 + 3 * xSpace, dyEdit, SWP_SHOWWINDOW);
-		::SetWindowPos(_edtArray[19]->GetHandle(), HWND_TOP, xCol1, yRow[11], xCol6 + 3 * xSpace, yRow[4], SWP_SHOWWINDOW);
+		::SetWindowPos(_edtArray[18]->GetHandle(), HWND_TOP, xCol9, yRow9, dxFileEdit, dyFileEdit, SWP_SHOWWINDOW);
+		::SetWindowPos(_edtArray[19]->GetHandle(), HWND_TOP, xColA, yRowA, dxOutEdit, dyOutEdit, SWP_SHOWWINDOW);
 
 		return true;
 	};

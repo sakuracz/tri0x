@@ -10,7 +10,7 @@ namespace Win
 	};
 	bool EditController::OnKeyDown(WPARAM wParam, LPARAM lParam)
 	{
-		if (wParam == VK_RETURN)
+		if ((wParam == VK_RETURN) || (wParam == VK_TAB))
 		{
 			NMHDR nmh;
 			nmh.code = VK_RETURN;

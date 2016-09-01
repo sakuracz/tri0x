@@ -7,7 +7,7 @@ using std::string;
 
 namespace Win
 {
-	ComboController::ComboController(CustomCombo& theCombo) : combo(theCombo), sublist_controller(new ListController)
+	ComboController::ComboController(CustomCombo& theCombo) : combo(theCombo), sublist_controller(new SubListController)
 	{		
 	}
 
@@ -71,5 +71,33 @@ namespace Win
 		sublist_controller->Init(comboInfo.hwndList, reinterpret_cast<ProcPtr>(listProc), this, combo.GetHandle(), listRect);
 		::SetWindowLong(comboInfo.hwndList, GWL_USERDATA, reinterpret_cast<LONG>(sublist_controller.get()));
 		::SetWindowLong(comboInfo.hwndList, GWL_WNDPROC, reinterpret_cast<LONG>(SpecialListProc));
+	}
+
+	void SubListController::Init(HWND hWnd, ProcPtr prevProc, Controller* prevCont, HWND parent, RECT& rc)
+	{
+		SubController::Init(hWnd, prevProc, prevCont);
+		rect.bottom = rc.bottom;
+		rect.top = rc.top;
+		rect.left = rc.left;
+		rect.right = rc.right;
+		parentHWND = parent;
+	}
+
+	bool SubListController::OnNCCalcSize(WPARAM wParam, LPARAM lParam)
+	{
+		return true;	//has to return true otherwise the ugly frame appears around the list popup
+	}
+
+	bool SubListController::OnWindowPosChanging(WPARAM wParam, LPARAM lParam)
+	{
+		WINDOWPOS* wndPos = (WINDOWPOS*)lParam;
+		RECT parRect;
+		::GetWindowRect(parentHWND, &parRect);	//get the combo window bounding rect
+		wndPos->x = parRect.left;
+		wndPos->y = parRect.bottom - 5;
+		wndPos->cx = rect.right - rect.left;
+		wndPos->cy = rect.bottom - rect.top;
+
+		return true;
 	}
 }

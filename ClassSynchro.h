@@ -23,7 +23,7 @@ public:
 	double GetTargetEV();
 	void ShutdownDev();
 
-	void updateSettings();
+	void UpdateSettings();
 	bool isRunning(){ return running; }
 //	void SetOutputWindow(Win::ImgWndController*);
 	//program switching functions:
@@ -66,7 +66,7 @@ private:
 	bool CreateOpenKey();
 
 private:					// experiment control variables:
-	void toggleRunning();
+	void ToggleRunning();
 	bool running;
 	DWORD time;				// timestamp
 
