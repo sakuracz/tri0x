@@ -18,10 +18,10 @@ namespace Win
 		~ExpWndController();
 		void ReturnExpParams(double*);
 		void ReadExpParams();
-		bool OnCommand(WPARAM, LPARAM);
-		bool OnCreate(CreateData const*);
-		bool OnSize(int, int, int);
-		bool OnNotify(HWND, LPARAM);
+		bool OnCommand(WPARAM, LPARAM) override;
+		bool OnCreate(CreateData const*) override;
+		bool OnSize(int, int, int) override;
+		bool OnNotify(HWND, LPARAM) override;
 		void setEditVal(int, string);
 		void visibleRun();
 		void visibleStop();

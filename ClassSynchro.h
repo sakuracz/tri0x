@@ -7,10 +7,11 @@
 #include "ClassDispatcher.h"
 #include "WndCtrlExp.h"
 #include "WndCtrlImg.h"
+#include <memory>
 
 class Synchronizer : public ActiveObject
 {
-public:
+public:	
 	Synchronizer(Win::ExpWndController&);
 	~Synchronizer();
 	void Update(void){ ; }
@@ -24,7 +25,7 @@ public:
 	void StopLineMovement();
 	void updateSettings();
 	bool isRunning(){ return running; }
-	void SetOutputWindow(Win::ImgWndController*);
+//	void SetOutputWindow(Win::ImgWndController*);
 	void progLineHome();
 	void progLineParams();
 	void progLockParams();
@@ -38,7 +39,7 @@ private:
 	HANDLE _hDevLine;
 	Dispatcher *_Disp;
 	Win::ExpWndController& _exp;
-	Logic::LogicIface *_iface;
+	Logic::LogicIface _iface;
 	void Loop(void);
 	void InitThread(){};
 	void FlushThread(){};

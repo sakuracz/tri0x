@@ -21,8 +21,8 @@ namespace Win{
 	{
 		outArr[0] = ::SendMessage(_comboOpts[0]->GetHandle(), CB_GETCURSEL, NULL, NULL);
 		outArr[1] = ::SendMessage(_comboOpts[1]->GetHandle(), CB_GETCURSEL, NULL, NULL);
-		outArr[2] = (::IsDlgButtonChecked(_btnForce->GetHandle(), 1201) ? 1 : 0);
-
+		outArr[2] = (::IsDlgButtonChecked(_hwnd, 1201) ? 1 : 0);
+		
 		return true;
 	};
 
@@ -115,8 +115,6 @@ namespace Win{
 
 		::SendMessage(_comboOpts[0]->GetHandle(), CB_SETCURSEL, 0, NULL);
 		::SendMessage(_comboOpts[1]->GetHandle(), CB_SETCURSEL, 0, NULL);
-
-
 
 		return true;
 	}

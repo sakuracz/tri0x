@@ -16,19 +16,19 @@ namespace Win
 	public:
 		MainController(HWND, CreateData*);
 		~MainController();
-		bool OnCreate(CreateData const*);
+		bool OnCreate(CreateData const*) override;
 		bool OnNotify(WPARAM, LPARAM);
 	private:
 		//controllers:
 		MonoWndCtrl monoCtrl;
 		ExpWndController expCtrl;
-		ImgWndController *_outCtrl;
+//		ImgWndController *_outCtrl;
 
 		//windows:
 		Dow _main;
 		Dow _monoDow;
 		Dow _expDow;
-		Dow *_outWnd;
+//		Dow *_outWnd;
 
 		Synchronizer _synch;
 	};

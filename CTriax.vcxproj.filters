@@ -84,9 +84,6 @@
     <ClInclude Include="ClassDispatcher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WndCtrlImg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SubCtrlEdit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -147,9 +144,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ClassDispatcher.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WndCtrlImg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SubCtrlEdit.cpp">

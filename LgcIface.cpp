@@ -5,24 +5,21 @@
 
 using namespace std;
 
-#define NOMONO_			//NOMONO - no triax; NOMONO_ - use triax
-#define NOHOMO_			//NOHOMO - no lock-in; NOHOMO_ - use lock-in
+#define NOMONO			//NOMONO - no triax; NOMONO_ - use triax
+#define NOHOMO			//NOHOMO - no lock-in; NOHOMO_ - use lock-in
 
 namespace Logic
 {
-	LogicIface::LogicIface(int* params)
+	LogicIface::LogicIface()
 	{
+		//default params:
+		_turret = 1; 
+		_mirror = 1;
+		_force = false;
+
 		_gratingFactors[0] = 4.0;
 		_gratingFactors[1] = 16.0;
 		_gratingFactors[2] = 2.0;
-
-		if (params[2])
-			_force = true;
-		else
-			_force = false;
-
-		_turret = params[0];
-		_mirror = params[1];
 
 		_dev = NULL;
 
@@ -55,7 +52,7 @@ namespace Logic
 		stream << "/1 ";
 		_whereStr = stream.str();
 		stream = stringstream();
-		stream << "/1O2000" << (char)0x0D;
+		stream << "/1O2000" << (char)0x0D;		//cos tu nie tak chyba z tym mesygem
 		_boot2MainStr = stream.str();
 		stream = stringstream();
 		stream << "/1A";
@@ -98,6 +95,16 @@ namespace Logic
 #ifndef NOMONO
 		Init();
 #endif
+	};
+
+	void LogicIface::paramSet(int t, int m, int f)
+	{
+		_turret = t;
+		_mirror = m;
+		if (f)
+			_force = true;
+		else
+			_force = false;
 	};
 
 	LogicIface::~LogicIface()

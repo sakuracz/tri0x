@@ -4,7 +4,7 @@
 #include "libWin\WinMaker.h"
 
 Synchronizer::Synchronizer(Win::ExpWndController& exp)
-	: _exp(exp)
+	: _exp(exp), _iface()
 {
 	_Disp = NULL;
 	_dataX = NULL;
@@ -83,28 +83,28 @@ void Synchronizer::SetSlitWithUpdate(int slit)
 	stringstream pos;
 	switch (slit){
 	case 0:
-		_iface->SetSlit(slit, frontSlit);
-		while (_iface->isMotorMoving()){
-			outVal = _iface->GetSlitPos(0);
+		_iface.SetSlit(slit, frontSlit);
+		while (_iface.isMotorMoving()){
+			outVal = _iface.GetSlitPos(0);
 			pos << outVal;
 			_exp.setEditVal(0, pos.str());
 			pos = stringstream();
 		};
-		outVal = _iface->GetSlitPos(0);
+		outVal = _iface.GetSlitPos(0);
 		pos << outVal;
 		_exp.setEditVal(0, pos.str());
 		break;
 	case 1:
 		break;
 	case 2:
-		_iface->SetSlit(slit, rearSlit);
-		while (_iface->isMotorMoving()){
-			outVal = _iface->GetSlitPos(2);
+		_iface.SetSlit(slit, rearSlit);
+		while (_iface.isMotorMoving()){
+			outVal = _iface.GetSlitPos(2);
 			pos << outVal;
 			_exp.setEditVal(2, pos.str());
 			pos = stringstream();
 		};
-		outVal = _iface->GetSlitPos(2);
+		outVal = _iface.GetSlitPos(2);
 		pos << outVal;
 		_exp.setEditVal(2, pos.str());
 		break;
@@ -117,8 +117,8 @@ void Synchronizer::SetSlitWithUpdate(int slit)
 
 void Synchronizer::GoToAndUpdate(double wavelength)
 {
-	_iface->Goto(wavelength);
-	double current = _iface->GetPos();
+	_iface.Goto(wavelength);
+	double current = _iface.GetPos();
 	stringstream text;
 	text << current;
 	_exp.setEditVal(10, text.str());
@@ -139,21 +139,21 @@ double Synchronizer::GetTargetNM()
 
 bool Synchronizer::InitDev(int* params)
 {
-	_iface = new Logic::LogicIface(params);
+	_iface.paramSet(params[0], params[1], params[2]);
 
-	//	stringstream initParam;
-	//	initParam << params[0] << "\t" << params[1] << "\t" << params[2];
+		stringstream initParam;
+		initParam << params[0] << "\t" << params[1] << "\t" << params[2];
 
-	//	::MessageBox(NULL, initParam.str().c_str(), "Init parameters", MB_OK);
+		::MessageBox(NULL, initParam.str().c_str(), "Init parameters", MB_OK);
 
-	_iface->InitMono();
+	_iface.InitMono();
 	GoToAndUpdate(1000);
 
 
-	double posNM = _iface->GetPos();
+	double posNM = _iface.GetPos();
 	double posEV = 1239.8384 / posNM;
-	int frontSlit = _iface->GetSlitPos(0);
-	int exitSlit = _iface->GetSlitPos(2);
+	int frontSlit = _iface.GetSlitPos(0);
+	int exitSlit = _iface.GetSlitPos(2);
 
 	//	stringstream vals;
 	//	vals << posEV << "\t" << frontSlit << "\t" << exitSlit;
@@ -193,8 +193,6 @@ bool Synchronizer::InitDev(int* params)
 
 	_exp.setEditVal(16, "not used");
 	_exp.setEditVal(17, "0.1");
-
-
 
 	return true;
 };
@@ -247,7 +245,7 @@ void Synchronizer::MoveMono()	//func tab[2]
 void Synchronizer::Measure()	//func tab[3]
 {
 	if(point == 0){
-		_iface->Goto(1239.8384/start);
+		_iface.Goto(1239.8384/start);
 		if (inc != 0){
 			//			::MessageBox(NULL, "KL", "op", MB_OK);
 			int pCount = (start - stop) / inc + 1;
@@ -272,7 +270,7 @@ void Synchronizer::Measure()	//func tab[3]
 			double data[3];
 			double average[4] = { 0.0, 0.0, 0.0, 0.0 };
 			for (unsigned int i = 0; i < numPoints; i++){
-				_iface->queryData(data);
+				_iface.queryData(data);
 				::Sleep(interval);
 				average[1] += data[0] / (i*1.0);
 				average[2] += data[1] / (i*1.0);
@@ -284,9 +282,9 @@ void Synchronizer::Measure()	//func tab[3]
 			_dataCh2[point - 1] = average[1];
 			_dataX1[point - 1] = average[2];
 
-			double nextPos = 1239.8384 / (1239.8384 / _iface->GetPos() - inc);
-			_iface->Goto(nextPos);
-			_exp.UpdatePos(_iface->GetPos());
+			double nextPos = 1239.8384 / (1239.8384 / _iface.GetPos() - inc);
+			_iface.Goto(nextPos);
+			_exp.UpdatePos(_iface.GetPos());
 			_exp.UpdateEditBox(average, 4);
 			//			_dataY[point-1] = _lockIface.GetMeasuredValues();
 			//			::MessageBox(NULL, "Przed", "MB", MB_OK);
@@ -325,10 +323,10 @@ void Synchronizer::GoHome()				// func tab[6]
 	_program = 0;
 };
 
-void Synchronizer::SetOutputWindow(Win::ImgWndController* ctrl)
+/*void Synchronizer::SetOutputWindow(Win::ImgWndController* ctrl)
 {
 	_outCtrl = ctrl;
-};
+};*/
 
 void Synchronizer::StartExp()			// func tab[8]
 {
@@ -399,6 +397,5 @@ void Synchronizer::toggleRunning()
 };
 
 void Synchronizer::ShutdownDev()
-{
-	delete _iface;
+{	
 }

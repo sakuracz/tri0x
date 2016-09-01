@@ -29,7 +29,7 @@ namespace Win
 		expWinMaker.AddExStyle(WS_EX_COMPOSITED);
 
 		//creating the windows:
-		monoWinMaker.Create("Select device");
+		monoWinMaker.Create("Mono init");
 		expWinMaker.Create("Set up experiment");
 
 		//initiating windows:

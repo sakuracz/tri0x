@@ -9,6 +9,7 @@ namespace Logic
 	class LogicIface
 	{
 	public:
+		LogicIface();
 		LogicIface(int*);
 		~LogicIface();
 		void InitMono();
@@ -19,6 +20,7 @@ namespace Logic
 		void Goto(double);
 		void SetTurret(int);
 		void SetSlit(int, int);
+		void paramSet(int, int, int);
 		bool isMotorMoving();
 		bool isTurretBusy();
 	private:
