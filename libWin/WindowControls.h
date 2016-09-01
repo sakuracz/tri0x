@@ -93,12 +93,12 @@ namespace Win
 		void Fill();
 		bool Draw(const int&, DRAWITEMSTRUCT*);
 		unsigned int GetWidth(){ return idle.right - idle.left; }
-		unsigned int GetHeight() { return (idle.bottom-idle.top)+(selecting.bottom - selecting.top); }
+		unsigned int GetHeight() { return idle.bottom-idle.top; }
 		void Select(unsigned int& sel){ selection = sel; }
 		void ToggleSelected();		
 		void ToggleSelecting();
-		pair<unsigned int, unsigned int> GetBasePos(){ return pair<unsigned int, unsigned int>(idle.top, idle.left); }
-		pair<unsigned int, unsigned int> GetExpPos() { return pair<unsigned int, unsigned int>(selected.top, selected.left); }
+		pair<unsigned int, unsigned int> GetBasePos(){ return pair<unsigned int, unsigned int>(idle.left, idle.top); }
+		pair<unsigned int, unsigned int> GetExpPos() { return pair<unsigned int, unsigned int>(selected.left, selected.top); }
 	private:
 		bool isSelected = false;
 		bool isBeingSelected = false;
@@ -108,6 +108,7 @@ namespace Win
 		vector<HANDLE> footer_bmaps;
 		vector<HANDLE> hover_bmaps;
 		vector<HANDLE> idle_bmaps;
+		vector<string> items;
 		HFONT font;
 	};
 

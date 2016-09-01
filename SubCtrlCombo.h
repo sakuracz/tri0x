@@ -1,7 +1,11 @@
 #ifndef COMBOSUBCONTROLLER_H_
 #define COMBOSUBCONTROLLER_H_
 
+#include <memory>
 #include "libWin\ClassControllerSub.h"
+#include "SubCtrlList.h"
+
+using std::unique_ptr;
 
 namespace Win
 {
@@ -10,15 +14,14 @@ namespace Win
 	public:
 		friend class ListController;
 		ComboController(CustomCombo&);
+		~ComboController();
 		void Invalidate();
-	private:
-		bool OnPaint() override;
-		bool OnLMouseDblClick() override { return false; }
-		bool OnLMouseButtonUp(WPARAM, LPARAM) override;
-		bool OnLMouseButtonDown(WPARAM, LPARAM) override;
-		bool OnCommand(WPARAM, LPARAM) override;
-		bool OnNCCalcSize(WPARAM, LPARAM) override;
+		void SubList();
+	private:		
+		bool OnPaint() override;		
 		CustomCombo& combo;
+		const unique_ptr<ListController> sublist_controller;
+		COMBOBOXINFO comboInfo;
 	};
 }
 

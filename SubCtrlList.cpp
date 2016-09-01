@@ -6,27 +6,14 @@ using namespace std;
 
 namespace Win
 {
-	void ListController::Init(HWND hWnd, ProcPtr prevProc, Controller* prevCont, HWND parent)
+	void ListController::Init(HWND hWnd, ProcPtr prevProc, Controller* prevCont, HWND parent, RECT& rc)
 	{
 		SubController::Init(hWnd, prevProc, prevCont);
+		rect.bottom = rc.bottom;
+		rect.top = rc.top;
+		rect.left = rc.left;
+		rect.right = rc.right;
 		parentHWND = parent;		
-	}
-
-	bool ListController::OnEraseBG(HDC hdc)
-	{
-
-		return true;
-	}
-
-	bool ListController::OnMove(WPARAM wParam, LPARAM lParam)
-	{
-		DWORD x = LOWORD(lParam);
-		DWORD y = HIWORD(lParam);
-		stringstream ss;
-//		ss << " x: " << x << " y: " << y << endl;
-//		::MessageBox(NULL, ss.str().c_str(), "Nope", MB_OK);
-
-		return true;
 	}
 
 	bool ListController::OnNCCalcSize(WPARAM wParam, LPARAM lParam)
@@ -71,16 +58,11 @@ namespace Win
 	{
 		WINDOWPOS* wndPos = (WINDOWPOS*)lParam;		
 		RECT parRect;		
-		::GetWindowRect(parentHWND, &parRect);
-		wndPos->x = parRect.left-1;
+		::GetWindowRect(parentHWND, &parRect);	//get the combo window bounding rect
+		wndPos->x = parRect.left;
 		wndPos->y = parRect.bottom - 5;
-		wndPos->cx = 136;
-		wndPos->cy = 90;		
-
-//		stringstream ss;
-//		ss << " cy:" <<wndPos->cx << " cy:" << wndPos->cy << " x: " << wndPos->x << " y: " << wndPos->y << endl;
-//		ss << " Insert after: " << wndPos->hwndInsertAfter << " Flags: " << std::hex << wndPos->flags << endl;
-//		::MessageBox(NULL, ss.str().c_str(), "WindowPosChanging()", MB_OK);
+		wndPos->cx = rect.right - rect.left;
+		wndPos->cy = rect.bottom - rect.top;
 
 		return true;
 	}

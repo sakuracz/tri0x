@@ -9,54 +9,57 @@ using std::stringstream;
 using std::vector;
 
 namespace Win{
-	MonoWndCtrl::MonoWndCtrl() : combo_controller(gratingCombo)
+	MonoWndCtrl::MonoWndCtrl() : grating_controller(gratingCombo), mirror_controller(mirrorCombo)
 	{
 		itemIndex = 0;		
-		for (int i = 0; i < 2; i++){
-			_comboOpts[i] = new ComboControl(0);
-		}
 		
 		_btnForce.LoadBMPs(string("switch"));
 		_btnInit.LoadBMPs(string("init"));
 
-		vector<string> items = vector<string>();
-		items.push_back("300");
-		items.push_back("75");
-		items.push_back("600");
+		vector<string> gratingItems = vector<string>();
+		gratingItems.push_back("300");
+		gratingItems.push_back("75");
+		gratingItems.push_back("600");
 
-		RECT rc1;
+		vector<string> mirrorItems = vector<string>();
+		mirrorItems.push_back("Rear");
+		mirrorItems.push_back("Side");
+		
+		RECT rc1, rc2;
 		rc1.top = 11;
 		rc1.left = 10;
-		rc1.bottom = 41;
-		rc1.right = 146;
-		gratingCombo.Load(string("grating"),items, rc1);
+//		rc1.bottom = 0;		//useless since the size is determined by the size of the loaded bitmap
+//		rc1.right = 0;
+		gratingCombo.Load(string("grating"), gratingItems, rc1);
 
-		string bg_name = string("WndCtrlMonoBg.bmp");
+		rc2.top = 84;
+		rc2.left = 10;
+//		rc2.bottom = 0;		//same as above
+//		rc2.right = 0;
+		mirrorCombo.Load(string("mirror"), mirrorItems, rc2);
+
+		string bg_name = string("res/WndCtrlMonoBg.bmp");
 		background_bmp = ::LoadImage(NULL, bg_name.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 		if (background_bmp == NULL){
 			DWORD dw = GetLastError();
 			stringstream stream;
 			stream << "Got error #: " << dw;
 			::MessageBox(NULL, stream.str().c_str(), "Failed to load background image.", MB_OK | MB_ICONERROR);
-		}
+		}		
 	}
 
 	MonoWndCtrl::~MonoWndCtrl()
 	{
 		_btnForce.UnSubClass();
-		gratingCombo.UnSubClass();
-		
-		lc = new ListController();
-
-		for (unsigned int i = 0; i < combo_count; i++){
-			delete _comboOpts[i];
-		}				
+		_btnInit.UnSubClass();
+		gratingCombo.UnSubClass();			
+		mirrorCombo.UnSubClass();		
 	}
 
 	bool MonoWndCtrl::GetInitParams(int *outArr)
 	{
 		outArr[0] = ::SendMessage(gratingCombo.GetHandle(), CB_GETCURSEL, NULL, NULL);
-		outArr[1] = ::SendMessage(_comboOpts[1]->GetHandle(), CB_GETCURSEL, NULL, NULL);
+		outArr[1] = ::SendMessage(mirrorCombo.GetHandle(), CB_GETCURSEL, NULL, NULL);
 		outArr[2] = forceState;
 		
 		return true;
@@ -65,11 +68,6 @@ namespace Win{
 	HRESULT MonoWndCtrl::OnCTLColorListBox(HDC hdc, HWND hwnd)
 	{
 //		::SetWindowPos(gratingCombo.GetHandle(), NULL, 10, 41, 0, 0, SWP_NOSIZE);
-		return false;
-	}
-
-	bool MonoWndCtrl::OnNotify(HWND hFrom, LPARAM lParam)
-	{
 		return false;
 	}
 
@@ -96,36 +94,15 @@ namespace Win{
 				gratingCombo.ToggleSelected();		//grating selection used to be false - now it's true window needs to be resized				
 				unsigned int sel = ::SendMessage(gratingCombo.GetHandle(), CB_GETCURSEL, 0, 0);
 				gratingCombo.Select(sel);
-				combo_controller.Invalidate();
+				grating_controller.Invalidate();
 			}
 				break;
 			case CBN_SELENDOK:
 				gratingCombo.ToggleSelecting();
 				break;
-			case CBN_SETFOCUS:
-				break;
-			case CBN_CLOSEUP:				
-				break;
-			case CBN_DROPDOWN:
-			{				
+			case CBN_DROPDOWN:				
 				gratingCombo.ToggleSelecting();
-				COMBOBOXINFO comboInfo;
-				comboInfo.cbSize = sizeof(COMBOBOXINFO);
-				::GetComboBoxInfo(gratingCombo.GetHandle(), &comboInfo);
-				
-				if (!subclassed){					
-					LONG listProc = ::GetWindowLong(comboInfo.hwndList, GWL_WNDPROC);
-					LONG comboProc = ::GetWindowLong(comboInfo.hwndCombo, GWL_WNDPROC);
-				
-					ListController* pL = new ListController();
-					pL->Init(comboInfo.hwndList, reinterpret_cast<ProcPtr>(listProc), &combo_controller, gratingCombo);
-					::SetWindowLong(comboInfo.hwndList, GWL_USERDATA, reinterpret_cast<LONG>(pL));
-					::SetWindowLong(comboInfo.hwndList, GWL_WNDPROC, reinterpret_cast<LONG>(SpecialListProc));
-
-					subclassed = true;
-				};
-				break;
-			}
+				break;			
 			case CBN_KILLFOCUS:		
 				gratingCombo.ToggleSelecting();
 				break;
@@ -134,6 +111,31 @@ namespace Win{
 				break;
 			}
 		}
+		if (LOWORD(wParam) == 1101){	//combo box 0 (grating)
+			switch (HIWORD(wParam)){
+			case CBN_SELCHANGE:
+			{
+				mirrorCombo.ToggleSelected();		//mirror selection used to be false - now it's true window needs to be resized				
+				unsigned int sel = ::SendMessage(mirrorCombo.GetHandle(), CB_GETCURSEL, 0, 0);
+				mirrorCombo.Select(sel);
+				mirror_controller.Invalidate();
+			}
+			break;
+			case CBN_SELENDOK:
+				mirrorCombo.ToggleSelecting();
+				break;
+			case CBN_DROPDOWN:			
+				mirrorCombo.ToggleSelecting();
+				break;			
+			case CBN_KILLFOCUS:
+				mirrorCombo.ToggleSelecting();
+				break;
+			case CBN_SELENDCANCEL:
+				mirrorCombo.ToggleSelecting();
+				break;
+			}
+		}
+
 		return true;
 	}
 
@@ -161,15 +163,19 @@ namespace Win{
 		comb.Show();
 		gratingCombo.Init(comb, j);
 		gratingCombo.Fill();
-		gratingCombo.SubClass(&combo_controller);
-		
+		gratingCombo.SubClass(&grating_controller);
+		grating_controller.SubList();
 
 		for (unsigned int i = 1; i < 2; i++){
 			j = 1100 + i;						// combo control ids: [1100,1101]
 			ComboMaker comb(_hwnd, j);
+			comb.SetStyle(CBS_OWNERDRAWFIXED | CBS_DROPDOWNLIST);
 			comb.Create("");
 			comb.Show();
-			_comboOpts[i]->Init(comb, j);
+			mirrorCombo.Init(comb, j);
+			mirrorCombo.Fill();
+			mirrorCombo.SubClass(&mirror_controller);
+			mirror_controller.SubList();
 		}
 	
 		j = 1200;						// button control id: {1200} - init button
@@ -190,18 +196,20 @@ namespace Win{
 		_btnForce.SubClass(&button_controller);		
 
 		::SetWindowPos(gratingCombo.GetHandle(), NULL, (gratingCombo.GetBasePos()).first, (gratingCombo.GetBasePos()).second, 136, 30, SWP_SHOWWINDOW );
-		::SetWindowPos(_comboOpts[1]->GetHandle(), NULL, 10, 83, 136, 63, SWP_SHOWWINDOW);
+		::SetWindowPos(mirrorCombo.GetHandle(), NULL, (mirrorCombo.GetBasePos()).first, (mirrorCombo.GetBasePos()).second, 136, 30, SWP_SHOWWINDOW);
+//		::SetWindowPos(mirrorCombo.GetHandle(), NULL, 10, 84, 136, 30, SWP_SHOWWINDOW);
+		//::SetWindowPos(_comboOpts[1]->GetHandle(), NULL, 10, 83, 136, 63, SWP_SHOWWINDOW);
 		::SetWindowPos(_btnInit.GetHandle(), NULL, 67, 247, 103, 32, SWP_SHOWWINDOW);
 		::SetWindowPos(_btnForce.GetHandle(), NULL, 67, 186, 79, 31, SWP_SHOWWINDOW);
-
+		
 		::SendMessage(gratingCombo.GetHandle(), CB_ADDSTRING, NULL, (LPARAM)"300");
 		::SendMessage(gratingCombo.GetHandle(), CB_ADDSTRING, NULL, (LPARAM)"75");
 		::SendMessage(gratingCombo.GetHandle(), CB_ADDSTRING, NULL, (LPARAM)"600");
-		::SendMessage(_comboOpts[1]->GetHandle(), CB_ADDSTRING, NULL, (LPARAM)"Rear");
-		::SendMessage(_comboOpts[1]->GetHandle(), CB_ADDSTRING, NULL, (LPARAM)"Side");
+		::SendMessage(mirrorCombo.GetHandle(), CB_ADDSTRING, NULL, (LPARAM)"Rear");
+		::SendMessage(mirrorCombo.GetHandle(), CB_ADDSTRING, NULL, (LPARAM)"Side");
 
 		::SendMessage(gratingCombo.GetHandle(), CB_SETCURSEL, -1, NULL);
-		::SendMessage(_comboOpts[1]->GetHandle(), CB_SETCURSEL, 0, NULL);
+		::SendMessage(mirrorCombo.GetHandle(), CB_SETCURSEL, -1, NULL);
 
 		return true;
 	}
@@ -214,11 +222,13 @@ namespace Win{
 		bool res;
 		switch (pDIS->CtlID) {
 		case 1100:		//grating combo
-		{
 			res = true;
 			gratingCombo.Draw(pDIS->itemID, pDIS);
 			break;
-		}
+		case 1101:		//mirror combo
+			res = true;
+			mirrorCombo.Draw(pDIS->itemID, pDIS);
+			break;
 		case 1201:		//force init check button
 			if (forceState == 0)
 				res = _btnForce.Draw(1, pDIS);

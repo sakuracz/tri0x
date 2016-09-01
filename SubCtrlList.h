@@ -9,15 +9,14 @@ namespace Win
 	class ListController : public SubController
 	{
 	public:
-		void Init(HWND, ProcPtr, Controller*, HWND parent);
-	private:
-		bool OnEraseBG(HDC) override;
-		bool OnMove(WPARAM, LPARAM) override;
+		void Init(HWND, ProcPtr, Controller*, HWND, RECT&);
+	private:				
 		bool OnNCCalcSize(WPARAM, LPARAM) override;
 //		bool OnNCPaint(WPARAM, LPARAM) override;
 //		bool OnPaint() override;
 		bool OnWindowPosChanging(WPARAM, LPARAM) override;
 		HWND parentHWND;
+		RECT rect;
 		ComboController* parent_controller;
 
 	};

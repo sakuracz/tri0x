@@ -108,8 +108,8 @@ namespace Win
 	void CustomButton::LoadBMPs(const string& nameBase)
 	{
 		stringstream stream;
-		string press = nameBase + "-on.bmp";
-		string dpress = nameBase + "-off.bmp";
+		string press = "res/" + nameBase + "-on.bmp";
+		string dpress = "res/" + nameBase + "-off.bmp";
 		bmapPressed = ::LoadImage(NULL, press.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 		if (bmapPressed == NULL){
 			DWORD dw = GetLastError();
@@ -178,7 +178,8 @@ namespace Win
 
 	ComboControl::ComboControl(HWND win)
 		: SimpleControl(win)
-	{};
+	{		
+	};
 
 	ComboControl::ComboControl(HWND winParent, int id)
 		: SimpleControl(winParent, id)
@@ -197,15 +198,15 @@ namespace Win
 		::DeleteObject(font);
 	}
 
-	void CustomCombo::Load(const string& nameBase, const vector<string>& items, const RECT& coords)
+	void CustomCombo::Load(const string& nameBase, const vector<string>& itemNames, const RECT& coords)
 	{				
 		idle.top = selecting.top = selected.top = coords.top;
 		idle.left = selecting.left = selected.left = coords.left;
 
-		//load header bitmaps:
+		//load header bitmaps:		
 		header_bmaps = vector<HANDLE>();
 		BITMAP bm;
-		string default = string(nameBase + "-idle.bmp");		
+		string default = string("res/"+nameBase + "-idle.bmp");		
 		HANDLE tempBMP = ::LoadImage(NULL, default.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 		if (::GetObject(tempBMP, sizeof(bm), &bm)){
 			idle.bottom = idle.top + bm.bmHeight;
@@ -216,7 +217,7 @@ namespace Win
 		else {
 			::MessageBox(NULL, "GetObject() failed", "CustomControl::Load error", MB_OK | MB_ICONERROR);
 		}
-		default = string(nameBase + "-selected.bmp");
+		default = string("res/" + nameBase + "-selected.bmp");
 		tempBMP = ::LoadImage(NULL, default.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 		if (::GetObject(tempBMP, sizeof(bm), &bm)){
 			header_bmaps.push_back(tempBMP);
@@ -224,7 +225,7 @@ namespace Win
 		else {
 			::MessageBox(NULL, "GetObject() failed", "CustomControl::Load error", MB_OK | MB_ICONERROR);
 		}	
-		default = string(nameBase + "-selecting.bmp");
+		default = string("res/" + nameBase + "-selecting.bmp");
 		tempBMP = ::LoadImage(NULL, default.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 		if (::GetObject(tempBMP, sizeof(bm), &bm)){
 			header_bmaps.push_back(tempBMP);
@@ -237,17 +238,21 @@ namespace Win
 		footer_bmaps = vector<HANDLE>();
 		hover_bmaps = vector<HANDLE>();
 		idle_bmaps = vector<HANDLE>();
-		for (auto i = items.begin(); i != items.end(); i++){
-			string idle = string(nameBase + "-" + *i + "-idle.bmp");
-			string hover = string(nameBase + "-" + *i + "-hover.bmp");
-			string item = string(nameBase + "-" + *i + "-item.bmp");
+		for (auto i = itemNames.begin(); i != itemNames.end(); i++){
+			string idle = string("res/" + nameBase + "-" + *i + "-idle.bmp");
+			string hover = string("res/" + nameBase + "-" + *i + "-hover.bmp");
+			string item = string("res/" + nameBase + "-" + *i + "-item.bmp");
 			footer_bmaps.push_back(::LoadImage(NULL, idle.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
 			hover_bmaps.push_back(::LoadImage(NULL, hover.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
 			idle_bmaps.push_back(::LoadImage(NULL, item.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
 		}
 
+		for (auto i = itemNames.begin(); i != itemNames.end(); i++){
+			items.push_back(*i);
+		}
+
 		selecting.bottom = idle.bottom + items.size()*bm.bmHeight;
-		selected.bottom = idle.bottom + items.size()*bm.bmHeight;
+		selected.bottom = idle.bottom + bm.bmHeight;
 
 		font = CreateFont(1, 0, 0, 0, FW_DONTCARE, FALSE, TRUE, FALSE, DEFAULT_CHARSET, OUT_OUTLINE_PRECIS,
 			CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY, VARIABLE_PITCH, TEXT("Impact"));		
@@ -267,7 +272,6 @@ namespace Win
 		::MessageBox(NULL, sss.str().c_str(), "H", MB_OK);
 */		
 	
-//		HDC compHDC = ::CreateCompatibleDC(hdc);
 		HDC compHDC = ::CreateCompatibleDC(hDC);
 		if (compHDC == NULL)
 			::MessageBox(NULL, "::CreateCompatibleDC returned NULL", "Error in CustomCombo::Draw", MB_OK);
@@ -286,22 +290,17 @@ namespace Win
 			bm = (HBITMAP)idle_bmaps[item];
 			::SelectObject(compHDC, bm);			
 		}
-	
-//		COLORREF ref = RGB(0, 255, 111);
-//		::SetBkColor(compHDC, ref);
+
 		::BitBlt(pDIS->hDC, pDIS->rcItem.left, pDIS->rcItem.top, 136, 30, compHDC, 0, 0, SRCCOPY);
-//		::BitBlt(hdc, pDIS->rcItem.left, pDIS->rcItem.top, 136, 30, compHDC, 0, 0, SRCCOPY);
 		::DeleteDC(compHDC);
 
 		return true;			
 	}
 
 	void CustomCombo::Fill()
-	{
-		vector<string> vec = { "300", "75", "600" };
-		for (unsigned int i = 0; i < idle_bmaps.size(); i++){
-//			::SendMessage(_h, CB_SETITEMDATA, i, (LPARAM)idle_bmaps[i] );	
-			::SendMessage(_h, CB_ADDSTRING, i, (LPARAM)vec[i].c_str());
+	{		
+		for (unsigned int i = 0; i < items.size(); i++){
+			::SendMessage(_h, CB_ADDSTRING, i, (LPARAM)items[i].c_str());
 		}
 	}
 
