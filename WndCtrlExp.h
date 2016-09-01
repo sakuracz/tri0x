@@ -5,6 +5,7 @@
 #include "SubCtrlEdit.h"
 #include "SubCtrlRadio.h"
 #include "libWin\WindowControls.h"
+#include "CustomControls.h"
 #include <string>
 #include <vector>
 #include <list>

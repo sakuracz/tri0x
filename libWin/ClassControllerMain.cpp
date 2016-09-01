@@ -1,7 +1,6 @@
 #include "ClassControllerMain.h"
 #include "WinClassMaker.h"
 #include "WinMaker.h"
-#include "ChildProcedure.h"
 #include <sstream>
 #include <thread>
 

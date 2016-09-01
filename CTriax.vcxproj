@@ -92,6 +92,7 @@
   <ItemGroup>
     <ClInclude Include="ClassDispatcher.h" />
     <ClInclude Include="ClassSynchro.h" />
+    <ClInclude Include="CustomControls.h" />
     <ClInclude Include="LgcIface.h" />
     <ClInclude Include="libWin\ActiveObject.h" />
     <ClInclude Include="libWin\ClassChildController.h" />
@@ -121,6 +122,7 @@
   <ItemGroup>
     <ClCompile Include="ClassDispatcher.cpp" />
     <ClCompile Include="ClassSynchro.cpp" />
+    <ClCompile Include="CustomControls.cpp" />
     <ClCompile Include="LgcIface.cpp" />
     <ClCompile Include="libWin\ActiveObject.cpp" />
     <ClCompile Include="libWin\ClassChildController.cpp" />

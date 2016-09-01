@@ -5,6 +5,7 @@
 #include "SubCtrlButton.h"
 #include "SubCtrlCombo.h"
 #include "libWin\WindowControls.h"
+#include "CustomControls.h"
 #include "struct.h"
 
 namespace Win{

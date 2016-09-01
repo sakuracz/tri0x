@@ -1,4 +1,5 @@
 #include "SubCtrlCombo.h"
+#include "CustomControls.h"
 #include <string>
 #include <sstream>
 

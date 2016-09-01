@@ -3,6 +3,7 @@
 
 #include <memory>
 #include "libWin\ClassControllerSub.h"
+#include "CustomControls.h"
 
 using std::unique_ptr;
 
