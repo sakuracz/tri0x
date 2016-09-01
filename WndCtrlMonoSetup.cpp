@@ -60,9 +60,9 @@ namespace Win{
 		::SystemParametersInfo(SPI_GETWORKAREA, 0, &rect, 0);
 		int maxX = rect.right;
 		int maxY = rect.bottom;
-		int width = 90, height = 200;	//window parameters
+		int width = 175, height = 290;	//window parameters
 
-		::SetWindowPos(_hwnd, NULL, (maxX - width) / 2, (maxY - height) / 2, 175, 220, SWP_SHOWWINDOW);
+		::SetWindowPos(_hwnd, NULL, (maxX - width) / 2, (maxY - height) / 2, width, height, SWP_SHOWWINDOW);
 
 		int j = 1000;
 		for (int i = 0; i < 3; i++){
@@ -108,9 +108,9 @@ namespace Win{
 		::SetWindowPos(_staticArr[2]->GetHandle(), NULL, 10, 100, 65, 20, SWP_SHOWWINDOW);
 		::SetWindowPos(_comboOpts[0]->GetHandle(), NULL, 85, 20, 65, 20, SWP_SHOWWINDOW);
 		::SetWindowPos(_comboOpts[1]->GetHandle(), NULL, 85, 60, 65, 20, SWP_SHOWWINDOW);
-		::SetWindowPos(_btnSelect->GetHandle(), NULL, 85, 120, 65, 30, SWP_SHOWWINDOW);
+		::SetWindowPos(_btnSelect->GetHandle(), NULL, 67, 247, 103, 32, SWP_SHOWWINDOW);
 //		::SetWindowPos(_btnForce->GetHandle(), NULL, 10, 155, 90, 20, SWP_SHOWWINDOW);
-		::SetWindowPos(_btnForce->GetHandle(), NULL, 10, 155, 200, 100, SWP_SHOWWINDOW);
+		::SetWindowPos(_btnForce->GetHandle(), NULL, 67, 186, 79, 31, SWP_SHOWWINDOW);
 
 		::SendMessage(_staticArr[0]->GetHandle(), WM_SETTEXT, NULL, (LPARAM)"Grating:");
 		::SendMessage(_staticArr[1]->GetHandle(), WM_SETTEXT, NULL, (LPARAM)"Mirror:");
