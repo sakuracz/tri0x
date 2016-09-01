@@ -92,7 +92,7 @@ namespace Win
 		};
 
 		EditMaker edit(_hwnd, 2119);
-		edit.AddStyle(WS_VSCROLL | ES_MULTILINE | ES_AUTOVSCROLL | ES_WANTRETURN);
+		edit.AddStyle(WS_VSCROLL | ES_MULTILINE | ES_AUTOVSCROLL | ES_WANTRETURN | ES_READONLY);
 		edit.Create("");
 		edit.Show();
 		_edtArray[19]->Init(edit, 2119);
@@ -100,7 +100,7 @@ namespace Win
 
 		for (int i = 0; i < 18; i += 2)
 			Edit_Enable(_edtArray[i]->GetHandle(), false);
-		Edit_Enable(_edtArray[19]->GetHandle(), false);
+		Edit_Enable(_edtArray[19]->GetHandle(), true);
 
 		//button controls:		
 		for (int i = 0; i < 11; i++){

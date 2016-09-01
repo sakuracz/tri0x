@@ -10,6 +10,7 @@ Synchronizer::Synchronizer(Win::ExpWndController& exp)
 	: _exp(exp), _iface()
 {
 //	_Disp = NULL;
+	data = vvect(0, vector<double>(4));
 	_dataX = NULL;
 	_dataCh1 = NULL;
 	_dataCh2 = NULL;
@@ -270,25 +271,28 @@ void Synchronizer::Measure()	//func tab[3]
 		return;
 	} else {
 		if(point != 0){
-			vector<double> data(3);			
+			vector<double> dat(3);			
 			vector<double> average(4);
 			for (unsigned int i = 0; i < numPoints; i++){
-				_iface.queryData(data);
+				_iface.queryData(dat);
 				::Sleep(interval);
-				average[0] += (data[0] / (numPoints*1.0));
-				average[1] += (data[1] / (numPoints*1.0));
-				average[2] += (data[2] / (numPoints*1.0));
+				average[1] += (dat[0] / (numPoints*1.0));
+				average[2] += (dat[1] / (numPoints*1.0));
+				average[3] += (dat[2] / (numPoints*1.0));
 			}
-		
+			average[0] = start - inc*point;
+				
 			_dataX[point-1] = start + inc*point;
-			_dataCh1[point - 1] = average[0];
-			_dataCh2[point - 1] = average[1];
-			_dataX1[point - 1] = average[2];
-
+			_dataCh1[point - 1] = average[1];
+			_dataCh2[point - 1] = average[2];
+			_dataX1[point - 1] = average[3];
+			
 			double nextPos = 1239.8384 / (1239.8384 / _iface.GetPos() - inc);
 			_iface.Goto(nextPos);
 			_exp.UpdatePos(_iface.GetPos());
-			_exp.UpdateEditBox(average, 3);
+			_exp.UpdateEditBox(average, 4);
+
+			data.push_back(std::move(average));
 			//			_dataY[point-1] = _lockIface.GetMeasuredValues();
 			//			::MessageBox(NULL, "Przed", "MB", MB_OK);
 			//			_outCtrl->UpdateData(_dataX, _dataCh1, point);

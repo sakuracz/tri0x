@@ -76,6 +76,10 @@ private:					// experiment control variables:
 
 private:					// output windows and helper functions
 	Win::ImgWndController	*_outCtrl;
+
+private:		//data vector
+	typedef vector<vector<double>> vvect;
+	vvect data;
 public:
 	double *_dataX;
 	double *_dataCh1;
