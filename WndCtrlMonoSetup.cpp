@@ -46,6 +46,19 @@ namespace Win{
 			stream << "Got error #: " << dw;
 			::MessageBox(NULL, stream.str().c_str(), "Failed to load background image.", MB_OK | MB_ICONERROR);
 		}		
+		
+		stringstream s;
+		for (int i = 0; i < 101; i++){
+			s = stringstream();
+			s << "res/prog-" << i << ".bmp";
+			progress_bmps.push_back(::LoadImage(NULL, s.str().c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
+			if (progress_bmps[i] == NULL){
+				DWORD dw = GetLastError();
+				stringstream stream;
+				stream << "Got error #: " << dw;
+				::MessageBox(NULL, stream.str().c_str(), "Failed to load progress image.", MB_OK | MB_ICONERROR);
+			}
+		}
 	}
 
 	MonoWndCtrl::~MonoWndCtrl()
@@ -253,7 +266,15 @@ namespace Win{
 		::GetObject(background_bmp, sizeof(BITMAP), &bm);
 		::SelectObject(compHDC, bg);
 		::BitBlt(hDC, 0, 0, bm.bmWidth, bm.bmHeight, compHDC, 0, 0, SRCCOPY);
-		DeleteDC(compHDC);
+
+		//copy progress bar:
+		HBITMAP pro = (HBITMAP)progress_bmps[progress];
+		::GetObject(progress_bmps[progress], sizeof(BITMAP), &bm);
+		::SelectObject(compHDC, pro);
+		::BitBlt(hDC, 23, 158, bm.bmWidth, bm.bmHeight, compHDC, 0, 0, SRCCOPY);
+
+		::DeleteDC(compHDC);
+
 		return true;
 	}
 
@@ -271,5 +292,16 @@ namespace Win{
 		}
 
 		return true;
+	}
+
+	void MonoWndCtrl::UpdateProgress(int by)
+	{
+		if (progress + by <= 100){
+			progress += by;
+		} else { 
+			progress = 100; 
+		}
+
+		::InvalidateRect(_hwnd, NULL, TRUE);
 	}
 };

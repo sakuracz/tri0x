@@ -28,6 +28,7 @@ namespace Win{
 		void ZeroInit(){ initState = 0; }
 
 	private:
+		void UpdateProgress(int);
 		unsigned int itemIndex;
 		const unsigned int combo_count = 2;
 		CustomButton _btnForce;
@@ -37,6 +38,7 @@ namespace Win{
 		CustomCombo gratingCombo, mirrorCombo;
 		ComboController grating_controller, mirror_controller;		
 		HANDLE background_bmp;
+		vector<HANDLE> progress_bmps;
 		int forceState = 1, initState = 0;
 		int progress = 0; //percentage of init completion		
 	};
