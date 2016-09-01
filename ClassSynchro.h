@@ -37,7 +37,7 @@ public:
 private:
 	HKEY _regKey;
 	HANDLE _hDevLine;
-	Dispatcher *_Disp;
+//	Dispatcher *_Disp;
 	Win::ExpWndController& _exp;
 	Logic::LogicIface _iface;
 	void Loop(void);

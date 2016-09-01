@@ -17,12 +17,11 @@ namespace Win
 	public:
 		ExpWndController();
 		~ExpWndController();
-		void ReturnExpParams(double*);
-		void ReadExpParams();
+		void ReturnExpParams(vector<double>&);
 		bool OnCommand(WPARAM, LPARAM) override;
 		bool OnCreate(CreateData const*) override;
 		bool OnSize(int, int, int) override;
-		bool OnNotify(HWND, LPARAM) override;
+		bool OnNotify(HWND, LPARAM) override;	//reads input parameters since edit boxes trigger this message
 		void setEditVal(int, string);
 		void visibleRun();
 		void visibleStop();

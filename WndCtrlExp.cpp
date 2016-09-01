@@ -92,11 +92,11 @@ namespace Win
 		};
 
 		EditMaker edit(_hwnd, 2119);
-		edit.AddStyle(ES_MULTILINE | ES_AUTOVSCROLL);
+		edit.AddStyle(WS_VSCROLL | ES_MULTILINE | ES_AUTOVSCROLL | ES_WANTRETURN);
 		edit.Create("");
 		edit.Show();
 		_edtArray[19]->Init(edit, 2119);
-		_edtArray[19]->SubClass(&_edtCtrl[19]);
+//		_edtArray[19]->SubClass(&_edtCtrl[19]);
 
 		for (int i = 0; i < 18; i += 2)
 			Edit_Enable(_edtArray[i]->GetHandle(), false);
@@ -282,7 +282,7 @@ namespace Win
 			::SendMessage(::GetParent(_hwnd), WM_NOTIFY, 2111, 0);
 		}
 		else if (hFrom == _edtArray[13]->GetHandle()){		//Time const
-			_timeConst = GetEditVal(11);
+			_timeConst = GetEditVal(13);
 		}
 		else if (hFrom == _edtArray[15]->GetHandle()){		//point count
 			_pointCount = GetEditVal(15);
@@ -294,20 +294,15 @@ namespace Win
 		return true;
 	}
 
-	void ExpWndController::ReturnExpParams(double* params)
+	void ExpWndController::ReturnExpParams(vector<double>& params)
 	{
 		params[0] = _startPos;
 		params[1] = _stopPos;
 		params[2] = _incPos;
-		params[3] = 1000*_timeConst;
+		params[3] = 1000 * _timeConst;
 		params[4] = _pointCount;
-		params[5] = 1000*_interval;
+		params[5] = 1000 * _interval;
 		return;
-	};
-
-	void ExpWndController::ReadExpParams()
-	{
-		stringstream params;
 	};
 
 	void ExpWndController::setEditVal(int editNum, string text)
@@ -321,11 +316,11 @@ namespace Win
 		stringstream valStream;
 		for (int i = 0; i < num; i++)
 		{
-			valStream << valArr[i] << "\t";
+			valStream << setprecision(5) << fixed << valArr[i] << "\t";
 		}
-		valStream << endl;
+		valStream << "\r\n";
 
-		::SendMessage(NULL, WM_SETTEXT, 0, (LPARAM)valStream.str().c_str());
+		::SendMessage(_edtArray[19]->GetHandle(), EM_REPLACESEL, 0, (LPARAM)valStream.str().c_str());
 
 		return;
 	};

@@ -9,7 +9,7 @@ using std::vector;
 Synchronizer::Synchronizer(Win::ExpWndController& exp)
 	: _exp(exp), _iface()
 {
-	_Disp = NULL;
+//	_Disp = NULL;
 	_dataX = NULL;
 	_dataCh1 = NULL;
 	_dataCh2 = NULL;
@@ -144,10 +144,10 @@ bool Synchronizer::InitDev(int* params)
 {
 	_iface.paramSet(params[0], params[1], params[2]);
 
-		stringstream initParam;
-		initParam << params[0] << "\t" << params[1] << "\t" << params[2];
+//		stringstream initParam;
+//		initParam << params[0] << "\t" << params[1] << "\t" << params[2];
 
-		::MessageBox(NULL, initParam.str().c_str(), "Init parameters", MB_OK);
+//		::MessageBox(NULL, initParam.str().c_str(), "Init parameters", MB_OK);
 
 	_iface.InitMono();
 	GoToAndUpdate(1000);
@@ -270,16 +270,16 @@ void Synchronizer::Measure()	//func tab[3]
 		return;
 	} else {
 		if(point != 0){
-			vector<double> data;
-			vector<double> average = { 0.0, 0.0, 0.0, 0.0 };
+			vector<double> data(3);			
+			vector<double> average(4);
 			for (unsigned int i = 0; i < numPoints; i++){
 				_iface.queryData(data);
 				::Sleep(interval);
-				average[1] += data[0] / (i*1.0);
-				average[2] += data[1] / (i*1.0);
-				average[3] += data[2] / (i*1.0);
+				average[0] += (data[0] / (numPoints*1.0));
+				average[1] += (data[1] / (numPoints*1.0));
+				average[2] += (data[2] / (numPoints*1.0));
 			}
-
+		
 			_dataX[point-1] = start + inc*point;
 			_dataCh1[point - 1] = average[0];
 			_dataCh2[point - 1] = average[1];
@@ -288,7 +288,7 @@ void Synchronizer::Measure()	//func tab[3]
 			double nextPos = 1239.8384 / (1239.8384 / _iface.GetPos() - inc);
 			_iface.Goto(nextPos);
 			_exp.UpdatePos(_iface.GetPos());
-			_exp.UpdateEditBox(average, 4);
+			_exp.UpdateEditBox(average, 3);
 			//			_dataY[point-1] = _lockIface.GetMeasuredValues();
 			//			::MessageBox(NULL, "Przed", "MB", MB_OK);
 			//			_outCtrl->UpdateData(_dataX, _dataCh1, point);
@@ -342,15 +342,15 @@ void Synchronizer::StartExp()			// func tab[8]
 
 void Synchronizer::updateSettings()
 {
-	double params[6];
+	vector<double> params(6);
 	_exp.ReturnExpParams(params);
 
 	start = params[0];
 	stop = params[1];
 	inc = params[2];
-	waitTime = (unsigned int)params[3];			// wait time in [ms]
-	numPoints = (unsigned int)params[4];
-	interval = (unsigned int)params[5];			// interval in [ms]
+	waitTime = static_cast<unsigned int>(params[3]);			// wait time in [ms]
+	numPoints = static_cast<unsigned int>(params[4]);
+	interval = static_cast<unsigned int>(params[5]);			// interval in [ms]
 };
 
 void Synchronizer::progLineHome()
