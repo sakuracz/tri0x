@@ -33,6 +33,7 @@ namespace Win{
 		CustomButton forceBtn, initButton;
 		HANDLE background_bmp;
 		int forceState = 1, initState = 0;
+		int progress = 0; //percentage of init completion
 	};
 }
 
