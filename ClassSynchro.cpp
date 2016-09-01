@@ -253,11 +253,13 @@ void Synchronizer::Measure()	//func tab[3]
 		if (inc != 0){
 			//			::MessageBox(NULL, "KL", "op", MB_OK);
 			int pCount = (start - stop) / inc + 1;
-			if ((_dataCh1 == NULL) && (pCount != 0)) {
-				_dataX = new double[pCount];
-				_dataCh1 = new double[pCount];
-				_dataCh2 = new double[pCount];
-				_dataX1 = new double[pCount];
+//			if ((_dataCh1 == NULL) && (pCount != 0)) {
+//				_dataX = new double[pCount];
+//				_dataCh1 = new double[pCount];
+//				_dataCh2 = new double[pCount];
+//				_dataX1 = new double[pCount];
+			if (data.size() != 0){
+				data = vvect(0, vector<double>(4));
 			}
 		}
 	};
@@ -269,35 +271,34 @@ void Synchronizer::Measure()	//func tab[3]
 
 	if(::GetTickCount() - time < waitTime){
 		return;
-	} else {
-		if(point != 0){
-			vector<double> dat(3);			
-			vector<double> average(4);
-			for (unsigned int i = 0; i < numPoints; i++){
-				_iface.queryData(dat);
-				::Sleep(interval);
-				average[1] += (dat[0] / (numPoints*1.0));
-				average[2] += (dat[1] / (numPoints*1.0));
-				average[3] += (dat[2] / (numPoints*1.0));
-			}
-			average[0] = start - inc*point;
-				
-			_dataX[point-1] = start + inc*point;
-			_dataCh1[point - 1] = average[1];
-			_dataCh2[point - 1] = average[2];
-			_dataX1[point - 1] = average[3];
-			
-			double nextPos = 1239.8384 / (1239.8384 / _iface.GetPos() - inc);
-			_iface.Goto(nextPos);
-			_exp.UpdatePos(_iface.GetPos());
-			_exp.UpdateEditBox(average, 4);
-
-			data.push_back(std::move(average));
-			//			_dataY[point-1] = _lockIface.GetMeasuredValues();
-			//			::MessageBox(NULL, "Przed", "MB", MB_OK);
-			//			_outCtrl->UpdateData(_dataX, _dataCh1, point);
-			//			::MessageBox(NULL, "Po", "MB", MB_OK);
+	} else {	
+		vector<double> dat(3);			
+		vector<double> average(4);
+		for (unsigned int i = 0; i < numPoints; i++){
+			_iface.queryData(dat);
+			::Sleep(interval);
+			average[1] += (dat[0] / (numPoints*1.0));
+			average[2] += (dat[1] / (numPoints*1.0));
+			average[3] += (dat[2] / (numPoints*1.0));
 		}
+		average[0] = start - inc*point;
+				
+		_dataX[point-1] = start + inc*point;
+		_dataCh1[point - 1] = average[1];
+		_dataCh2[point - 1] = average[2];
+		_dataX1[point - 1] = average[3];
+			
+		double nextPos = 1239.8384 / (1239.8384 / _iface.GetPos() - inc);
+		_iface.Goto(nextPos);
+		_exp.UpdatePos(_iface.GetPos());
+		_exp.UpdateEditBox(average, 4);
+		
+		data.push_back(std::move(average));
+		
+		//			_dataY[point-1] = _lockIface.GetMeasuredValues();
+		//			::MessageBox(NULL, "Przed", "MB", MB_OK);
+		//			_outCtrl->UpdateData(_dataX, _dataCh1, point);
+		//			::MessageBox(NULL, "Po", "MB", MB_OK);
 		point++;
 		//		_lockIface.StartAcquisition();
 		time = ::GetTickCount();
