@@ -7,12 +7,12 @@ namespace Win
 	{
 	}
 
-	HRESULT EditController::OnCTLColorEdit(HDC hdc, HWND win)
+	HRESULT EditController::OnCTLColorEdit(HDC, HWND)
 	{
 		return (HRESULT)::GetSysColorBrush(4);
 	}
 
-	HRESULT EditController::OnCTLColorStatic(HDC hdc, HWND win)
+	HRESULT EditController::OnCTLColorStatic(HDC, HWND)
 	{
 //		return (HRESULT)::CreateSolidBrush(RGB(236,233,230));
 		return (HRESULT)::GetStockObject(GRAY_BRUSH);
@@ -32,7 +32,7 @@ namespace Win
 		return true;
 	}
 
-	bool EditController::OnKeyDown(WPARAM wParam, LPARAM lParam)
+	bool EditController::OnKeyDown(WPARAM wParam, LPARAM)
 	{
 		if ((wParam == VK_RETURN) || (wParam == VK_TAB))
 		{
@@ -45,16 +45,16 @@ namespace Win
 		return false;
 	}
 
-	bool EditController::OnKillFocus(WPARAM wParam, LPARAM lParam)
+	bool EditController::OnKillFocus(WPARAM wParam, LPARAM)
 	{
-		::SendMessage(_hwnd, EM_SETSEL, 0, -1);
-		::SendMessage(_hwnd, EM_SETSEL, -1, -1);
+		::SendMessage(_hwnd, EM_SETSEL, (WPARAM)0, -1);
+		::SendMessage(_hwnd, EM_SETSEL, (WPARAM)-1, -1);
 		if (wParam != NULL)
 			::SetFocus((HWND)wParam);
 		return true;
 	}
 
-	bool EditController::OnLMouseButtonDown(WPARAM wParam, LPARAM lParam)
+	bool EditController::OnLMouseButtonDown(WPARAM, LPARAM)
 	{
 		::SetFocus(_hwnd);
 		//		::SendMessage(_hwnd, EM_SETSEL, 0, -1);

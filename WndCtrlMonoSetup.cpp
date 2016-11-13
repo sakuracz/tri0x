@@ -77,19 +77,19 @@ namespace Win{
 		return true;
 	};
 
-	HRESULT MonoWndCtrl::OnCTLColorListBox(HDC hdc, HWND hwnd)
+	HRESULT MonoWndCtrl::OnCTLColorListBox(HDC, HWND)
 	{
 //		::SetWindowPos(gratingCombo.GetHandle(), NULL, 10, 41, 0, 0, SWP_NOSIZE);
 		return false;
 	}
 
-	bool MonoWndCtrl::OnSize(int width, int height, int flag)
+	bool MonoWndCtrl::OnSize(int, int, int)
 	{
 
 		return false;
 	}
 
-	bool MonoWndCtrl::OnCommand(WPARAM wParam, LPARAM lParam)
+	bool MonoWndCtrl::OnCommand(WPARAM wParam, LPARAM)
 	{
 		if (LOWORD(wParam) == 1200){	// run button pressed - notify parent window
 			progress = 0;
@@ -167,7 +167,7 @@ namespace Win{
 		return true;
 	}
 
-	bool MonoWndCtrl::OnCreate(CreateData const* create)
+	bool MonoWndCtrl::OnCreate(CreateData const*)
 	{
 		RECT rect, client_rect;
 		::SystemParametersInfo(SPI_GETWORKAREA, 0, &rect, 0);
@@ -238,8 +238,8 @@ namespace Win{
 		::SendMessage(mirrorCombo.GetHandle(), CB_ADDSTRING, NULL, (LPARAM)"Rear");
 		::SendMessage(mirrorCombo.GetHandle(), CB_ADDSTRING, NULL, (LPARAM)"Side");
 
-		::SendMessage(gratingCombo.GetHandle(), CB_SETCURSEL, -1, NULL);
-		::SendMessage(mirrorCombo.GetHandle(), CB_SETCURSEL, -1, NULL);
+		::SendMessage(gratingCombo.GetHandle(), CB_SETCURSEL, (WPARAM)-1, NULL);
+		::SendMessage(mirrorCombo.GetHandle(), CB_SETCURSEL, (WPARAM)-1, NULL);
 
 		return true;
 	}
@@ -249,7 +249,7 @@ namespace Win{
 		DRAWITEMSTRUCT* pDIS = reinterpret_cast<DRAWITEMSTRUCT*>(lParam);
 
 		//DONE: Fix double click button problem - subclassing helped.
-		bool res;
+		bool res = false;
 		switch (pDIS->CtlID) {
 		case 1100:		//grating combo
 			res = true;

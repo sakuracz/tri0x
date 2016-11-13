@@ -65,13 +65,14 @@ namespace Win
 			if (GetObject(toDraw, sizeof(bm), &bm)){
 				cxBitmap = bm.bmWidth;
 				cyBitmap = bm.bmHeight;
+
+				CopyRect(&rcImage, &rectItem);
+				LONG image_width = rcImage.right - rcImage.left;
+				LONG image_height = rcImage.bottom - rcImage.top;
+				rcImage.left = (image_width - cxBitmap) / 2;
+				rcImage.top = (image_height - cyBitmap) / 2;
+				DrawState(hDC, NULL, NULL, (LPARAM)toDraw, 0, rcImage.left, rcImage.top, rcImage.right - rcImage.left, rcImage.bottom - rcImage.top, DSS_NORMAL | DST_BITMAP);
 			}
-			CopyRect(&rcImage, &rectItem);
-			LONG image_width = rcImage.right - rcImage.left;
-			LONG image_height = rcImage.bottom - rcImage.top;
-			rcImage.left = (image_width - cxBitmap) / 2;
-			rcImage.top = (image_height - cyBitmap) / 2;
-			DrawState(hDC, NULL, NULL, (LPARAM)toDraw, 0, rcImage.left, rcImage.top, rcImage.right - rcImage.left, rcImage.bottom - rcImage.top, DSS_NORMAL | DST_BITMAP);
 		}
 
 		//	if (which == 0)
@@ -157,7 +158,7 @@ namespace Win
 
 	bool CustomCombo::Draw(const int& item, DRAWITEMSTRUCT* pDIS)
 	{
-		RECT rectItem = pDIS->rcItem;
+//		RECT rectItem = pDIS->rcItem;
 		HDC hDC = pDIS->hDC;
 		//		HDC hdc = GetDC(_h);
 
@@ -271,7 +272,7 @@ namespace Win
 			DWORD dw = GetLastError();
 			stream = stringstream();
 			stream << "Got error #: " << dw;
-			-::MessageBox(NULL, stream.str().c_str(), "No checked bitmap", MB_OK);
+			::MessageBox(NULL, stream.str().c_str(), "No checked bitmap", MB_OK);
 		}
 		bmapDis = shared_ptr<HANDLE>((HANDLE*)::LoadImage(NULL, disable.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE), [=](HANDLE handle){::DeleteObject(handle); });
 		if (bmapDis.get() == NULL){

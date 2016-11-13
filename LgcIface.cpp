@@ -3,6 +3,8 @@
 #include <iomanip>
 #include <cstdlib>
 
+#pragma warning ( disable: 4702 )
+
 using namespace std;
 
 #define NOMONO			//NOMONO - no triax; NOMONO_ - use triax
@@ -40,13 +42,15 @@ namespace Logic
 
 		//Commonly used strings:
 		stringstream stream;
-		stream << "/1" << (char)222;
+		byte i = 222;
+		stream << "/1" << static_cast<char>(i);
 		_resetStr = stream.str();
 		stream = stringstream();
 		stream << "/1 ";
 		_whereStr = stream.str();
 		stream = stringstream();
-		stream << "/1O2000" << (char)0x0D;		//cos tu nie tak chyba z tym mesygem
+		i = 0x0D;
+		stream << "/1O2000" << static_cast<char>(i);		//cos tu nie tak chyba z tym mesygem
 		_boot2MainStr = stream.str();
 		stream = stringstream();
 		stream << "/1A";
@@ -55,7 +59,7 @@ namespace Logic
 		stream << "/2q1" << 0x0d << "q2" << 0x0d << "x1" << 0x0d;
 		_dataQuery = stream.str();
 		stream = stringstream();
-		stream << "/1f0" << (char)0x0D;
+		stream << "/1f0" << static_cast<char>(i);
 		_mirRearStr = stream.str();
 		stream = stringstream();
 		stream << "/1e0" << (char)0x0D;
@@ -209,9 +213,11 @@ namespace Logic
 		}
 		else
 		{
-			sstream << (char)248;
+			byte i = 248;
+			sstream << static_cast<char>(i);
 			WriteFile(_dev, sstream.str().c_str(), 1, &dwBytesWritten, NULL);
-			sstream << (char)222;
+			i = 222;
+			sstream << static_cast<char>(i);
 			WriteFile(_dev, sstream.str().c_str(), 1, &dwBytesWritten, NULL);
 			WriteFile(_dev, "/1A", 3, &dwBytesWritten, NULL);
 		}
@@ -330,7 +336,7 @@ namespace Logic
 #ifdef NOMONO
 		return 1;
 #endif
-		char readBuff = 0;
+//		char readBuff = 0;
 		char readBuffer[255];
 		DWORD dwBytesRead, dwBytesWritten;
 		ZeroMemory(readBuffer, 255);
@@ -382,7 +388,7 @@ namespace Logic
 #endif
 		PurgeComm(_dev, PURGE_RXCLEAR);
 
-		char readBuff = 0;
+//		char readBuff = 0;
 		char readBuffer[255];
 		DWORD dwBytesRead, dwBytesWritten;
 		ZeroMemory(readBuffer, 255);
@@ -473,7 +479,7 @@ namespace Logic
 
 		DWORD dwBytesWritten, dwBytesRead;
 		char readBuffer[10];
-		char readBuff = 0;
+//		char readBuff = 0;
 		ZeroMemory(readBuffer, 10);
 
 		int watchdog = 0;

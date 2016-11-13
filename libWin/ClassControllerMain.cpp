@@ -6,7 +6,7 @@
 
 namespace Win
 {
-	MainController::MainController(HWND hwnd, CreateData *create)
+	MainController::MainController(HWND hwnd, CreateData *)
 		: _main(hwnd), _monoDow(0), _expDow(0), _synch(expCtrl, monoCtrl)
 	{
 		//window class names:
@@ -50,7 +50,7 @@ namespace Win
 
 	};
 
-	bool MainController::OnCreate(CreateData const* create)
+	bool MainController::OnCreate(CreateData const*)
 	{
 		RECT rect;
 		::SystemParametersInfo(SPI_GETWORKAREA, 0, &rect, 0);
@@ -62,7 +62,7 @@ namespace Win
 		return true;
 	};
 
-	bool MainController::OnNotify(WPARAM wParam, LPARAM lParam)
+	bool MainController::OnNotify(WPARAM wParam, LPARAM)
 	{
 //		int val;
 //		stringstream msg;

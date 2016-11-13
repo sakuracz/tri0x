@@ -28,7 +28,7 @@ namespace Win
 		virtual bool OnLMouseButtonDown(WPARAM, LPARAM) = 0;
 		virtual bool OnLMouseDblClick() = 0;
 		virtual bool OnPaint(){return false;}
-		virtual bool OnSize(int width, int height, int flag){return false;}
+		virtual bool OnSize(int, int, int){return false;}
 		virtual bool OnSizing(RECT*){return false;}
 		virtual bool OnMove(WPARAM, LPARAM) = 0;
 		virtual bool OnNCCalcSize(WPARAM, LPARAM) = 0;

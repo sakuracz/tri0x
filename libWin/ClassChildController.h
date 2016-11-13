@@ -21,7 +21,7 @@ namespace Win
 		virtual bool OnKillFocus(HWND){return false;}
 		virtual bool OnSetFocus(HWND){return false;}
 		virtual bool OnMoving(RECT*){return false;}
-		virtual bool OnSize(int w, int h, int f){return false;}		
+		virtual bool OnSize(int, int, int){return false;}		
 		virtual bool OnDrawItem(LPARAM){ return false; }		
 		bool OnLMouseButtonUp(WPARAM, LPARAM) override { return false; }
 		bool OnLMouseButtonDown(WPARAM, LPARAM) override { return false; };

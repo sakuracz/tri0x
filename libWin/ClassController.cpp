@@ -6,7 +6,7 @@ namespace Win
 	Controller::Controller() : _hwnd(0)
 	{};
 
-	Controller::Controller(HWND hwnd, CreateData * create) : _hwnd(hwnd)
+	Controller::Controller(HWND hwnd, CreateData *) : _hwnd(hwnd)
 	{};
 
 	Controller::~Controller()

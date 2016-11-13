@@ -79,7 +79,7 @@ namespace Win
 		return SendMessage(WM_GETTEXTLENGTH);
 	};
 
-	void EditControl::SetText(char * buf, int len)
+	void EditControl::SetText(char * buf, int)
 	{
 		SendMessage (WM_SETTEXT, 0, (LPARAM) buf);
 	};
@@ -122,7 +122,7 @@ namespace Win
 		: SimpleControl(winParent, id)
 	{};
 
-	bool ListViewControl::InsertTwoColumnValues(char const *col1, char const *col2)
+	bool ListViewControl::InsertTwoColumnValues(char const *, char const *)
 	{
 
 		return true;

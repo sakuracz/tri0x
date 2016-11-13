@@ -221,7 +221,7 @@ void Synchronizer::InitDev()
 
 void Synchronizer::Loop(void)
 {
-	while(1){
+	while (bool b = true){
 		(this->*funcTab[_program])();
 	};
 };
@@ -271,7 +271,7 @@ void Synchronizer::Measure()	//func tab[3]
 		_iface.Goto(1239.8384/start);
 		if (inc != 0){
 			//::MessageBox(NULL, "KL", "op", MB_OK);
-			int pCount = static_cast<int>((start - stop) / inc + 1);
+//			int pCount = static_cast<int>((start - stop) / inc + 1);
 //			if ((_dataCh1 == NULL) && (pCount != 0)) {
 //				_dataX = new double[pCount];
 //				_dataCh1 = new double[pCount];

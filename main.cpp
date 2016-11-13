@@ -2,8 +2,9 @@
 #include "libWin/View.h"
 
 int WINAPI WinMain
-	(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdParam, int cmdShow)
+	(HINSTANCE hInst, HINSTANCE, LPSTR, int cmdShow)
 {
+
 	View view(hInst, cmdShow);
 
 	MSG msg;

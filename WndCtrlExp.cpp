@@ -44,7 +44,7 @@ namespace Win
 		};
 	};
 
-	bool ExpWndController::OnCommand(WPARAM wParam, LPARAM lParam)
+	bool ExpWndController::OnCommand(WPARAM wParam, LPARAM)
 	{
 		switch (LOWORD(wParam))
 		{
@@ -127,7 +127,7 @@ namespace Win
 		return true;
 	};
 
-	bool ExpWndController::OnCreate(CreateData const* data)
+	bool ExpWndController::OnCreate(CreateData const*)
 	{
 		RECT rect;
 		::SystemParametersInfo(SPI_GETWORKAREA, 0, &rect, 0);
@@ -302,7 +302,7 @@ namespace Win
 		return true;
 	}
 
-	bool ExpWndController::OnSize(int width, int height, int flags)
+	bool ExpWndController::OnSize(int, int, int)
 	{		
 		int dxShortEdit = 63, dyShortEdit = 26;
 		int dxEdit = 107, dyEdit = 27;
@@ -368,7 +368,7 @@ namespace Win
 		return true;
 	};
 
-	bool ExpWndController::OnNotify(HWND hFrom, LPARAM lParam)
+	bool ExpWndController::OnNotify(HWND hFrom, LPARAM)
 	{				
 		if (hFrom == _edtArray[1]->GetHandle()){			//Front slit
 			int width = static_cast<int>(GetEditVal(1));

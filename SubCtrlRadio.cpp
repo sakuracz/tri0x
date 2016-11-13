@@ -7,7 +7,7 @@ namespace Win
 	{
 	};
 
-	bool RadioController::OnLMouseButtonUp(WPARAM wParam, LPARAM lParam)
+	bool RadioController::OnLMouseButtonUp(WPARAM, LPARAM)
 	{
 		radio.isChecked = !radio.isChecked;
 		InvalidateRect(radio.GetHandle(), NULL, TRUE);

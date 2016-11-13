@@ -61,7 +61,7 @@ namespace Win
 		::GetComboBoxInfo(combo.GetHandle(), &comboInfo);
 
 		LONG listProc = ::GetWindowLong(comboInfo.hwndList, GWL_WNDPROC);
-		LONG comboProc = ::GetWindowLong(comboInfo.hwndCombo, GWL_WNDPROC);
+//		LONG comboProc = ::GetWindowLong(comboInfo.hwndCombo, GWL_WNDPROC);
 
 		RECT listRect;
 		listRect.top = combo.selected.top;
@@ -84,12 +84,12 @@ namespace Win
 		parentHWND = parent;
 	}
 
-	bool SubListController::OnNCCalcSize(WPARAM wParam, LPARAM lParam)
+	bool SubListController::OnNCCalcSize(WPARAM, LPARAM)
 	{
 		return true;	//has to return true otherwise the ugly frame appears around the list popup
 	}
 
-	bool SubListController::OnWindowPosChanging(WPARAM wParam, LPARAM lParam)
+	bool SubListController::OnWindowPosChanging(WPARAM, LPARAM lParam)
 	{
 		WINDOWPOS* wndPos = (WINDOWPOS*)lParam;
 		RECT parRect;
